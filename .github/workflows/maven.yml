@@ -20,7 +20,6 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-          cache: maven
       - name: "Package"
         run: mvn -B package --file pom.xml
       - name: "Target Stage"
