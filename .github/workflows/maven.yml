@@ -1,0 +1,38 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Build
+
+on:
+  # 支持手动触发构建
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Set up JDK"
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          cache: maven
+          server-id: github
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_TOKEN
+      - name: "Package"
+        run: mvn -B package --file pom.xml
+        env:
+          MAVEN_USERNAME: ${{ github.repository_owner }}
+          MAVEN_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: "Target Stage"
+        run: mkdir staging && cp target/*.jar staging
+      - name: "Upload artifact"
+        uses: actions/upload-artifact@v2
+        with:
+          name: Artifact
+          path: staging
