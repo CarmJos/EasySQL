@@ -34,7 +34,7 @@
 
 ## 开发
 
-详细开发介绍请 [点击这里](.documentation/INDEX.md) , JavaDoc(最新Release) 请 [点击这里](https://carmjos.github.io/easysql) 。
+详细开发介绍请 [点击这里](.documentation/INDEX.md) , JavaDoc(最新Release) 请 [点击这里](https://carmjos.github.io/EasySQL) 。
 
 ### 示例代码
 

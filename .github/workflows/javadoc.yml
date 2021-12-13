@@ -37,7 +37,7 @@ jobs:
         id: sitemap
         uses: cicirello/generate-sitemap@v1
         with:
-          base-url-path: https://carmjos.github.io/easysql
+          base-url-path: https://carmjos.github.io/EasySQL
           path-to-root: docs
 
       - name: Output stats
