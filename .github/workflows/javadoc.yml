@@ -1,0 +1,73 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Javadoc
+
+on:
+  # 支持手动触发构建
+  workflow_dispatch:
+  release:
+    # 创建release的时候触发
+    types: [ published ]
+
+jobs:
+  api-website:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+
+      - name: Set up the Java JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: Generate docs
+        run: mvn javadoc:javadoc
+
+      - name: Copy to Location
+        run: |
+          rm -rf docs
+          mkdir -vp docs
+          cp -vrf easysql-api/target/site/apidocs/* docs/
+          cp -vrf JAVADOC-README.md docs/README.md
+
+      - name: Generate the sitemap
+        id: sitemap
+        uses: cicirello/generate-sitemap@v1
+        with:
+          base-url-path: https://carmjos.github.io/userprefix
+          path-to-root: docs
+
+      - name: Output stats
+        run: |
+          echo "sitemap-path = ${{ steps.sitemap.outputs.sitemap-path }}"
+          echo "url-count = ${{ steps.sitemap.outputs.url-count }}"
+          echo "excluded-count = ${{ steps.sitemap.outputs.excluded-count }}"
+
+      - name: Configure Git
+        env:
+          DEPLOY_PRI: ${{secrets.DEPLOY_PRI}}
+        run: |
+          sudo timedatectl set-timezone "Asia/Shanghai"
+          mkdir -p ~/.ssh/
+          echo "$DEPLOY_PRI" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config --global user.name 'CarmJos'
+          git config --global user.email 'carm@carm.cc'
+
+      - name: Commit documentation changes
+        run: |
+          cd docs
+          git init
+          git remote add origin git@github.com:CarmJos/UserPrefix.git
+          git checkout -b gh-pages
+          git add -A
+          git commit -m "API Document generated."
+      - name: Push javadocs
+        run: |
+          cd docs
+          git push origin HEAD:gh-pages --force
+

@@ -9,11 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>easysql-impl</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>easysql-hikaricp</artifactId>
 
-    <name>01-EasySQL-Impl</name>
-    <description>EasySQL的实现部分。</description>
+    <name>11-EasySQL-HikariCP</name>
+    <description>EasySQL的应用部分。此为HikariCP版本。</description>
     <url>https://github.com/CarmJos/${project.parent.name}</url>
 
     <developers>
@@ -39,8 +38,16 @@
 
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
-            <artifactId>easysql-api</artifactId>
+            <artifactId>easysql-impl</artifactId>
             <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <!--项目地址 https://github.com/brettwooldridge/HikariCP/  -->
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>4.0.3</version>
             <scope>compile</scope>
         </dependency>
 

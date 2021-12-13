@@ -9,11 +9,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>easysql-impl</artifactId>
+    <artifactId>easysql-beecp</artifactId>
     <packaging>jar</packaging>
 
-    <name>01-EasySQL-Impl</name>
-    <description>EasySQL的实现部分。</description>
+    <name>10-EasySQL-BeeCP</name>
+    <description>EasySQL的应用部分。此为BeeCP版本。</description>
     <url>https://github.com/CarmJos/${project.parent.name}</url>
 
     <developers>
@@ -39,8 +39,16 @@
 
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
-            <artifactId>easysql-api</artifactId>
+            <artifactId>easysql-impl</artifactId>
             <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <!--项目地址 https://github.com/Chris2018998/BeeCP  -->
+            <groupId>com.github.chris2018998</groupId>
+            <artifactId>beecp</artifactId>
+            <version>3.3.0</version>
             <scope>compile</scope>
         </dependency>
 

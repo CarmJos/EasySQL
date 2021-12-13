@@ -5,14 +5,14 @@
     <parent>
         <groupId>cc.carm.lib</groupId>
         <artifactId>easysql-parent</artifactId>
-        <version>1.0.0</version>
+        <version>v0.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>easysql-api</artifactId>
     <packaging>jar</packaging>
 
-    <name>EasySQL-API</name>
+    <name>00-EasySQL-API</name>
     <description>EasySQL的接口部分。用于打包到公共项目的API中，避免项目过大。</description>
     <url>https://github.com/CarmJos/${project.parent.name}</url>
 
@@ -56,10 +56,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
