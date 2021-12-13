@@ -46,12 +46,6 @@ public abstract class AbstractConditionalBuilder<T> extends AbstractSQLBuilder i
 	}
 
 	@Override
-	public AbstractConditionalBuilder<T> addNotNullCondition(@NotNull String queryName) {
-		return addCondition("`" + queryName + "` IS NOT NULL");
-	}
-
-
-	@Override
 	public AbstractConditionalBuilder<T> addCondition(
 			@NotNull String queryName, @NotNull String operator, @Nullable Object queryValue
 	) {
@@ -72,6 +66,13 @@ public abstract class AbstractConditionalBuilder<T> extends AbstractSQLBuilder i
 		}
 		return this;
 	}
+
+
+	@Override
+	public AbstractConditionalBuilder<T> addNotNullCondition(@NotNull String queryName) {
+		return addCondition("`" + queryName + "` IS NOT NULL");
+	}
+
 
 	@Override
 	public AbstractConditionalBuilder<T> addTimeCondition(
