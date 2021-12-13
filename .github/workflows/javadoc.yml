@@ -31,7 +31,7 @@ jobs:
           rm -rf docs
           mkdir -vp docs
           cp -vrf easysql-api/target/apidocs/* docs/
-          cp -vrf JAVADOC-README.md docs/README.md
+          cp -vrf .documentation/JAVADOC-README.md docs/README.md
 
       - name: Generate the sitemap
         id: sitemap
