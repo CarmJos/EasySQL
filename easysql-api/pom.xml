@@ -14,7 +14,7 @@
 
     <name>00-EasySQL-API</name>
     <description>EasySQL的接口部分。用于打包到公共项目的API中，避免项目过大。</description>
-    <url>https://github.com/CarmJos/${project.parent.name}</url>
+    <url>https://github.com/CarmJos/EasySQL</url>
 
     <developers>
         <developer>
@@ -27,6 +27,23 @@
             </roles>
         </developer>
     </developers>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://opensource.org/licenses/GPL-3.0</url>
+        </license>
+    </licenses>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>${project.url}/issues</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>GitHub Actions</system>
+        <url>${project.url}/actions/workflows/maven.yml</url>
+    </ciManagement>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
