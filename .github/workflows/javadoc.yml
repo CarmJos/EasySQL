@@ -24,20 +24,20 @@ jobs:
           distribution: 'adopt'
 
       - name: Generate docs
-        run: mvn javadoc:javadoc
+        run: mvn clean package
 
       - name: Copy to Location
         run: |
           rm -rf docs
           mkdir -vp docs
-          cp -vrf easysql-api/target/site/apidocs/* docs/
+          cp -vrf easysql-api/target/apidocs/* docs/
           cp -vrf JAVADOC-README.md docs/README.md
 
       - name: Generate the sitemap
         id: sitemap
         uses: cicirello/generate-sitemap@v1
         with:
-          base-url-path: https://carmjos.github.io/userprefix
+          base-url-path: https://carmjos.github.io/easysql
           path-to-root: docs
 
       - name: Output stats
@@ -62,7 +62,7 @@ jobs:
         run: |
           cd docs
           git init
-          git remote add origin git@github.com:CarmJos/UserPrefix.git
+          git remote add origin git@github.com:CarmJos/EasySQL.git
           git checkout -b gh-pages
           git add -A
           git commit -m "API Document generated."
