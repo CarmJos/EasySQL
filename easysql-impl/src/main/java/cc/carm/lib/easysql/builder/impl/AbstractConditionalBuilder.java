@@ -32,6 +32,14 @@ public abstract class AbstractConditionalBuilder<T> extends AbstractSQLBuilder i
 	}
 
 	@Override
+	public AbstractConditionalBuilder<T> setConditions(
+			LinkedHashMap<@NotNull String, @Nullable Object> conditions
+	) {
+		conditions.forEach(this::addCondition);
+		return this;
+	}
+
+	@Override
 	public AbstractConditionalBuilder<T> addCondition(@Nullable String condition) {
 		this.conditionSQLs.add(condition);
 		return this;
@@ -90,13 +98,6 @@ public abstract class AbstractConditionalBuilder<T> extends AbstractSQLBuilder i
 		return this;
 	}
 
-	@Override
-	public AbstractConditionalBuilder<T> setConditions(
-			LinkedHashMap<@NotNull String, @Nullable Object> conditions
-	) {
-		conditions.forEach(this::addCondition);
-		return this;
-	}
 
 	@Override
 	public AbstractConditionalBuilder<T> setLimit(int limit) {
