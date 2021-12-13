@@ -34,6 +34,13 @@
         </developer>
     </developers>
 
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://opensource.org/licenses/GPL-3.0</url>
+        </license>
+    </licenses>
+    
     <issueManagement>
         <system>GitHub Issues</system>
         <url>${project.url}/issues</url>
