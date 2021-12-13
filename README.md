@@ -9,9 +9,81 @@
 
 # EasySQL
 
-简单便捷的数据库操作工具，采用 [BeeCP](https://github.com/Chris2018998/BeeCP) 连接池。
+简单便捷的数据库操作工具，可自定义连接池来源。
 
-## 开发
+随项目分别提供 [BeeCP](https://github.com/Chris2018998/BeeCP) 与 [Hikari](https://github.com/brettwooldridge/HikariCP~~~~)
+两个连接池的版本。
+
+## 优势
+
+- 基于JDBC开发，可自选连接池、JDBC驱动。
+- 简单便捷的增删改查接口，无需手写SQL语句。
+- 额外提供部分常用情况的SQL操作
+    - 存在则更新，不存在则插入
+    - 创建表
+    - 修改表
+    - ...
+- 支持同步操作与异步操作
+
+## 依赖方式
+
+### Maven
+
+```xml
+
+<project>
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <!--对于需要提供公共接口的项目，可以仅打包API部分，方便他人调用-->
+        <dependency>
+            <groupId>cc.carm.lib</groupId>
+            <artifactId>easysql-api</artifactId>
+            <version>[LATEST VERSION]</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--如需自定义连接池，则可以仅打包实现部分，自行创建SQLManager-->
+        <dependency>
+            <groupId>cc.carm.lib</groupId>
+            <artifactId>easysql-impl</artifactId>
+            <version>[LATEST VERSION]</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--如需自定义连接池，则可以仅打包实现部分，自行创建SQLManager-->
+        <dependency>
+            <groupId>cc.carm.lib</groupId>
+            <artifactId>easysql-beecp</artifactId>
+            <version>[LATEST VERSION]</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--也可直接选择打包了连接池的版本-->
+        <dependency>
+            <groupId>cc.carm.lib</groupId>
+            <artifactId>easysql-beecp</artifactId>
+            <version>[LATEST VERSION]</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>cc.carm.lib</groupId>
+            <artifactId>easysql-hikaricp</artifactId>
+            <version>[LATEST VERSION]</version>
+            <scope>compile</scope>
+        </dependency>
+
+    </dependencies>
+</project>
+
+```
+
+
 
 ## 支持与捐赠
 
