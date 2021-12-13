@@ -40,7 +40,7 @@
             <url>https://opensource.org/licenses/GPL-3.0</url>
         </license>
     </licenses>
-    
+
     <issueManagement>
         <system>GitHub Issues</system>
         <url>${project.url}/issues</url>
@@ -79,7 +79,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/CarmJos/${project.name}</url>
+            <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
         </repository>
 
     </repositories>
@@ -91,7 +91,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/CarmJos/${project.name}</url>
+            <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
         </repository>
 
     </distributionManagement>
