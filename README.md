@@ -27,9 +27,72 @@
 
 ## 开发
 
-详细开发介绍请 [点击这里](pom.xml) 。
+详细开发介绍请 [点击这里](.documentation/INDEX.md) 。
 
 ### 示例代码
+
+```java
+public class EasySQLDemo {
+
+	public void createTable(SQLManager sqlManager) {
+		//异步创建表
+		sqlManager.createTable("users")
+				.addColumn("id", "INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY")
+				.addColumn("username", "VARCHAR(16) NOT NULL UNIQUE KEY")
+				.addColumn("email", "VARCHAR(32)")
+				.addColumn("phone", "VARCHAR(16)")
+				.addColumn("registerTime", "DATETIME NOT NULL")
+				.build().execute(null /* 不处理错误 */);
+	}
+
+	public void sqlQuery(SQLManager sqlManager) {
+		// 同步SQL查询
+		try (SQLQuery query = sqlManager.createQuery()
+				.inTable("users") // 在users表中查询
+				.addCondition("id", ">", 5) // 限定 id 要大于5
+				.addCondition("email", null) // 限定查询email字段为空
+				.addNotNullCondition("phone") // 限定 phone字段不为空
+				.addTimeCondition(
+						"registerTime", // 时间字段
+						System.currentTimeMillis() - 100000, //限制开始时间
+						-1) //不限制结束时间
+				.build().execute()) {
+			ResultSet resultSet = query.getResultSet();
+			//do something
+
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+		}
+	}
+
+	public void sqlQueryAsync(SQLManager sqlManager) {
+		// 异步SQL查询
+		sqlManager.createQuery()
+				.inTable("users") // 在users表中查询
+				.addCondition("id", 5) // 限定 id 为 5
+				.setLimit(1).build().executeAsync(success -> {
+					ResultSet resultSet = success.getResultSet();
+					//do something
+				}, exception -> {
+					//do something
+				});
+	}
+
+	public void sqlInsert(SQLManager sqlManager) {
+		// 同步SQL插入 （不使用try-catch的情况下，返回的数值可能为空。）
+		Integer id = sqlManager.createInsert("users")
+				.setColumnNames("username", "phone", "email", "registerTime")
+				.setParams("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
+				.setKeyIndex(1) // 设定自增主键的index，将会在后续返回自增主键
+				.execute(exception -> {
+					// 处理异常
+				});
+	}
+
+}
+```
+
+更多演示详见开发介绍。
 
 ### 依赖方式 (Maven)
 
@@ -48,7 +111,7 @@
         <dependency>
             <groupId>cc.carm.lib</groupId>
             <artifactId>easysql-api</artifactId>
-            <version>[LATEST VERSION]</version>
+            <version>[LATEST RELEASE]</version>
             <scope>compile</scope>
         </dependency>
 
@@ -56,7 +119,7 @@
         <dependency>
             <groupId>cc.carm.lib</groupId>
             <artifactId>easysql-impl</artifactId>
-            <version>[LATEST VERSION]</version>
+            <version>[LATEST RELEASE]</version>
             <scope>compile</scope>
         </dependency>
 
@@ -64,7 +127,7 @@
         <dependency>
             <groupId>cc.carm.lib</groupId>
             <artifactId>easysql-beecp</artifactId>
-            <version>[LATEST VERSION]</version>
+            <version>[LATEST RELEASE]</version>
             <scope>compile</scope>
         </dependency>
 
