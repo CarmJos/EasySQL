@@ -41,7 +41,7 @@
 public class EasySQLDemo {
 
 	public void createTable(SQLManager sqlManager) {
-		//异步创建表
+		// 同步创建表
 		sqlManager.createTable("users")
 				.addColumn("id", "INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY")
 				.addColumn("username", "VARCHAR(16) NOT NULL UNIQUE KEY")
