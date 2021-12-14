@@ -137,7 +137,11 @@
                         <links>
                             <link>https://javadoc.io/doc/org.jetbrains/annotations/</link>
                         </links>
-                        <detectJavaApiLink>true</detectJavaApiLink>
+                        <detectJavaApiLink>false</detectJavaApiLink>
+                        <encoding>UTF-8</encoding>
+                        <charset>UTF-8</charset>
+                        <docencoding>UTF-8</docencoding>
+                        <locale>en_US</locale>
                     </configuration>
                     <executions>
                         <execution>

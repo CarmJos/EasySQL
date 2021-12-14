@@ -14,16 +14,16 @@ import java.util.function.Function;
  *
  * <ul>
  *     <li>同步执行 {@link #execute()}, {@link #execute(Function, BiConsumer)}</li>
- *     <br> 同步执行方法中有会抛出异常的方法与不抛出异常的方法，
- *     <br> 若选择不抛出异常，则返回值可能为空，需要特殊处理。
+ *     <br>同步执行方法中有会抛出异常的方法与不抛出异常的方法，
+ *     <br>若选择不抛出异常，则返回值可能为空，需要特殊处理。
  *
  *     <li>异步执行 {@link #executeAsync(Consumer, BiConsumer)}</li>
- *     <br> 异步执行时将提供成功与异常两种处理方式
- *     <br> 可自行选择是否对数据或异常进行处理
- *     <br> 默认的异常处理器为 {@link #defaultExceptionHandler()}
+ *     <br>异步执行时将提供成功与异常两种处理方式
+ *     <br>可自行选择是否对数据或异常进行处理
+ *     <br>默认的异常处理器为 {@link #defaultExceptionHandler()}
  * </ul>
  *
- * <b>注意：</b> 无论是否异步，都不需要自行关闭ResultSet，本API已自动关闭
+ * <b>注意： 无论是否异步，都不需要自行关闭ResultSet，本API已自动关闭</b>
  *
  * @param <T> 需要返回的类型
  * @author CarmJos
