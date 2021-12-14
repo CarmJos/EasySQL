@@ -15,6 +15,7 @@
 
         <module>easysql-beecp</module>
         <module>easysql-hikaricp</module>
+        <module>easysql-demo</module>
 
     </modules>
 

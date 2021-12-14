@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public interface SQLAction<T> {
 
@@ -21,6 +22,13 @@ public interface SQLAction<T> {
 	@NotNull SQLManager getManager();
 
 	@NotNull T execute() throws SQLException;
+
+	@Nullable
+	default <R> R execute(@NotNull Function<T, R> function, @Nullable BiConsumer<SQLException, SQLAction<T>> exceptionHandler) {
+		T value = execute(exceptionHandler);
+		if (value == null) return null;
+		else return function.apply(value);
+	}
 
 	@Nullable
 	default T execute(@Nullable BiConsumer<SQLException, SQLAction<T>> exceptionHandler) {
