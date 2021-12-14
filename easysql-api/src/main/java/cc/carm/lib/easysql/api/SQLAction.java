@@ -13,14 +13,14 @@ import java.util.function.Function;
  * SQLAction 是用于承载SQL语句并进行处理、返回的基本类。
  *
  * <ul>
- *     <li>同步执行 {@link #execute()}, {@link #execute(Function, BiConsumer)}</li>
+ *     <li>同步执行 {@link #execute()}, {@link #execute(Function, BiConsumer)}
  *     <br>同步执行方法中有会抛出异常的方法与不抛出异常的方法，
- *     <br>若选择不抛出异常，则返回值可能为空，需要特殊处理。
+ *     <br>若选择不抛出异常，则返回值可能为空，需要特殊处理。</li>
  *
- *     <li>异步执行 {@link #executeAsync(Consumer, BiConsumer)}</li>
+ *     <li>异步执行 {@link #executeAsync(Consumer, BiConsumer)}
  *     <br>异步执行时将提供成功与异常两种处理方式
  *     <br>可自行选择是否对数据或异常进行处理
- *     <br>默认的异常处理器为 {@link #defaultExceptionHandler()}
+ *     <br>默认的异常处理器为 {@link #defaultExceptionHandler()}</li>
  * </ul>
  *
  * <b>注意： 无论是否异步，都不需要自行关闭ResultSet，本API已自动关闭</b>
