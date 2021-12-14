@@ -1,7 +1,5 @@
 package cc.carm.lib.easysql.action.query;
 
-import cc.carm.lib.easysql.api.SQLAction;
-import cc.carm.lib.easysql.api.SQLQuery;
 import cc.carm.lib.easysql.api.action.query.PreparedQueryAction;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import cc.carm.lib.easysql.query.SQLQueryImpl;
@@ -15,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class PreparedQueryActionImpl extends QueryActionImpl implements PreparedQueryAction {
@@ -39,9 +36,7 @@ public class PreparedQueryActionImpl extends QueryActionImpl implements Prepared
 			return setParams((Object[]) null);
 		} else {
 			List<Object> paramsList = new ArrayList<>();
-			for (Object param : params) {
-				paramsList.add(param);
-			}
+			params.forEach(paramsList::add);
 			return setParams(paramsList.toArray());
 		}
 	}

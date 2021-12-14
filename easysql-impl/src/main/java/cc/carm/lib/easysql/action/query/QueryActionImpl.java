@@ -2,7 +2,7 @@ package cc.carm.lib.easysql.action.query;
 
 import cc.carm.lib.easysql.action.AbstractSQLAction;
 import cc.carm.lib.easysql.api.SQLAction;
-import cc.carm.lib.easysql.api.SQLQuery;
+import cc.carm.lib.easysql.api.action.query.SQLQuery;
 import cc.carm.lib.easysql.api.action.query.QueryAction;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import cc.carm.lib.easysql.query.SQLQueryImpl;

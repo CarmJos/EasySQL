@@ -2,6 +2,7 @@ package cc.carm.lib.easysql.api;
 
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
+import cc.carm.lib.easysql.api.action.query.SQLQuery;
 import cc.carm.lib.easysql.api.builder.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -76,6 +77,12 @@ public interface SQLManager {
 	 */
 	@Nullable List<Integer> executeSQLBatch(@NotNull String sql, String... moreSQL);
 
+	/**
+	 * 执行多条不需要返回结果的SQL。
+	 *
+	 * @param sqlBatch SQL语句内容
+	 * @return 对应参数返回的行数
+	 */
 	@Nullable List<Integer> executeSQLBatch(@NotNull Iterable<String> sqlBatch);
 
 	TableCreateBuilder createTable(@NotNull String tableName);

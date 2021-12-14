@@ -7,10 +7,30 @@ import org.jetbrains.annotations.NotNull;
 
 public interface QueryBuilder extends SQLBuilder {
 
+	/**
+	 * 通过一条 SQL语句创建查询
+	 *
+	 * @param sql SQL语句
+	 * @return {@link QueryAction}
+	 * @deprecated 存在SQL注入风险，请使用 {@link QueryBuilder#withPreparedSQL(String)}
+	 */
+	@Deprecated
 	QueryAction withSQL(@NotNull String sql);
 
+	/**
+	 * 通过一条 SQL语句创建预查询
+	 *
+	 * @param sql SQL语句
+	 * @return {@link PreparedQueryAction}
+	 */
 	PreparedQueryAction withPreparedSQL(@NotNull String sql);
 
+	/**
+	 * 创建表查询
+	 *
+	 * @param tableName 表名
+	 * @return {@link TableQueryBuilder}
+	 */
 	TableQueryBuilder inTable(@NotNull String tableName);
 
 }

@@ -5,7 +5,7 @@ import cc.carm.lib.easysql.action.PreparedSQLUpdateActionImpl;
 import cc.carm.lib.easysql.action.SQLUpdateActionImpl;
 import cc.carm.lib.easysql.action.SQLUpdateBatchActionImpl;
 import cc.carm.lib.easysql.api.SQLManager;
-import cc.carm.lib.easysql.api.SQLQuery;
+import cc.carm.lib.easysql.api.action.query.SQLQuery;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;

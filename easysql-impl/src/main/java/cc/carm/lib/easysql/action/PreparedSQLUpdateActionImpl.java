@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PreparedSQLUpdateActionImpl extends SQLUpdateActionImpl implements PreparedSQLUpdateAction {
@@ -35,6 +36,17 @@ public class PreparedSQLUpdateActionImpl extends SQLUpdateActionImpl implements 
 	public PreparedSQLUpdateActionImpl setParams(Object[] params) {
 		this.params = params;
 		return this;
+	}
+
+	@Override
+	public PreparedSQLUpdateAction setParams(@Nullable Iterable<Object> params) {
+		if (params == null) {
+			return setParams((Object[]) null);
+		} else {
+			List<Object> paramsList = new ArrayList<>();
+			params.forEach(paramsList::add);
+			return setParams(paramsList.toArray());
+		}
 	}
 
 	@Override

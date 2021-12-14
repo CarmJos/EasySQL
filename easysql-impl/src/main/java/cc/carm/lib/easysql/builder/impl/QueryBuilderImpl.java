@@ -16,6 +16,7 @@ public class QueryBuilderImpl extends AbstractSQLBuilder implements QueryBuilder
 	}
 
 	@Override
+	@Deprecated
 	public QueryAction withSQL(@NotNull String sql) {
 		return new QueryActionImpl(getManager(), sql);
 	}

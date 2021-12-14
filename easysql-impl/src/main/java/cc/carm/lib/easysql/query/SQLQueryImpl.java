@@ -1,7 +1,7 @@
 package cc.carm.lib.easysql.query;
 
 import cc.carm.lib.easysql.action.query.QueryActionImpl;
-import cc.carm.lib.easysql.api.SQLQuery;
+import cc.carm.lib.easysql.api.action.query.SQLQuery;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 
 import java.sql.Connection;
