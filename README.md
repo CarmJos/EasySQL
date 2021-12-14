@@ -15,7 +15,6 @@
 [![workflow](https://github.com/CarmJos/EasySQL/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/CarmJos/EasySQL/actions/workflows/maven.yml)
 ![](https://visitor-badge.glitch.me/badge?page_id=EasySQL.readme)
 
-
 简单便捷的数据库操作工具，可自定义连接池来源。
 
 随项目分别提供 [BeeCP](https://github.com/Chris2018998/BeeCP) 与 [Hikari](https://github.com/brettwooldridge/HikariCP~~~~)
@@ -46,6 +45,7 @@ public class EasySQLDemo {
 		sqlManager.createTable("users")
 				.addColumn("id", "INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY")
 				.addColumn("username", "VARCHAR(16) NOT NULL UNIQUE KEY")
+				.addColumn("age", "INT(3) NOT NULL DEFAULT 1")
 				.addColumn("email", "VARCHAR(32)")
 				.addColumn("phone", "VARCHAR(16)")
 				.addColumn("registerTime", "DATETIME NOT NULL")
@@ -56,14 +56,14 @@ public class EasySQLDemo {
 		// 同步SQL查询
 		try (SQLQuery query = sqlManager.createQuery()
 				.inTable("users") // 在users表中查询
-				.addCondition("id", ">", 5) // 限定 id 要大于5
-				.addCondition("email", null) // 限定查询email字段为空
-				.addNotNullCondition("phone") // 限定 phone字段不为空
-				.addTimeCondition(
-						"registerTime", // 时间字段
+				.selectColumn("id", "name") // 选中 id 与 name列~~~~
+				.addCondition("age", ">", 18) // 限定 age 要大于5
+				.addCondition("email", null) // 限定查询 email 字段为空
+				.addNotNullCondition("phone") // 限定 phone 字段不为空
+				.addTimeCondition("registerTime", // 时间字段
 						System.currentTimeMillis() - 100000, //限制开始时间
-						-1) //不限制结束时间
-				.build().execute()) {
+						-1//不限制结束时间
+				).build().execute()) {
 			ResultSet resultSet = query.getResultSet();
 			//do something
 
