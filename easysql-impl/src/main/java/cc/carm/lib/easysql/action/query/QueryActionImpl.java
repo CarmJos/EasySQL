@@ -32,9 +32,4 @@ public class QueryActionImpl extends AbstractSQLAction<SQLQuery> implements Quer
 
 		return query;
 	}
-
-	@Override
-	public void executeAsync(Consumer<SQLQuery> success, Consumer<SQLException> failure) {
-
-	}
 }

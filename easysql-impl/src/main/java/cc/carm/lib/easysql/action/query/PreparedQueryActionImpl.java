@@ -1,6 +1,5 @@
 package cc.carm.lib.easysql.action.query;
 
-import cc.carm.lib.easysql.api.SQLQuery;
 import cc.carm.lib.easysql.api.action.query.PreparedQueryAction;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import cc.carm.lib.easysql.query.SQLQueryImpl;
@@ -66,11 +65,6 @@ public class PreparedQueryActionImpl extends QueryActionImpl implements Prepared
 		ResultSet resultSet = preparedStatement.executeQuery();
 
 		return new SQLQueryImpl(getManager(), this, connection, preparedStatement, resultSet);
-	}
-
-	@Override
-	public void executeAsync(Consumer<SQLQuery> success, Consumer<SQLException> failure) {
-
 	}
 
 }

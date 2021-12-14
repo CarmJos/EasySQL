@@ -7,7 +7,7 @@
     <groupId>cc.carm.lib</groupId>
     <artifactId>easysql-parent</artifactId>
     <packaging>pom</packaging>
-    <version>v0.0.1</version>
+    <version>0.2.0</version>
 
     <modules>
         <module>easysql-api</module>

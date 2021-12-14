@@ -12,8 +12,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public interface SQLManager {
+
+	Logger getLogger();
 
 	boolean isDebugMode();
 

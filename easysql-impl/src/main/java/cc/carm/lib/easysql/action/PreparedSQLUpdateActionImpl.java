@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class PreparedSQLUpdateActionImpl extends SQLUpdateActionImpl implements PreparedSQLUpdateAction {
 
@@ -61,11 +60,6 @@ public class PreparedSQLUpdateActionImpl extends SQLUpdateActionImpl implements 
 		connection.close();
 
 		return value;
-	}
-
-	@Override
-	public void executeAsync(Consumer<Integer> success, Consumer<SQLException> failure) {
-
 	}
 
 }

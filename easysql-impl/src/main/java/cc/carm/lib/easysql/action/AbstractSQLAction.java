@@ -3,9 +3,11 @@ package cc.carm.lib.easysql.action;
 import cc.carm.lib.easysql.api.SQLAction;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public abstract class AbstractSQLAction<T> implements SQLAction<T> {
@@ -17,7 +19,7 @@ public abstract class AbstractSQLAction<T> implements SQLAction<T> {
 
 	protected @NotNull String sqlContent;
 
-	protected @NotNull Consumer<SQLException> exceptionHandler = defaultExceptionHandler();
+	protected @Nullable BiConsumer<SQLException, SQLAction<T>> exceptionHandler = null;
 
 	public AbstractSQLAction(@NotNull SQLManagerImpl manager, @NotNull String sql) {
 		this(manager, sql, System.currentTimeMillis());
@@ -69,14 +71,25 @@ public abstract class AbstractSQLAction<T> implements SQLAction<T> {
 		getManager().debug("#" + getShortID() + " ->" + getSQLContent());
 	}
 
-	@Override
-	public SQLAction<T> handleException(Consumer<SQLException> handler) {
-		this.exceptionHandler = handler;
-		return this;
+	public void handleException(SQLException exception) {
+		if (this.exceptionHandler == null) {
+			defaultExceptionHandler().accept(exception, this);
+		} else {
+			this.exceptionHandler.accept(exception, this);
+		}
 	}
 
-	@NotNull
-	public Consumer<SQLException> getExceptionHandler() {
-		return exceptionHandler;
+	@Override
+	public void executeAsync(Consumer<T> success, BiConsumer<SQLException, SQLAction<T>> failure) {
+		getManager().getExecutorPool().submit(() -> {
+			try {
+				T returnedValue = execute();
+				if (success != null) success.accept(returnedValue);
+			} catch (SQLException e) {
+				(failure == null ? defaultExceptionHandler() : failure).accept(e, this);
+			}
+		});
 	}
+
+
 }

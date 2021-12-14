@@ -1,5 +1,7 @@
 package cc.carm.lib.easysql.util;
 
+import cc.carm.lib.easysql.api.SQLAction;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.*;

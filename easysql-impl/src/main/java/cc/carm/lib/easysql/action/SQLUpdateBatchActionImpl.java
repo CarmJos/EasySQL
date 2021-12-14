@@ -10,7 +10,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SQLUpdateBatchActionImpl extends AbstractSQLAction<List<Integer>> implements SQLUpdateBatchAction {
@@ -51,11 +50,5 @@ public class SQLUpdateBatchActionImpl extends AbstractSQLAction<List<Integer>> i
 
 		return returnedValues;
 	}
-
-	@Override
-	public void executeAsync(Consumer<List<Integer>> success, Consumer<SQLException> failure) {
-
-	}
-
 
 }

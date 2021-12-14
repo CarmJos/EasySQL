@@ -43,10 +43,6 @@ public class SQLUpdateActionImpl extends AbstractSQLAction<Integer> implements S
 		return returnedValue;
 	}
 
-	@Override
-	public void executeAsync(Consumer<Integer> success, Consumer<SQLException> failure) {
-
-	}
 
 	@Override
 	public SQLUpdateActionImpl setKeyIndex(int keyIndex) {

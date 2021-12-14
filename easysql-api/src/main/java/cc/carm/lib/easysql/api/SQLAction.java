@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public interface SQLAction<T> {
@@ -22,13 +23,13 @@ public interface SQLAction<T> {
 	@NotNull T execute() throws SQLException;
 
 	@Nullable
-	default T execute(@Nullable Consumer<SQLException> exceptionHandler) {
+	default T execute(@Nullable BiConsumer<SQLException, SQLAction<T>> exceptionHandler) {
 		if (exceptionHandler == null) exceptionHandler = defaultExceptionHandler();
 		T value = null;
 		try {
 			value = execute();
 		} catch (SQLException exception) {
-			exceptionHandler.accept(exception);
+			exceptionHandler.accept(exception, this);
 		}
 		return value;
 	}
@@ -37,22 +38,16 @@ public interface SQLAction<T> {
 		executeAsync(null);
 	}
 
-	default void executeAsync(Consumer<T> success) {
+	default void executeAsync(@Nullable Consumer<T> success) {
 		executeAsync(success, null);
 	}
 
-	void executeAsync(Consumer<T> success, Consumer<SQLException> failure);
+	void executeAsync(@Nullable Consumer<T> success, @Nullable BiConsumer<SQLException, SQLAction<T>> failure);
 
-	SQLAction<T> handleException(Consumer<SQLException> failure);
-
-	@NotNull Consumer<SQLException> getExceptionHandler();
-
-	default Consumer<SQLException> defaultExceptionHandler() {
-		return Throwable::printStackTrace;
-	}
-
-	default Consumer<T> defaultResultHandler() {
-		return t -> {
+	default BiConsumer<SQLException, SQLAction<T>> defaultExceptionHandler() {
+		return (exception, action) -> {
+			getManager().getLogger().severe("Error when execute [" + action.getSQLContent() + "]");
+			getManager().getLogger().severe(exception.getLocalizedMessage());
 		};
 	}
 

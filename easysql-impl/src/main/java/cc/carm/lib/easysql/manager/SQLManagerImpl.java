@@ -19,6 +19,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 public class SQLManagerImpl implements SQLManager {
@@ -29,13 +31,21 @@ public class SQLManagerImpl implements SQLManager {
 
 	boolean debug = false;
 
+	protected ExecutorService executorPool;
+
 	public SQLManagerImpl(@NotNull DataSource dataSource) {
 		this(dataSource, null);
 	}
 
 	public SQLManagerImpl(@NotNull DataSource dataSource, @Nullable String name) {
-		this.LOGGER = Logger.getLogger("SQLManager" + (name != null ? "#" + name : ""));
+		String managerName = "SQLManager" + (name != null ? "#" + name : "");
+		this.LOGGER = Logger.getLogger(managerName);
 		this.dataSource = dataSource;
+		this.executorPool = Executors.newFixedThreadPool(3, r -> {
+			Thread thread = new Thread(r, managerName);
+			thread.setDaemon(true);
+			return thread;
+		});
 	}
 
 	@Override
@@ -56,6 +66,9 @@ public class SQLManagerImpl implements SQLManager {
 		return LOGGER;
 	}
 
+	public ExecutorService getExecutorPool() {
+		return executorPool;
+	}
 
 	@Override
 	public @NotNull DataSource getDataSource() {

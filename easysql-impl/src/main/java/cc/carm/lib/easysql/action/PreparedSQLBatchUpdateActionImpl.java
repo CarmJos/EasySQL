@@ -72,8 +72,4 @@ public class PreparedSQLBatchUpdateActionImpl extends SQLUpdateBatchActionImpl i
 		return returnedValues;
 	}
 
-	@Override
-	public void executeAsync(Consumer<List<Integer>> success, Consumer<SQLException> failure) {
-
-	}
 }

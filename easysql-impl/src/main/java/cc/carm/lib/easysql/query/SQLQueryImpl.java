@@ -70,7 +70,7 @@ public class SQLQueryImpl implements SQLQuery {
 			);
 			getManager().getActiveQuery().remove(getAction().getActionUUID());
 		} catch (SQLException e) {
-			getAction().getExceptionHandler().accept(e);
+			getAction().handleException(e);
 		}
 		this.queryAction = null;
 	}
