@@ -35,11 +35,11 @@
 
 ## 开发
 
-详细开发介绍请 [点击这里](.documentation/INDEX.md) , JavaDoc(最新Release) 请 [点击这里](https://carmjos.github.io/EasySQL) 。
+详细开发介绍请 [点击这里](.documentation/README.md) , JavaDoc(最新Release) 请 [点击这里](https://carmjos.github.io/EasySQL) 。
 
 ### 示例代码
 
-您可以 [点击这里](easysql-demo/src/main/java/EasySQLDemo.java) 查看部分代码演示，更多演示详见 [开发介绍](.documentation/INDEX.md) 。
+您可以 [点击这里](easysql-demo/src/main/java/EasySQLDemo.java) 查看部分代码演示，更多演示详见 [开发介绍](.documentation/README.md) 。
 
 ### 依赖方式 (Maven)
 
