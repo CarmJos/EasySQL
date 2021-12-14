@@ -9,11 +9,10 @@
 
 # EasySQL
 [![version](https://img.shields.io/github/v/release/CarmJos/EasySQL)](https://github.com/CarmJos/EasySQL/releases)
-[![CodeFactor](https://www.codefactor.io/repository/github/carmjos/easysql/badge)](https://www.codefactor.io/repository/github/carmjos/easysql)
-![CodeSize](https://img.shields.io/github/languages/code-size/CarmJos/EasySQL)
 [![License](https://img.shields.io/github/license/CarmJos/EasySQL)](https://opensource.org/licenses/GPL-3.0)
 [![workflow](https://github.com/CarmJos/EasySQL/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/CarmJos/EasySQL/actions/workflows/maven.yml)
-
+[![CodeFactor](https://www.codefactor.io/repository/github/carmjos/easysql/badge)](https://www.codefactor.io/repository/github/carmjos/easysql)
+![CodeSize](https://img.shields.io/github/languages/code-size/CarmJos/EasySQL)
 ![](https://visitor-badge.glitch.me/badge?page_id=EasySQL.readme)
 
 简单便捷的数据库操作工具，可自定义连接池来源。
