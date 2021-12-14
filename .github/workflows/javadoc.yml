@@ -24,7 +24,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Generate docs
-        run: mvn clean package
+        run: mvn clean package -DskipTests
 
       - name: Copy to Location
         run: |

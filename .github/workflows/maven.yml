@@ -21,7 +21,7 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: "Package"
-        run: mvn -B package --file pom.xml
+        run: mvn -B package --file pom.xml -Dmaven.javadoc.skip=true
       - name: "Target Stage"
         run: mkdir staging && cp */target/*.jar staging
       - name: "Upload artifact"
