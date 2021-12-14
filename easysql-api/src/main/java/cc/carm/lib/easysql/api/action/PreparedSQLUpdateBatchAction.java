@@ -26,8 +26,8 @@ public interface PreparedSQLUpdateBatchAction extends SQLAction<List<Integer>> {
 	 * 设定自增主键的序列
 	 *
 	 * @param keyColumnIndex 自增主键的序列
-	 *                       若该值 ＞ 0，则 {@link #execute()} 返回自增主键数值
-	 *                       若该值 ≤ 0，则 {@link #execute()} 返回变更的行数
+	 *                       <br>若该值 ＞ 0，则 {@link #execute()} 返回自增主键数值
+	 *                       <br>若该值 ≤ 0，则 {@link #execute()} 返回变更的行数
 	 * @return {@link PreparedSQLUpdateBatchAction}
 	 */
 	PreparedSQLUpdateBatchAction setKeyIndex(int keyColumnIndex);
