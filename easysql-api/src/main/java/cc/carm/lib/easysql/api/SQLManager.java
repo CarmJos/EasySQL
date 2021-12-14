@@ -69,7 +69,8 @@ public interface SQLManager {
 	/**
 	 * 执行多条不需要返回结果的SQL更改(UPDATE、REPLACE、DELETE)
 	 *
-	 * @param sql SQL语句内容
+	 * @param sql         SQL语句内容
+	 * @param paramsBatch SQL语句中对应?的参数组
 	 * @return 对应参数返回的行数
 	 * @see PreparedSQLUpdateBatchAction
 	 */

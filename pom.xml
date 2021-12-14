@@ -21,7 +21,7 @@
 
     <name>EasySQL</name>
     <description>简单便捷的数据库操作工具，可自选连接池。</description>
-    <url>https://github.com/CarmJos/${name}</url>
+    <url>https://github.com/CarmJos/${project.name}</url>
 
     <developers>
         <developer>
