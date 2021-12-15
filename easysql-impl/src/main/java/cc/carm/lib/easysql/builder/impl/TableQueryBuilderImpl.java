@@ -5,6 +5,7 @@ import cc.carm.lib.easysql.api.action.query.PreparedQueryAction;
 import cc.carm.lib.easysql.api.builder.TableQueryBuilder;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,8 @@ public class TableQueryBuilderImpl
 
 	ArrayList<Object> params = new ArrayList<>();
 	String[] columns;
+
+	@Nullable String orderBy;
 
 	public TableQueryBuilderImpl(@NotNull SQLManagerImpl manager, @NotNull String tableName) {
 		super(manager);
@@ -43,6 +46,7 @@ public class TableQueryBuilderImpl
 
 		if (hasConditions()) sqlBuilder.append(" ").append(buildConditionSQL());
 		if (limit > 0) sqlBuilder.append(" ").append(buildLimitSQL());
+		if (orderBy != null) sqlBuilder.append(orderBy);
 
 		return new PreparedQueryActionImpl(getManager(), sqlBuilder.toString())
 				.setParams(hasConditionParams() ? params : null);
@@ -56,6 +60,12 @@ public class TableQueryBuilderImpl
 	@Override
 	public TableQueryBuilderImpl selectColumns(@NotNull String[] columnNames) {
 		this.columns = columnNames;
+		return this;
+	}
+
+	@Override
+	public TableQueryBuilder orderBy(@NotNull String columnName, boolean asc) {
+		this.orderBy = "ORDER BY `" + columnName + "` " + (asc ? "ASC" : "DESC");
 		return this;
 	}
 

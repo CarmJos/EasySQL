@@ -9,4 +9,13 @@ public interface TableQueryBuilder extends ConditionalBuilder<PreparedQueryActio
 
 	TableQueryBuilder selectColumns(@NotNull String... columnNames);
 
+	/**
+	 * 对结果进行排序
+	 *
+	 * @param columnName 排序使用的列名
+	 * @param asc        是否为正序排序 (为false则倒序排序)
+	 * @return {@link TableQueryBuilder}
+	 */
+	TableQueryBuilder orderBy(@NotNull String columnName, boolean asc);
+
 }

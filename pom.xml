@@ -29,11 +29,14 @@
             <name>Carm Jos</name>
             <email>carm@carm.cc</email>
             <url>https://www.carm.cc</url>
-            <roles>
-                <role>Main Developer</role>
-            </roles>
         </developer>
     </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:CarmJos/EasySQL.git</connection>
+        <developerConnection>scm:git:git@github.com:CarmJos/EasySQL.git</developerConnection>
+        <url>https://github.com/CarmJos/EasySQL</url>
+    </scm>
 
     <licenses>
         <license>
@@ -124,6 +127,21 @@
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
         </plugins>
+
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+                <execution>
+                    <id>sign-artifacts</id>
+                    <phase>verify</phase>
+                    <goals>
+                        <goal>sign</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
 
         <pluginManagement>
             <plugins>
