@@ -43,9 +43,4 @@ public abstract class ReplaceBuilderImpl<T> extends AbstractSQLBuilder implement
 	public String getTableName() {
 		return tableName;
 	}
-
-	public ReplaceBuilderImpl<T> setTableName(String tableName) {
-		this.tableName = tableName;
-		return this;
-	}
 }

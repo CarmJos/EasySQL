@@ -138,6 +138,7 @@ public interface SQLAction<T> {
 		return (exception, action) -> {
 			getManager().getLogger().severe("Error when execute [" + action.getSQLContent() + "]");
 			getManager().getLogger().severe(exception.getLocalizedMessage());
+			exception.printStackTrace();
 		};
 	}
 

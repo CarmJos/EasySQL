@@ -28,7 +28,7 @@ public interface ConditionalBuilder<T> extends SQLBuilder {
 	ConditionalBuilder<T> addCondition(@NotNull String[] queryNames, @Nullable Object[] queryValues);
 
 	ConditionalBuilder<T> addNotNullCondition(@NotNull String queryName);
-	
+
 	default ConditionalBuilder<T> addTimeCondition(@NotNull String queryName, long startMillis, long endMillis) {
 		return addTimeCondition(queryName,
 				startMillis > 0 ? new Date(startMillis) : null,

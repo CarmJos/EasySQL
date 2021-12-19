@@ -7,8 +7,6 @@ public interface InsertBuilder<T> {
 
 	String getTableName();
 
-	InsertBuilder<T> setTableName(String tableName);
-
 	T setColumnNames(List<String> columnNames);
 
 	default T setColumnNames(String... columnNames) {

@@ -7,8 +7,6 @@ public interface ReplaceBuilder<T> {
 
 	String getTableName();
 
-	ReplaceBuilder<T> setTableName(String tableName);
-
 	T setColumnNames(List<String> columnNames);
 
 	default T setColumnNames(String... columnNames) {

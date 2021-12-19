@@ -1,7 +1,5 @@
 package cc.carm.lib.easysql.util;
 
-import cc.carm.lib.easysql.api.SQLAction;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.*;
@@ -40,10 +38,9 @@ public class StatementUtil {
 	) throws SQLException {
 		sql = sql.trim();
 		PreparedStatement statement = connection.prepareStatement(sql, returnGeneratedKey ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS);
-		final Map<Integer, Integer> nullTypeMap = new HashMap<>();
-		if (params != null) {
-			fillParams(statement, Arrays.asList(params), nullTypeMap);
-		}
+		Map<Integer, Integer> nullTypeMap = new HashMap<>();
+		if (params != null) fillParams(statement, Arrays.asList(params), nullTypeMap);
+		statement.addBatch();
 		return statement;
 	}
 
@@ -76,7 +73,7 @@ public class StatementUtil {
 
 		sql = sql.trim();
 		PreparedStatement statement = connection.prepareStatement(sql, returnGeneratedKey ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS);
-		final Map<Integer, Integer> nullTypeMap = new HashMap<>();
+		Map<Integer, Integer> nullTypeMap = new HashMap<>();
 		for (Object[] params : paramsBatch) {
 			fillParams(statement, Arrays.asList(params), nullTypeMap);
 			statement.addBatch();

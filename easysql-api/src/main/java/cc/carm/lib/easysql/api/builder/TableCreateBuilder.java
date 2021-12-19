@@ -8,8 +8,6 @@ public interface TableCreateBuilder extends SQLBuilder {
 
 	@NotNull String getTableName();
 
-	TableCreateBuilder setTableName(@NotNull String tableName);
-
 	@NotNull String getTableSettings();
 
 	TableCreateBuilder setTableSettings(@NotNull String settings);

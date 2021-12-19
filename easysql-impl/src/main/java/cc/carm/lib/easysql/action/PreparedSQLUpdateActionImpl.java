@@ -59,13 +59,14 @@ public class PreparedSQLUpdateActionImpl extends SQLUpdateActionImpl implements 
 		);
 		outputDebugMessage();
 		if (keyIndex > 0) {
+			statement.executeUpdate();
 			ResultSet resultSet = statement.getGeneratedKeys();
 			if (resultSet != null) {
 				if (resultSet.next()) value = resultSet.getInt(keyIndex);
 				resultSet.close();
 			}
 		} else {
-			value = statement.executeUpdate(getSQLContent());
+			value = statement.executeUpdate();
 		}
 
 		statement.close();

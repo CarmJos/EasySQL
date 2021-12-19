@@ -51,12 +51,6 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
 	}
 
 	@Override
-	public TableCreateBuilder setTableName(@NotNull String tableName) {
-		this.tableName = tableName;
-		return this;
-	}
-
-	@Override
 	public TableCreateBuilder addColumn(@NotNull String column) {
 		this.columns.add(column);
 		return this;

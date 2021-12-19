@@ -43,9 +43,4 @@ public abstract class InsertBuilderImpl<T> extends AbstractSQLBuilder implements
 	public String getTableName() {
 		return tableName;
 	}
-
-	public InsertBuilderImpl<T> setTableName(String tableName) {
-		this.tableName = tableName;
-		return this;
-	}
 }

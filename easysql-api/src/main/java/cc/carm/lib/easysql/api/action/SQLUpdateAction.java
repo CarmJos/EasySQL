@@ -2,6 +2,10 @@ package cc.carm.lib.easysql.api.action;
 
 import cc.carm.lib.easysql.api.SQLAction;
 
+import java.sql.SQLException;
+import java.util.List;
+import java.util.function.BiConsumer;
+
 public interface SQLUpdateAction extends SQLAction<Integer> {
 
 	/**
@@ -22,5 +26,7 @@ public interface SQLUpdateAction extends SQLAction<Integer> {
 	default SQLUpdateAction defaultKeyIndex() {
 		return setKeyIndex(-1); // will return changed lines number
 	}
+
+
 
 }

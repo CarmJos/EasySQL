@@ -23,9 +23,12 @@ public class SQLUpdateBatchActionImpl extends AbstractSQLAction<List<Integer>> i
 
 	@Override
 	public @NotNull String getSQLContent() {
-		return this.sqlContents.stream()
-				.map(content -> "[" + content + "]" + " ")
-				.collect(Collectors.joining());
+		return this.sqlContents.get(0);
+	}
+
+	@Override
+	public @NotNull List<String> getSQLContents() {
+		return this.sqlContents;
 	}
 
 	@Override
@@ -50,5 +53,4 @@ public class SQLUpdateBatchActionImpl extends AbstractSQLAction<List<Integer>> i
 
 		return returnedValues;
 	}
-
 }

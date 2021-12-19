@@ -15,7 +15,6 @@ public class TableQueryBuilderImpl
 
 	@NotNull String tableName;
 
-	ArrayList<Object> params = new ArrayList<>();
 	String[] columns;
 
 	@Nullable String orderBy;
@@ -49,7 +48,7 @@ public class TableQueryBuilderImpl
 		if (orderBy != null) sqlBuilder.append(orderBy);
 
 		return new PreparedQueryActionImpl(getManager(), sqlBuilder.toString())
-				.setParams(hasConditionParams() ? params : null);
+				.setParams(hasConditionParams() ? getConditionParams() : null);
 	}
 
 	@Override
