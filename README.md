@@ -26,10 +26,6 @@
 - 基于JDBC开发，可自选连接池、JDBC驱动。
 - 简单便捷的增删改查接口，无需手写SQL语句。
 - 额外提供部分常用情况的SQL操作
-    - 存在则更新，不存在则插入
-    - 创建表
-    - 修改表
-    - ...
 - 自动关闭数据流
 - 支持同步操作与异步操作
 
@@ -41,10 +37,12 @@
 
 您可以 [点击这里](easysql-demo/src/main/java/EasySQLDemo.java) 查看部分代码演示，更多演示详见 [开发介绍](.documentation/README.md) 。
 
-### 依赖方式 (Maven)
+### 依赖方式 
+
+<details>
+<summary>远程库配置(Maven)</summary>
 
 ```xml
-
 <project>
     <repositories>
         <repository>
@@ -53,6 +51,16 @@
             <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
         </repository>
     </repositories>
+</project>
+```
+
+</details>
+
+<details>
+<summary>原生依赖(Maven)</summary>
+
+```xml
+<project>
     <dependencies>
         <!--对于需要提供公共接口的项目，可以仅打包API部分，方便他人调用-->
         <dependency>
@@ -70,14 +78,17 @@
             <scope>compile</scope>
         </dependency>
 
-        <!--如需自定义连接池，则可以仅打包实现部分，自行创建SQLManager-->
-        <dependency>
-            <groupId>cc.carm.lib</groupId>
-            <artifactId>easysql-beecp</artifactId>
-            <version>[LATEST RELEASE]</version>
-            <scope>compile</scope>
-        </dependency>
+    </dependencies>
+</project>
+```
+</details>
 
+<details>
+<summary>含连接池版本(Maven)</summary>
+
+```xml
+<project>
+    <dependencies>
         <!--也可直接选择打包了连接池的版本-->
         <dependency>
             <groupId>cc.carm.lib</groupId>
@@ -91,11 +102,11 @@
             <version>[LATEST VERSION]</version>
             <scope>compile</scope>
         </dependency>
-
     </dependencies>
 </project>
-
 ```
+
+</details>
 
 ## 支持与捐赠
 
