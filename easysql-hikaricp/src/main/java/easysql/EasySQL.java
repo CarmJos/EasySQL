@@ -1,5 +1,8 @@
 package easysql;
 
+import cc.carm.lib.easysql.api.SQLManager;
+import cc.carm.lib.easysql.api.action.query.SQLQuery;
+import cc.carm.lib.easysql.api.util.TimeDateUtils;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -27,6 +30,27 @@ public class EasySQL {
 
 	public static SQLManagerImpl createManager(@NotNull HikariConfig config) {
 		return new SQLManagerImpl(new HikariDataSource(config));
+	}
+
+	public static void shutdownManager(SQLManager manager, boolean forceClose, boolean outputActiveQuery) {
+		if (!manager.getActiveQuery().isEmpty()) {
+			manager.getLogger().severe("There are " + manager.getActiveQuery().size() + " connections still running");
+			for (SQLQuery value : manager.getActiveQuery().values()) {
+				if (outputActiveQuery) {
+					manager.getLogger().severe("#" + value.getAction().getShortID() + " -> " + value.getSQLContent());
+					manager.getLogger().severe("- execute at " + TimeDateUtils.getTimeString(value.getExecuteTime()));
+				}
+				if (forceClose) value.close();
+			}
+		}
+		if (manager.getDataSource() instanceof HikariDataSource) {
+			//Close hikari pool
+			((HikariDataSource) manager.getDataSource()).close();
+		}
+	}
+
+	public static void shutdownManager(SQLManager manager) {
+		shutdownManager(manager, true, manager.isDebugMode());
 	}
 
 }
