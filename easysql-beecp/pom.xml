@@ -5,7 +5,7 @@
     <parent>
         <artifactId>easysql-parent</artifactId>
         <groupId>cc.carm.lib</groupId>
-        <version>0.2.3</version>
+        <version>0.2.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -67,6 +67,7 @@
             <groupId>com.github.chris2018998</groupId>
             <artifactId>beecp</artifactId>
             <version>3.3.0</version>
+            <optional>true</optional>
             <scope>compile</scope>
         </dependency>
 
@@ -89,6 +90,36 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>org.slf4j</pattern>
+                            <shadedPattern>cc.carm.lib.easysql.slf4j</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>cn.beecp</pattern>
+                            <shadedPattern>cc.carm.lib.easysql.beecp</shadedPattern>
+                        </relocation>
+                    </relocations>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/MANIFEST.MF</exclude>
+                                <exclude>META-INF/*.txt</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
             </plugin>
         </plugins>
     </build>

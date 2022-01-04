@@ -1,4 +1,4 @@
-package easysql;
+package cc.carm.lib.easysql;
 
 import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.action.query.SQLQuery;
