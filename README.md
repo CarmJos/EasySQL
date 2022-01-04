@@ -148,10 +148,10 @@ repositories {
 dependencies {
     
     //对于需要提供公共接口的项目，可以仅打包API部分，方便他人调用
-    compileOnly "cc.carm.lib:easysql-api:[LATEST RELEASE]"
+    api "cc.carm.lib:easysql-api:[LATEST RELEASE]"
 
     //如需自定义连接池，则可以仅打包实现部分，自行创建SQLManager
-    compileOnly "cc.carm.lib:easysql-impl:[LATEST RELEASE]"
+    api "cc.carm.lib:easysql-impl:[LATEST RELEASE]"
     
 }
 ```
@@ -166,10 +166,10 @@ dependencies {
 dependencies {
     
     //也可直接选择打包了连接池的版本
-    
-    compileOnly "cc.carm.lib:easysql-beecp:[LATEST RELEASE]"
-    
-    compileOnly "cc.carm.lib:easysql-hikaricp:[LATEST RELEASE]"
+
+    api "cc.carm.lib:easysql-beecp:[LATEST RELEASE]"
+
+    api "cc.carm.lib:easysql-hikaricp:[LATEST RELEASE]"
     
 }
 ```
