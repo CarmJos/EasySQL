@@ -37,19 +37,31 @@
 
 您可以 [点击这里](easysql-demo/src/main/java/EasySQLDemo.java) 查看部分代码演示，更多演示详见 [开发介绍](.documentation/README.md) 。
 
-### 依赖方式 
+### 依赖方式
+
+#### Maven 依赖
 
 <details>
-<summary>远程库配置(Maven)</summary>
+<summary>远程库配置</summary>
 
 ```xml
+
 <project>
     <repositories>
         <repository>
-            <id>github</id>
+            <!--采用github依赖库，安全稳定，但需要配置 (推荐)-->
+            <id>EasySQL</id>
             <name>GitHub Packages</name>
             <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
         </repository>
+
+        <repository>
+            <!--采用我的私人依赖库，简单方便，但可能因为变故而无法使用-->
+            <id>carm-repo</id>
+            <name>Carm's Repo</name>
+            <url>https://repo.carm.cc/repository/maven-public/</url>
+        </repository>
+
     </repositories>
 </project>
 ```
@@ -57,9 +69,10 @@
 </details>
 
 <details>
-<summary>原生依赖(Maven)</summary>
+<summary>原生依赖</summary>
 
 ```xml
+
 <project>
     <dependencies>
         <!--对于需要提供公共接口的项目，可以仅打包API部分，方便他人调用-->
@@ -81,12 +94,14 @@
     </dependencies>
 </project>
 ```
+
 </details>
 
 <details>
-<summary>含连接池版本(Maven)</summary>
+<summary>含连接池版本</summary>
 
 ```xml
+
 <project>
     <dependencies>
         <!--也可直接选择打包了连接池的版本-->
@@ -106,6 +121,56 @@
 </project>
 ```
 
+</details>
+
+#### Gradle 依赖
+
+<details>
+<summary>远程库配置</summary>
+
+```groovy
+repositories {
+    maven { url 'https://maven.pkg.github.com/CarmJos/EasySQL' } // 采用github依赖库，安全稳定，但需要配置 (推荐)
+
+    maven { url 'https://repo.carm.cc/repository/maven-public/' } // 采用我的私人依赖库，简单方便，但可能因为变故而无法使用
+}
+```
+
+</details>
+
+<details>
+<summary>原生依赖</summary>
+
+```groovy
+
+dependencies {
+    
+    //对于需要提供公共接口的项目，可以仅打包API部分，方便他人调用
+    compileOnly "cc.carm.lib:easysql-api:[LATEST RELEASE]"
+
+    //如需自定义连接池，则可以仅打包实现部分，自行创建SQLManager
+    compileOnly "cc.carm.lib:easysql-impl:[LATEST RELEASE]"
+    
+}
+```
+
+</details>
+
+<details>
+<summary>含连接池版本</summary>
+
+```groovy
+
+dependencies {
+    
+    //也可直接选择打包了连接池的版本
+    
+    compileOnly "cc.carm.lib:easysql-beecp:[LATEST RELEASE]"
+    
+    compileOnly "cc.carm.lib:easysql-hikaricp:[LATEST RELEASE]"
+    
+}
+```
 </details>
 
 ## 支持与捐赠
