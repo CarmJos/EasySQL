@@ -5,7 +5,7 @@
     <parent>
         <artifactId>easysql-parent</artifactId>
         <groupId>cc.carm.lib</groupId>
-        <version>0.2.4</version>
+        <version>0.2.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -101,10 +101,6 @@
                 </executions>
                 <configuration>
                     <relocations>
-                        <relocation>
-                            <pattern>org.slf4j</pattern>
-                            <shadedPattern>cc.carm.lib.easysql.slf4j</shadedPattern>
-                        </relocation>
                         <relocation>
                             <pattern>cn.beecp</pattern>
                             <shadedPattern>cc.carm.lib.easysql.beecp</shadedPattern>
