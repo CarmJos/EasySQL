@@ -49,6 +49,7 @@ public interface SQLManager {
 
 	/**
 	 * 执行一条不需要返回结果的SQL语句(多用于UPDATE、REPLACE、DELETE方法)
+	 * 该方法使用 Statement 实现，请注意SQL注入风险！
 	 *
 	 * @param sql SQL语句内容
 	 * @return 更新的行数
@@ -79,6 +80,7 @@ public interface SQLManager {
 
 	/**
 	 * 执行多条不需要返回结果的SQL。
+	 * 该方法使用 Statement 实现，请注意SQL注入风险！
 	 *
 	 * @param sql     SQL语句内容
 	 * @param moreSQL 更多SQL语句内容

@@ -13,7 +13,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-public abstract class AbstractConditionalBuilder<T> extends AbstractSQLBuilder implements ConditionalBuilder<T> {
+public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B, T>, T>
+		extends AbstractSQLBuilder implements ConditionalBuilder<B, T> {
 
 	ArrayList<String> conditionSQLs = new ArrayList<>();
 	ArrayList<Object> conditionParams = new ArrayList<>();
@@ -23,39 +24,41 @@ public abstract class AbstractConditionalBuilder<T> extends AbstractSQLBuilder i
 		super(manager);
 	}
 
+	protected abstract B getThis();
+
 	@Override
-	public AbstractConditionalBuilder<T> setConditions(@Nullable String condition) {
+	public B setConditions(@Nullable String condition) {
 		this.conditionSQLs = new ArrayList<>();
 		this.conditionParams = new ArrayList<>();
 		if (condition != null) this.conditionSQLs.add(condition);
-		return this;
+		return getThis();
 	}
 
 	@Override
-	public AbstractConditionalBuilder<T> setConditions(
+	public B setConditions(
 			LinkedHashMap<@NotNull String, @Nullable Object> conditions
 	) {
 		conditions.forEach(this::addCondition);
-		return this;
+		return getThis();
 	}
 
 	@Override
-	public AbstractConditionalBuilder<T> addCondition(@Nullable String condition) {
+	public B addCondition(@Nullable String condition) {
 		this.conditionSQLs.add(condition);
-		return this;
+		return getThis();
 	}
 
 	@Override
-	public AbstractConditionalBuilder<T> addCondition(
+	public B addCondition(
 			@NotNull String queryName, @NotNull String operator, @Nullable Object queryValue
 	) {
 		addCondition("`" + queryName + "` " + operator + " ?");
 		this.conditionParams.add(queryValue);
-		return this;
+		return getThis();
 	}
 
 	@Override
-	public AbstractConditionalBuilder<T> addCondition(
+	public B addCondition(
 			@NotNull String[] queryNames, @Nullable Object[] queryValues
 	) {
 		if (queryNames.length != queryValues.length) {
@@ -64,21 +67,21 @@ public abstract class AbstractConditionalBuilder<T> extends AbstractSQLBuilder i
 		for (int i = 0; i < queryNames.length; i++) {
 			addCondition(queryNames[i], queryValues[i]);
 		}
-		return this;
+		return getThis();
 	}
 
 
 	@Override
-	public AbstractConditionalBuilder<T> addNotNullCondition(@NotNull String queryName) {
+	public B addNotNullCondition(@NotNull String queryName) {
 		return addCondition("`" + queryName + "` IS NOT NULL");
 	}
 
 
 	@Override
-	public AbstractConditionalBuilder<T> addTimeCondition(
+	public B addTimeCondition(
 			@NotNull String queryName, @Nullable Date startDate, @Nullable Date endDate
 	) {
-		if (startDate == null && endDate == null) return this; // 都不限定时间，不用判断了
+		if (startDate == null && endDate == null) return getThis(); // 都不限定时间，不用判断了
 		if (startDate != null) {
 			addCondition("`" + queryName + "` BETWEEN ? AND ?");
 			this.conditionParams.add(startDate);
@@ -96,14 +99,14 @@ public abstract class AbstractConditionalBuilder<T> extends AbstractSQLBuilder i
 		} else {
 			addCondition(queryName, "<=", endDate);
 		}
-		return this;
+		return getThis();
 	}
 
 
 	@Override
-	public AbstractConditionalBuilder<T> setLimit(int limit) {
+	public B setLimit(int limit) {
 		this.limit = limit;
-		return this;
+		return getThis();
 	}
 
 	protected String buildConditionSQL() {

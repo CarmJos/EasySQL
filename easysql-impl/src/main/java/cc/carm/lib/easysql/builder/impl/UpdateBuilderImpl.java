@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class UpdateBuilderImpl
-		extends AbstractConditionalBuilder<PreparedSQLUpdateAction>
+		extends AbstractConditionalBuilder<UpdateBuilder, PreparedSQLUpdateAction>
 		implements UpdateBuilder {
 
 	String tableName;
@@ -73,4 +73,8 @@ public class UpdateBuilderImpl
 	}
 
 
+	@Override
+	protected UpdateBuilder getThis() {
+		return this;
+	}
 }

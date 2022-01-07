@@ -8,11 +8,12 @@ import org.jetbrains.annotations.NotNull;
 public interface QueryBuilder extends SQLBuilder {
 
 	/**
-	 * 通过一条 SQL语句创建查询
+	 * 通过一条 SQL语句创建查询。
+	 * 该方法使用 Statement 实现，请注意SQL注入风险！
 	 *
 	 * @param sql SQL语句
 	 * @return {@link QueryAction}
-	 * @deprecated 存在SQL注入风险，请使用 {@link QueryBuilder#withPreparedSQL(String)}
+	 * @deprecated 存在SQL注入风险，建议使用 {@link QueryBuilder#withPreparedSQL(String)}
 	 */
 	@Deprecated
 	QueryAction withSQL(@NotNull String sql);

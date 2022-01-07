@@ -7,10 +7,8 @@ import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-
 public class TableQueryBuilderImpl
-		extends AbstractConditionalBuilder<PreparedQueryAction>
+		extends AbstractConditionalBuilder<TableQueryBuilder, PreparedQueryAction>
 		implements TableQueryBuilder {
 
 	@NotNull String tableName;
@@ -18,6 +16,8 @@ public class TableQueryBuilderImpl
 	String[] columns;
 
 	@Nullable String orderBy;
+
+	int[] pageLimit;
 
 	public TableQueryBuilderImpl(@NotNull SQLManagerImpl manager, @NotNull String tableName) {
 		super(manager);
@@ -44,7 +44,13 @@ public class TableQueryBuilderImpl
 		sqlBuilder.append("`").append(tableName).append("`");
 
 		if (hasConditions()) sqlBuilder.append(" ").append(buildConditionSQL());
-		if (limit > 0) sqlBuilder.append(" ").append(buildLimitSQL());
+		
+		if (pageLimit != null && pageLimit.length == 2) {
+			sqlBuilder.append(" LIMIT ").append(pageLimit[0]).append(",").append(pageLimit[1]);
+		} else if (limit > 0) {
+			sqlBuilder.append(" ").append(buildLimitSQL());
+		}
+
 		if (orderBy != null) sqlBuilder.append(orderBy);
 
 		return new PreparedQueryActionImpl(getManager(), sqlBuilder.toString())
@@ -68,4 +74,14 @@ public class TableQueryBuilderImpl
 		return this;
 	}
 
+	@Override
+	public TableQueryBuilder setPageLimit(int start, int end) {
+		this.pageLimit = new int[]{start, end};
+		return this;
+	}
+
+	@Override
+	protected TableQueryBuilderImpl getThis() {
+		return this;
+	}
 }

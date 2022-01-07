@@ -7,36 +7,36 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
-public interface ConditionalBuilder<T> extends SQLBuilder {
+public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T> extends SQLBuilder {
 
 	T build();
 
-	ConditionalBuilder<T> setLimit(int limit);
+	B setLimit(int limit);
 
-	ConditionalBuilder<T> setConditions(@Nullable String condition);
+	B setConditions(@Nullable String condition);
 
-	ConditionalBuilder<T> setConditions(LinkedHashMap<@NotNull String, @Nullable Object> conditionSQLs);
+	B setConditions(LinkedHashMap<@NotNull String, @Nullable Object> conditionSQLs);
 
-	ConditionalBuilder<T> addCondition(@Nullable String condition);
+	B addCondition(@Nullable String condition);
 
-	ConditionalBuilder<T> addCondition(@NotNull String queryName, @NotNull String operator, @Nullable Object queryValue);
+	B addCondition(@NotNull String queryName, @NotNull String operator, @Nullable Object queryValue);
 
-	default ConditionalBuilder<T> addCondition(@NotNull String queryName, @Nullable Object queryValue) {
+	default B addCondition(@NotNull String queryName, @Nullable Object queryValue) {
 		return addCondition(queryName, "=", queryValue);
 	}
 
-	ConditionalBuilder<T> addCondition(@NotNull String[] queryNames, @Nullable Object[] queryValues);
+	B addCondition(@NotNull String[] queryNames, @Nullable Object[] queryValues);
 
-	ConditionalBuilder<T> addNotNullCondition(@NotNull String queryName);
+	B addNotNullCondition(@NotNull String queryName);
 
-	default ConditionalBuilder<T> addTimeCondition(@NotNull String queryName, long startMillis, long endMillis) {
+	default B addTimeCondition(@NotNull String queryName, long startMillis, long endMillis) {
 		return addTimeCondition(queryName,
 				startMillis > 0 ? new Date(startMillis) : null,
 				endMillis > 0 ? new Date(endMillis) : null
 		);
 	}
 
-	ConditionalBuilder<T> addTimeCondition(@NotNull String queryName, @Nullable java.util.Date startDate, @Nullable java.util.Date endDate);
+	B addTimeCondition(@NotNull String queryName, @Nullable java.util.Date startDate, @Nullable java.util.Date endDate);
 
 
 }

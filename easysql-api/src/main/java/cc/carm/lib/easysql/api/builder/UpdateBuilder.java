@@ -4,7 +4,7 @@ import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
 
 import java.util.LinkedHashMap;
 
-public interface UpdateBuilder extends ConditionalBuilder<PreparedSQLUpdateAction> {
+public interface UpdateBuilder extends ConditionalBuilder<UpdateBuilder, PreparedSQLUpdateAction> {
 
 	String getTableName();
 

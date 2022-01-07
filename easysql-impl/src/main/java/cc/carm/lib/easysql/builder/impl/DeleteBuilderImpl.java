@@ -7,7 +7,7 @@ import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 
 public class DeleteBuilderImpl
-		extends AbstractConditionalBuilder<PreparedSQLUpdateAction>
+		extends AbstractConditionalBuilder<DeleteBuilder, PreparedSQLUpdateAction>
 		implements DeleteBuilder {
 
 	String tableName;
@@ -38,5 +38,10 @@ public class DeleteBuilderImpl
 		return tableName;
 	}
 
+
+	@Override
+	protected DeleteBuilderImpl getThis() {
+		return this;
+	}
 
 }
