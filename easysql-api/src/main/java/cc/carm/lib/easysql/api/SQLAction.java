@@ -1,5 +1,6 @@
 package cc.carm.lib.easysql.api;
 
+import cc.carm.lib.easysql.api.function.SQLFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -7,13 +8,12 @@ import java.sql.SQLException;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * SQLAction 是用于承载SQL语句并进行处理、返回的基本类。
  *
  * <ul>
- *     <li>同步执行 {@link #execute()}, {@link #execute(Function, BiConsumer)}
+ *     <li>同步执行 {@link #execute()}, {@link #execute(SQLFunction, BiConsumer)}
  *     <br>同步执行方法中有会抛出异常的方法与不抛出异常的方法，
  *     <br>若选择不抛出异常，则返回值可能为空，需要特殊处理。</li>
  *
@@ -22,8 +22,6 @@ import java.util.function.Function;
  *     <br>可自行选择是否对数据或异常进行处理
  *     <br>默认的异常处理器为 {@link #defaultExceptionHandler()}</li>
  * </ul>
- *
- * <b>注意： 无论是否异步，都不需要自行关闭ResultSet，本API已自动关闭</b>
  *
  * @param <T> 需要返回的类型
  * @author CarmJos
@@ -74,20 +72,6 @@ public interface SQLAction<T> {
 	 */
 	@NotNull T execute() throws SQLException;
 
-	/**
-	 * 执行语句并处理返回值
-	 *
-	 * @param function         处理方法
-	 * @param exceptionHandler 异常处理器 默认为 {@link #defaultExceptionHandler()}
-	 * @param <R>              需要返回的内容
-	 * @return 指定类型数据
-	 */
-	@Nullable
-	default <R> R execute(@NotNull Function<T, R> function, @Nullable BiConsumer<SQLException, SQLAction<T>> exceptionHandler) {
-		T value = execute(exceptionHandler);
-		if (value == null) return null;
-		else return function.apply(value);
-	}
 
 	/**
 	 * 执行语句并返回值
@@ -97,14 +81,44 @@ public interface SQLAction<T> {
 	 */
 	@Nullable
 	default T execute(@Nullable BiConsumer<SQLException, SQLAction<T>> exceptionHandler) {
-		if (exceptionHandler == null) exceptionHandler = defaultExceptionHandler();
-		T value = null;
+		return execute(t -> t, exceptionHandler);
+	}
+
+	/**
+	 * 执行语句并处理返回值
+	 *
+	 * @param function 处理方法
+	 * @param <R>      需要返回的内容
+	 * @return 指定类型数据
+	 * @throws SQLException 当SQL操作出现问题时抛出
+	 */
+	@Nullable
+	default <R> R executeFunction(@NotNull SQLFunction<T, R> function) throws SQLException {
 		try {
-			value = execute();
+			T value = execute();
+			return function.apply(value);
 		} catch (SQLException exception) {
-			exceptionHandler.accept(exception, this);
+			throw new SQLException(exception);
 		}
-		return value;
+	}
+
+	/**
+	 * 执行语句并处理返回值
+	 *
+	 * @param function         处理方法
+	 * @param exceptionHandler 异常处理器 默认为 {@link #defaultExceptionHandler()}
+	 * @param <R>              需要返回的内容
+	 * @return 指定类型数据
+	 */
+	@Nullable
+	default <R> R execute(@NotNull SQLFunction<T, R> function,
+						  @Nullable BiConsumer<SQLException, SQLAction<T>> exceptionHandler) {
+		try {
+			return executeFunction(function);
+		} catch (SQLException exception) {
+			handleException(exceptionHandler, exception);
+			return null;
+		}
 	}
 
 	/**
@@ -130,6 +144,12 @@ public interface SQLAction<T> {
 	 * @param failure 异常处理器 默认为 {@link SQLAction#defaultExceptionHandler()}
 	 */
 	void executeAsync(@Nullable Consumer<T> success, @Nullable BiConsumer<SQLException, SQLAction<T>> failure);
+
+
+	default void handleException(@Nullable BiConsumer<SQLException, SQLAction<T>> handler, SQLException exception) {
+		if (handler == null) handler = defaultExceptionHandler();
+		handler.accept(exception, this);
+	}
 
 	/**
 	 * @return 默认的异常处理器

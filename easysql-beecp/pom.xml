@@ -5,14 +5,14 @@
     <parent>
         <artifactId>easysql-parent</artifactId>
         <groupId>cc.carm.lib</groupId>
-        <version>0.2.5</version>
+        <version>0.2.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>easysql-beecp</artifactId>
     <packaging>jar</packaging>
 
-    <name>10-EasySQL-BeeCP</name>
+    <name>12-EasySQL-BeeCP</name>
     <description>EasySQL的应用部分。此为BeeCP版本。</description>
     <url>https://github.com/CarmJos/EasySQL</url>
 

@@ -49,16 +49,11 @@ public class EasySQLDemo {
 				.build().execute(query -> {
 					//可以直接进行数据处理
 					ResultSet result = query.getResultSet();
-					try {
-						if (result != null && result.next()) {
-							return UUIDUtil.toUUID(result.getString("uuid"));
-						}
-					} catch (SQLException ignored) {
-					}
-					return null;
+					return result.next() ? UUIDUtil.toUUID(result.getString("uuid")) : null;
 				}, (exception, action) -> {
 					// 处理异常，不想处理直接填null
 				});
+
 	}
 
 	public void sqlQueryAsync(SQLManager sqlManager) {
