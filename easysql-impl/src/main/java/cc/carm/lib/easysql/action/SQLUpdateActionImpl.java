@@ -11,42 +11,42 @@ import java.sql.Statement;
 
 public class SQLUpdateActionImpl extends AbstractSQLAction<Integer> implements SQLUpdateAction {
 
-	int keyIndex = -1;
+    int keyIndex = -1;
 
-	public SQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
-		super(manager, sql);
-	}
+    public SQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
+        super(manager, sql);
+    }
 
-	@Override
-	public @NotNull Integer execute() throws SQLException {
-		int returnedValue = -1;
-		Connection connection = getManager().getConnection();
-		Statement statement = connection.createStatement();
-		outputDebugMessage();
-		if (keyIndex > 0) {
-			statement.executeUpdate(getSQLContent(), Statement.RETURN_GENERATED_KEYS);
-			ResultSet resultSet = statement.getGeneratedKeys();
-			if (resultSet != null) {
-				if (resultSet.next()) {
-					returnedValue = resultSet.getInt(keyIndex);
-				}
-				resultSet.close();
-			}
-		} else {
-			returnedValue = statement.executeUpdate(getSQLContent());
-		}
+    @Override
+    public @NotNull Integer execute() throws SQLException {
+        int returnedValue = -1;
+        Connection connection = getManager().getConnection();
+        Statement statement = connection.createStatement();
+        outputDebugMessage();
+        if (keyIndex > 0) {
+            statement.executeUpdate(getSQLContent(), Statement.RETURN_GENERATED_KEYS);
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet != null) {
+                if (resultSet.next()) {
+                    returnedValue = resultSet.getInt(keyIndex);
+                }
+                resultSet.close();
+            }
+        } else {
+            returnedValue = statement.executeUpdate(getSQLContent());
+        }
 
-		statement.close();
-		connection.close();
+        statement.close();
+        connection.close();
 
-		return returnedValue;
-	}
+        return returnedValue;
+    }
 
 
-	@Override
-	public SQLUpdateActionImpl setKeyIndex(int keyIndex) {
-		this.keyIndex = keyIndex;
-		return this;
-	}
+    @Override
+    public SQLUpdateActionImpl setKeyIndex(int keyIndex) {
+        this.keyIndex = keyIndex;
+        return this;
+    }
 
 }

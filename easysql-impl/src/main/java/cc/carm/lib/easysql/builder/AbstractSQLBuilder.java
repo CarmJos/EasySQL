@@ -6,14 +6,14 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractSQLBuilder implements SQLBuilder {
 
-	@NotNull SQLManagerImpl sqlManager;
+    @NotNull SQLManagerImpl sqlManager;
 
-	public AbstractSQLBuilder(@NotNull SQLManagerImpl manager) {
-		this.sqlManager = manager;
-	}
+    public AbstractSQLBuilder(@NotNull SQLManagerImpl manager) {
+        this.sqlManager = manager;
+    }
 
-	@Override
-	public @NotNull SQLManagerImpl getManager() {
-		return this.sqlManager;
-	}
+    @Override
+    public @NotNull SQLManagerImpl getManager() {
+        return this.sqlManager;
+    }
 }

@@ -11,24 +11,24 @@ import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 
 public class QueryBuilderImpl extends AbstractSQLBuilder implements QueryBuilder {
-	public QueryBuilderImpl(@NotNull SQLManagerImpl manager) {
-		super(manager);
-	}
+    public QueryBuilderImpl(@NotNull SQLManagerImpl manager) {
+        super(manager);
+    }
 
-	@Override
-	@Deprecated
-	public QueryAction withSQL(@NotNull String sql) {
-		return new QueryActionImpl(getManager(), sql);
-	}
+    @Override
+    @Deprecated
+    public QueryAction withSQL(@NotNull String sql) {
+        return new QueryActionImpl(getManager(), sql);
+    }
 
-	@Override
-	public PreparedQueryAction withPreparedSQL(@NotNull String sql) {
-		return new PreparedQueryActionImpl(getManager(), sql);
-	}
+    @Override
+    public PreparedQueryAction withPreparedSQL(@NotNull String sql) {
+        return new PreparedQueryActionImpl(getManager(), sql);
+    }
 
-	@Override
-	public TableQueryBuilder inTable(@NotNull String tableName) {
-		return new TableQueryBuilderImpl(getManager(), tableName);
-	}
+    @Override
+    public TableQueryBuilder inTable(@NotNull String tableName) {
+        return new TableQueryBuilderImpl(getManager(), tableName);
+    }
 
 }

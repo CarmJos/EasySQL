@@ -6,25 +6,25 @@ import org.jetbrains.annotations.NotNull;
 
 public interface TableCreateBuilder extends SQLBuilder {
 
-	@NotNull String getTableName();
+    @NotNull String getTableName();
 
-	@NotNull String getTableSettings();
+    @NotNull String getTableSettings();
 
-	TableCreateBuilder setTableSettings(@NotNull String settings);
+    TableCreateBuilder setTableSettings(@NotNull String settings);
 
-	SQLUpdateAction build();
+    SQLUpdateAction build();
 
-	default TableCreateBuilder addColumn(@NotNull String columnName, @NotNull String settings) {
-		return addColumn("`" + columnName + "` " + settings);
-	}
+    default TableCreateBuilder addColumn(@NotNull String columnName, @NotNull String settings) {
+        return addColumn("`" + columnName + "` " + settings);
+    }
 
-	TableCreateBuilder addColumn(@NotNull String column);
+    TableCreateBuilder addColumn(@NotNull String column);
 
-	TableCreateBuilder setColumns(@NotNull String... columns);
+    TableCreateBuilder setColumns(@NotNull String... columns);
 
-	default TableCreateBuilder defaultTablesSettings() {
-		return setTableSettings("ENGINE=InnoDB DEFAULT CHARSET=utf8");
-	}
+    default TableCreateBuilder defaultTablesSettings() {
+        return setTableSettings("ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    }
 
 
 }

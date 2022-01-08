@@ -30,22 +30,22 @@ import java.util.function.Consumer;
  */
 public interface QueryAction extends SQLAction<SQLQuery> {
 
-	/**
-	 * 执行语句并处理返回值
-	 *
-	 * @param function 处理方法
-	 * @param <R>      需要返回的内容
-	 * @return 指定类型数据
-	 * @throws SQLException 当SQL操作出现问题时抛出
-	 */
-	@Nullable
-	default <R> R executeFunction(@NotNull SQLFunction<SQLQuery, R> function)
-			throws SQLException {
-		try (SQLQuery value = execute()) {
-			return function.apply(value);
-		} catch (SQLException exception) {
-			throw new SQLException(exception);
-		}
-	}
+    /**
+     * 执行语句并处理返回值
+     *
+     * @param function 处理方法
+     * @param <R>      需要返回的内容
+     * @return 指定类型数据
+     * @throws SQLException 当SQL操作出现问题时抛出
+     */
+    @Nullable
+    default <R> R executeFunction(@NotNull SQLFunction<SQLQuery, R> function)
+            throws SQLException {
+        try (SQLQuery value = execute()) {
+            return function.apply(value);
+        } catch (SQLException exception) {
+            throw new SQLException(exception);
+        }
+    }
 
 }

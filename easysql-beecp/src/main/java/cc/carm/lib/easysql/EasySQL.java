@@ -11,36 +11,36 @@ import org.jetbrains.annotations.Nullable;
 
 public class EasySQL {
 
-	public static SQLManagerImpl createManager(
-			@NotNull String driver, @NotNull String url,
-			@NotNull String username, @Nullable String password) {
-		return createManager(new BeeDataSourceConfig(driver, url, username, password));
-	}
+    public static SQLManagerImpl createManager(
+            @NotNull String driver, @NotNull String url,
+            @NotNull String username, @Nullable String password) {
+        return createManager(new BeeDataSourceConfig(driver, url, username, password));
+    }
 
-	public static SQLManagerImpl createManager(@NotNull BeeDataSourceConfig config) {
-		return new SQLManagerImpl(new BeeDataSource(config));
-	}
+    public static SQLManagerImpl createManager(@NotNull BeeDataSourceConfig config) {
+        return new SQLManagerImpl(new BeeDataSource(config));
+    }
 
 
-	public static void shutdownManager(SQLManager manager, boolean forceClose, boolean outputActiveQuery) {
-		if (!manager.getActiveQuery().isEmpty()) {
-			manager.getLogger().severe("There are " + manager.getActiveQuery().size() + " connections still running");
-			for (SQLQuery value : manager.getActiveQuery().values()) {
-				if (outputActiveQuery) {
-					manager.getLogger().severe("#" + value.getAction().getShortID() + " -> " + value.getSQLContent());
-					manager.getLogger().severe("- execute at " + TimeDateUtils.getTimeString(value.getExecuteTime()));
-				}
-				if (forceClose) value.close();
-			}
-		}
-		if (manager.getDataSource() instanceof BeeDataSource) {
-			//Close bee connection pool
-			((BeeDataSource) manager.getDataSource()).close();
-		}
-	}
+    public static void shutdownManager(SQLManager manager, boolean forceClose, boolean outputActiveQuery) {
+        if (!manager.getActiveQuery().isEmpty()) {
+            manager.getLogger().severe("There are " + manager.getActiveQuery().size() + " connections still running");
+            for (SQLQuery value : manager.getActiveQuery().values()) {
+                if (outputActiveQuery) {
+                    manager.getLogger().severe("#" + value.getAction().getShortID() + " -> " + value.getSQLContent());
+                    manager.getLogger().severe("- execute at " + TimeDateUtils.getTimeString(value.getExecuteTime()));
+                }
+                if (forceClose) value.close();
+            }
+        }
+        if (manager.getDataSource() instanceof BeeDataSource) {
+            //Close bee connection pool
+            ((BeeDataSource) manager.getDataSource()).close();
+        }
+    }
 
-	public static void shutdownManager(SQLManager manager) {
-		shutdownManager(manager, true, manager.isDebugMode());
-	}
+    public static void shutdownManager(SQLManager manager) {
+        shutdownManager(manager, true, manager.isDebugMode());
+    }
 
 }

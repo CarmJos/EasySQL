@@ -11,11 +11,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface SQLBuilder {
 
-	/**
-	 * 得到承载该Builder的对应{@link SQLManager}
-	 *
-	 * @return {@link SQLManager}
-	 */
-	@NotNull SQLManager getManager();
+    /**
+     * 得到承载该Builder的对应{@link SQLManager}
+     *
+     * @return {@link SQLManager}
+     */
+    @NotNull SQLManager getManager();
 
 }

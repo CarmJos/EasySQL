@@ -9,28 +9,28 @@ import java.util.function.BiConsumer;
 
 public interface SQLUpdateBatchAction extends SQLAction<List<Integer>> {
 
-	/**
-	 * 添加一条批量执行的SQL语句
-	 *
-	 * @param sql SQL语句
-	 * @return {@link SQLUpdateBatchAction}
-	 */
-	SQLUpdateBatchAction addBatch(@NotNull String sql);
+    /**
+     * 添加一条批量执行的SQL语句
+     *
+     * @param sql SQL语句
+     * @return {@link SQLUpdateBatchAction}
+     */
+    SQLUpdateBatchAction addBatch(@NotNull String sql);
 
-	List<String> getSQLContents();
+    List<String> getSQLContents();
 
-	@Override
-	default BiConsumer<SQLException, SQLAction<List<Integer>>> defaultExceptionHandler() {
-		return (exception, action) -> {
-			getManager().getLogger().severe("Error when execute SQLs : ");
-			int i = 1;
-			for (String content : getSQLContents()) {
-				getManager().getLogger().severe("#" + i + " [" + content + "]");
-				i++;
-			}
-			getManager().getLogger().severe(exception.getLocalizedMessage());
-			exception.printStackTrace();
-		};
-	}
+    @Override
+    default BiConsumer<SQLException, SQLAction<List<Integer>>> defaultExceptionHandler() {
+        return (exception, action) -> {
+            getManager().getLogger().severe("Error when execute SQLs : ");
+            int i = 1;
+            for (String content : getSQLContents()) {
+                getManager().getLogger().severe("#" + i + " [" + content + "]");
+                i++;
+            }
+            getManager().getLogger().severe(exception.getLocalizedMessage());
+            exception.printStackTrace();
+        };
+    }
 
 }

@@ -13,59 +13,59 @@ import java.util.List;
 
 public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableCreateBuilder {
 
-	String tableName;
+    String tableName;
 
-	List<String> columns;
+    List<String> columns;
 
-	String tableSettings;
+    String tableSettings;
 
-	public TableCreateBuilderImpl(SQLManagerImpl manager, String tableName) {
-		super(manager);
-		this.tableName = tableName;
-		this.columns = new ArrayList<>();
-		defaultTablesSettings();
-	}
+    public TableCreateBuilderImpl(SQLManagerImpl manager, String tableName) {
+        super(manager);
+        this.tableName = tableName;
+        this.columns = new ArrayList<>();
+        defaultTablesSettings();
+    }
 
-	@Override
-	public @NotNull String getTableName() {
-		return this.tableName;
-	}
+    @Override
+    public @NotNull String getTableName() {
+        return this.tableName;
+    }
 
-	@Override
-	public @NotNull String getTableSettings() {
-		return this.tableSettings;
-	}
+    @Override
+    public @NotNull String getTableSettings() {
+        return this.tableSettings;
+    }
 
-	@Override
-	public SQLUpdateAction build() {
-		StringBuilder createSQL = new StringBuilder();
-		createSQL.append("CREATE TABLE IF NOT EXISTS `").append(tableName).append("`");
-		createSQL.append("(");
-		for (int i = 0; i < columns.size(); i++) {
-			createSQL.append(columns.get(i));
-			if (i != columns.size() - 1) createSQL.append(", ");
-		}
-		createSQL.append(") ").append(tableSettings);
+    @Override
+    public SQLUpdateAction build() {
+        StringBuilder createSQL = new StringBuilder();
+        createSQL.append("CREATE TABLE IF NOT EXISTS `").append(tableName).append("`");
+        createSQL.append("(");
+        for (int i = 0; i < columns.size(); i++) {
+            createSQL.append(columns.get(i));
+            if (i != columns.size() - 1) createSQL.append(", ");
+        }
+        createSQL.append(") ").append(tableSettings);
 
-		return new SQLUpdateActionImpl(getManager(), createSQL.toString());
-	}
+        return new SQLUpdateActionImpl(getManager(), createSQL.toString());
+    }
 
-	@Override
-	public TableCreateBuilder addColumn(@NotNull String column) {
-		this.columns.add(column);
-		return this;
-	}
+    @Override
+    public TableCreateBuilder addColumn(@NotNull String column) {
+        this.columns.add(column);
+        return this;
+    }
 
-	@Override
-	public TableCreateBuilder setColumns(@NotNull String[] columns) {
-		this.columns = Arrays.asList(columns);
-		return this;
-	}
+    @Override
+    public TableCreateBuilder setColumns(@NotNull String[] columns) {
+        this.columns = Arrays.asList(columns);
+        return this;
+    }
 
-	@Override
-	public TableCreateBuilder setTableSettings(@NotNull String settings) {
-		this.tableSettings = settings;
-		return this;
-	}
+    @Override
+    public TableCreateBuilder setTableSettings(@NotNull String settings) {
+        this.tableSettings = settings;
+        return this;
+    }
 
 }

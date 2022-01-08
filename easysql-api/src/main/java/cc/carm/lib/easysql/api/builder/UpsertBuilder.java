@@ -2,8 +2,8 @@ package cc.carm.lib.easysql.api.builder;
 
 public interface UpsertBuilder {
 
-	String getTableName();
+    String getTableName();
 
-	UpsertBuilder setColumnNames(String[] columnNames, String updateColumn);
+    UpsertBuilder setColumnNames(String[] columnNames, String updateColumn);
 
 }

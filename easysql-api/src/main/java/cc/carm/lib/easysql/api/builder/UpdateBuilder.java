@@ -6,15 +6,15 @@ import java.util.LinkedHashMap;
 
 public interface UpdateBuilder extends ConditionalBuilder<UpdateBuilder, PreparedSQLUpdateAction> {
 
-	String getTableName();
+    String getTableName();
 
-	UpdateBuilder setColumnValues(LinkedHashMap<String, Object> columnData);
+    UpdateBuilder setColumnValues(LinkedHashMap<String, Object> columnData);
 
-	UpdateBuilder setColumnValues(String[] columnNames, Object[] columnValues);
+    UpdateBuilder setColumnValues(String[] columnNames, Object[] columnValues);
 
-	default UpdateBuilder setColumnValues(String columnName, Object columnValue) {
-		return setColumnValues(new String[]{columnName}, new Object[]{columnValue});
-	}
+    default UpdateBuilder setColumnValues(String columnName, Object columnValue) {
+        return setColumnValues(new String[]{columnName}, new Object[]{columnValue});
+    }
 
 
 }

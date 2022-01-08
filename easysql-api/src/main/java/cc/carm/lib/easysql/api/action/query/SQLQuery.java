@@ -8,43 +8,43 @@ import java.sql.Statement;
 
 public interface SQLQuery extends AutoCloseable {
 
-	/**
-	 * 获取该查询创建的时间
-	 *
-	 * @return 创建时间
-	 */
-	long getExecuteTime();
+    /**
+     * 获取该查询创建的时间
+     *
+     * @return 创建时间
+     */
+    long getExecuteTime();
 
-	/**
-	 * 得到承载该SQLQuery的对应{@link SQLManager}
-	 *
-	 * @return {@link SQLManager}
-	 */
-	SQLManager getManager();
+    /**
+     * 得到承载该SQLQuery的对应{@link SQLManager}
+     *
+     * @return {@link SQLManager}
+     */
+    SQLManager getManager();
 
-	/**
-	 * 得到承载该SQLQuery的对应{@link QueryAction}
-	 *
-	 * @return {@link QueryAction} 或 {@link PreparedQueryAction}
-	 */
-	QueryAction getAction();
+    /**
+     * 得到承载该SQLQuery的对应{@link QueryAction}
+     *
+     * @return {@link QueryAction} 或 {@link PreparedQueryAction}
+     */
+    QueryAction getAction();
 
-	ResultSet getResultSet();
+    ResultSet getResultSet();
 
-	/**
-	 * 得到设定的SQL语句
-	 *
-	 * @return SQL语句
-	 */
-	String getSQLContent();
+    /**
+     * 得到设定的SQL语句
+     *
+     * @return SQL语句
+     */
+    String getSQLContent();
 
-	/**
-	 * 关闭所有内容
-	 */
-	void close();
+    /**
+     * 关闭所有内容
+     */
+    void close();
 
-	Statement getStatement();
+    Statement getStatement();
 
-	Connection getConnection();
+    Connection getConnection();
 
 }
