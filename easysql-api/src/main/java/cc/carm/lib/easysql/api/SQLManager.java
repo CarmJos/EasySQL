@@ -4,7 +4,6 @@ import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.action.SQLUpdateAction;
 import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
-import cc.carm.lib.easysql.api.action.query.SQLQuery;
 import cc.carm.lib.easysql.api.builder.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

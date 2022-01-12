@@ -1,7 +1,7 @@
 package cc.carm.lib.easysql;
 
 import cc.carm.lib.easysql.api.SQLManager;
-import cc.carm.lib.easysql.api.action.query.SQLQuery;
+import cc.carm.lib.easysql.api.SQLQuery;
 import cc.carm.lib.easysql.api.util.TimeDateUtils;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import com.zaxxer.hikari.HikariConfig;

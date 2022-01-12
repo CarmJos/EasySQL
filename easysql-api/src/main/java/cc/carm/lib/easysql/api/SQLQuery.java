@@ -1,6 +1,8 @@
-package cc.carm.lib.easysql.api.action.query;
+package cc.carm.lib.easysql.api;
 
 import cc.carm.lib.easysql.api.SQLManager;
+import cc.carm.lib.easysql.api.action.query.PreparedQueryAction;
+import cc.carm.lib.easysql.api.action.query.QueryAction;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

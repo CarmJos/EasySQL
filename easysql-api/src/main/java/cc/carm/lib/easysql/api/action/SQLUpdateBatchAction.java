@@ -19,7 +19,7 @@ public interface SQLUpdateBatchAction extends SQLAction<List<Integer>> {
 	List<String> getSQLContents();
 
 	@Override
-	default SQLExceptionHandler<List<Integer>> defaultExceptionHandler() {
+	default SQLExceptionHandler defaultExceptionHandler() {
 		return (exception, action) -> {
 			getManager().getLogger().severe("Error when execute SQLs : ");
 			int i = 1;
