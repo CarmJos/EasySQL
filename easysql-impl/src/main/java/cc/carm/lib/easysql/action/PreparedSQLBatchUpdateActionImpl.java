@@ -14,7 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PreparedSQLBatchUpdateActionImpl extends AbstractSQLAction<List<Integer>> implements PreparedSQLUpdateBatchAction {
+public class PreparedSQLBatchUpdateActionImpl
+        extends AbstractSQLAction<List<Integer>>
+        implements PreparedSQLUpdateBatchAction {
 
     int keyIndex = -1;
     List<Object[]> allParams;

@@ -12,7 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SQLUpdateBatchActionImpl extends AbstractSQLAction<List<Integer>> implements SQLUpdateBatchAction {
+public class SQLUpdateBatchActionImpl
+		extends AbstractSQLAction<List<Integer>>
+		implements SQLUpdateBatchAction {
 
     List<String> sqlContents = new ArrayList<>();
 

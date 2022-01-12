@@ -9,7 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SQLUpdateActionImpl extends AbstractSQLAction<Integer> implements SQLUpdateAction {
+public class SQLUpdateActionImpl
+		extends AbstractSQLAction<Integer>
+		implements SQLUpdateAction {
 
     int keyIndex = -1;
 
