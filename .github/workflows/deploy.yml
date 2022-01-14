@@ -11,8 +11,7 @@ on:
     types: [ published ]
 
 jobs:
-  build:
-
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,8 +25,55 @@ jobs:
           server-id: github
           server-username: MAVEN_USERNAME
           server-password: MAVEN_TOKEN
-      - name: "Deploy"
+
+      - name: "Maven Deploy With Javadoc"
         run: mvn -B deploy --file pom.xml -DskipTests
         env:
           MAVEN_USERNAME: ${{ github.repository_owner }}
           MAVEN_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: "Copy Javadoc to Location"
+        run: |
+          rm -rf docs
+          mkdir -vp docs
+          cp -vrf easysql-api/target/apidocs/* docs/
+          cp -vrf .documentation/JAVADOC-README.md docs/README.md
+
+      - name: "Generate the Javadoc sitemap"
+        id: sitemap
+        uses: cicirello/generate-sitemap@v1
+        with:
+          base-url-path: https://carmjos.github.io/EasySQL
+          path-to-root: docs
+
+      - name: "Output stats"
+        run: |
+          echo "sitemap-path = ${{ steps.sitemap.outputs.sitemap-path }}"
+          echo "url-count = ${{ steps.sitemap.outputs.url-count }}"
+          echo "excluded-count = ${{ steps.sitemap.outputs.excluded-count }}"
+
+      - name: "Configure Git"
+        env:
+          DEPLOY_PRI: ${{secrets.DEPLOY_PRI}}
+        run: |
+          sudo timedatectl set-timezone "Asia/Shanghai"
+          mkdir -p ~/.ssh/
+          echo "$DEPLOY_PRI" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config --global user.name 'CarmJos'
+          git config --global user.email 'carm@carm.cc'
+
+      - name: "Commit documentations"
+        run: |
+          cd docs
+          git init
+          git remote add origin git@github.com:CarmJos/EasySQL.git
+          git checkout -b gh-pages
+          git add -A
+          git commit -m "API Document generated."
+
+      - name: "Push javadocs"
+        run: |
+          cd docs
+          git push origin HEAD:gh-pages --force
