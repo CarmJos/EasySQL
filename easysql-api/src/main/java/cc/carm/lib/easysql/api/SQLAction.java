@@ -4,11 +4,11 @@ import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.api.function.SQLHandler;
 import cc.carm.lib.easysql.api.function.impl.DefaultSQLExceptionHandler;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -22,7 +22,8 @@ import java.util.UUID;
  *     <li>异步执行 {@link #executeAsync(SQLHandler, SQLExceptionHandler)}
  *     <br>异步执行时将提供成功与异常两种处理方式
  *     <br>可自行选择是否对数据或异常进行处理
- *     <br>默认的异常处理器为 {@link #defaultExceptionHandler()}</li>
+ *     <br>默认的异常处理器为 {@link #defaultExceptionHandler()}
+ *     <br>若有特殊需要，可通过{@link #setExceptionHandler(SQLExceptionHandler)} 方法修改默认的处理器</li>
  * </ul>
  *
  * @param <T> 需要返回的类型
@@ -97,8 +98,24 @@ public interface SQLAction<T> {
 	@Nullable
 	default <R> R execute(@NotNull SQLFunction<T, R> function,
 						  @Nullable SQLExceptionHandler exceptionHandler) {
+		return execute(function, null, exceptionHandler);
+	}
+
+	/**
+	 * 执行语句并处理返回值
+	 *
+	 * @param function         处理方法
+	 * @param exceptionHandler 异常处理器 默认为 {@link #defaultExceptionHandler()}
+	 * @param <R>              需要返回的内容
+	 * @return 指定类型数据
+	 */
+	@Nullable
+	@Contract("_,!null,_ -> !null")
+	default <R> R execute(@NotNull SQLFunction<T, R> function,
+						  @Nullable R defaultResult,
+						  @Nullable SQLExceptionHandler exceptionHandler) {
 		try {
-			return executeFunction(function);
+			return executeFunction(function, defaultResult);
 		} catch (SQLException exception) {
 			handleException(exceptionHandler, exception);
 			return null;
@@ -115,9 +132,26 @@ public interface SQLAction<T> {
 	 */
 	@Nullable
 	default <R> R executeFunction(@NotNull SQLFunction<T, R> function) throws SQLException {
+		return executeFunction(function, null);
+	}
+
+	/**
+	 * 执行语句并处理返回值
+	 *
+	 * @param defaultResult 默认结果，若处理后的结果为null，则返回该值
+	 * @param function      处理方法
+	 * @param <R>           需要返回的内容
+	 * @return 指定类型数据
+	 * @throws SQLException 当SQL操作出现问题时抛出
+	 */
+	@Nullable
+	@Contract("_,!null -> !null")
+	default <R> R executeFunction(@NotNull SQLFunction<T, R> function,
+								  @Nullable R defaultResult) throws SQLException {
 		try {
 			T value = execute();
-			return function.apply(value);
+			R result = function.apply(value);
+			return result == null ? defaultResult : result;
 		} catch (SQLException exception) {
 			throw new SQLException(exception);
 		}
@@ -157,8 +191,7 @@ public interface SQLAction<T> {
 	 * @return 默认的异常处理器
 	 */
 	default SQLExceptionHandler defaultExceptionHandler() {
-		return Optional.ofNullable(DefaultSQLExceptionHandler.getCustomHandler())
-				.orElse(new DefaultSQLExceptionHandler(getManager()));
+		return DefaultSQLExceptionHandler.get(getManager().getLogger());
 	}
 
 	/**

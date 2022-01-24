@@ -19,6 +19,7 @@ public class EasySQLDemo {
 				.addColumn("email", "VARCHAR(32)")
 				.addColumn("phone", "VARCHAR(16)")
 				.addColumn("registerTime", "DATETIME NOT NULL")
+				.addColumn("INDEX `phone`") // 添加索引
 				.build().execute(null /* 不处理错误 */);
 	}
 

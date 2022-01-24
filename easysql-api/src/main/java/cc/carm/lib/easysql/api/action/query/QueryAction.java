@@ -5,6 +5,7 @@ import cc.carm.lib.easysql.api.SQLQuery;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.api.function.SQLHandler;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,16 +35,20 @@ public interface QueryAction extends SQLAction<SQLQuery> {
 	/**
 	 * 执行语句并处理返回值
 	 *
-	 * @param function 处理方法
-	 * @param <R>      需要返回的内容
+	 * @param defaultResult 默认结果，若处理后的结果为null，则返回该值
+	 * @param function      处理方法
+	 * @param <R>           需要返回的内容
 	 * @return 指定类型数据
 	 * @throws SQLException 当SQL操作出现问题时抛出
 	 */
 	@Nullable
-	default <R> R executeFunction(@NotNull SQLFunction<SQLQuery, R> function)
-			throws SQLException {
+	@Contract("!null, _ -> !null")
+	default <R> R executeFunction(@Nullable R defaultResult,
+								  @NotNull SQLFunction<SQLQuery, R> function) throws SQLException {
+
 		try (SQLQuery value = execute()) {
-			return function.apply(value);
+			R result = function.apply(value);
+			return result == null ? defaultResult : result;
 		} catch (SQLException exception) {
 			throw new SQLException(exception);
 		}

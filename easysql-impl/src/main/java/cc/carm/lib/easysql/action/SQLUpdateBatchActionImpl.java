@@ -16,43 +16,38 @@ public class SQLUpdateBatchActionImpl
 		extends AbstractSQLAction<List<Integer>>
 		implements SQLUpdateBatchAction {
 
-    List<String> sqlContents = new ArrayList<>();
+	List<String> sqlContents = new ArrayList<>();
 
-    public SQLUpdateBatchActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
-        super(manager, sql);
-        this.sqlContents.add(sql);
-    }
+	public SQLUpdateBatchActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
+		super(manager, sql);
+		this.sqlContents.add(sql);
+	}
 
-    @Override
-    public @NotNull String getSQLContent() {
-        return this.sqlContents.get(0);
-    }
+	@Override
+	public @NotNull List<String> getSQLContents() {
+		return this.sqlContents;
+	}
 
-    @Override
-    public @NotNull List<String> getSQLContents() {
-        return this.sqlContents;
-    }
+	@Override
+	public SQLUpdateBatchAction addBatch(@NotNull String sql) {
+		this.sqlContents.add(sql);
+		return this;
+	}
 
-    @Override
-    public SQLUpdateBatchAction addBatch(@NotNull String sql) {
-        this.sqlContents.add(sql);
-        return this;
-    }
+	@Override
+	public @NotNull List<Integer> execute() throws SQLException {
+		Connection connection = getManager().getConnection();
+		Statement statement = connection.createStatement();
+		outputDebugMessage();
+		for (String content : this.sqlContents) {
+			statement.addBatch(content);
+		}
+		int[] executed = statement.executeBatch();
+		List<Integer> returnedValues = Arrays.stream(executed).boxed().collect(Collectors.toList());
 
-    @Override
-    public @NotNull List<Integer> execute() throws SQLException {
-        Connection connection = getManager().getConnection();
-        Statement statement = connection.createStatement();
-        outputDebugMessage();
-        for (String content : this.sqlContents) {
-            statement.addBatch(content);
-        }
-        int[] executed = statement.executeBatch();
-        List<Integer> returnedValues = Arrays.stream(executed).boxed().collect(Collectors.toList());
+		statement.close();
+		connection.close();
 
-        statement.close();
-        connection.close();
-
-        return returnedValues;
-    }
+		return returnedValues;
+	}
 }

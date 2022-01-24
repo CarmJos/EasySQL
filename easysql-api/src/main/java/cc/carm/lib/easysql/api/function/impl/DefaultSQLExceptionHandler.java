@@ -1,11 +1,12 @@
 package cc.carm.lib.easysql.api.function.impl;
 
 import cc.carm.lib.easysql.api.SQLAction;
-import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class DefaultSQLExceptionHandler implements SQLExceptionHandler {
 
@@ -19,20 +20,25 @@ public class DefaultSQLExceptionHandler implements SQLExceptionHandler {
 		return customDefaultHandler;
 	}
 
-	private final SQLManager sqlManager;
-
-	public DefaultSQLExceptionHandler(SQLManager manager) {
-		this.sqlManager = manager;
+	public static @NotNull SQLExceptionHandler get(Logger logger) {
+		if (getCustomHandler() != null) return getCustomHandler();
+		else return new DefaultSQLExceptionHandler(logger);
 	}
 
-	protected SQLManager getManager() {
-		return sqlManager;
+	private final Logger logger;
+
+	public DefaultSQLExceptionHandler(Logger logger) {
+		this.logger = logger;
+	}
+
+	protected Logger getLogger() {
+		return logger;
 	}
 
 	@Override
 	public void accept(SQLException exception, SQLAction<?> sqlAction) {
-		getManager().getLogger().severe("Error when execute [" + sqlAction.getSQLContent() + "]");
-		getManager().getLogger().severe(exception.getLocalizedMessage());
+		getLogger().severe("Error when execute [" + sqlAction.getSQLContent() + "]");
+		getLogger().severe(exception.getLocalizedMessage());
 		exception.printStackTrace();
 	}
 

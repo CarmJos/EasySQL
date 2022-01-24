@@ -9,6 +9,6 @@ import java.sql.SQLException;
 public interface SQLFunction<T, R> {
 
 	@Nullable
-	R apply(T t) throws SQLException;
+	R apply(@NotNull T t) throws SQLException;
 
 }
