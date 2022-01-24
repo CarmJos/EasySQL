@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 public abstract class AbstractSQLAction<T> implements SQLAction<T> {
 
@@ -20,7 +20,7 @@ public abstract class AbstractSQLAction<T> implements SQLAction<T> {
 
 	protected @NotNull String sqlContent;
 
-	protected @Nullable BiConsumer<SQLException, SQLAction<T>> exceptionHandler = null;
+	protected static @Nullable SQLExceptionHandler exceptionHandler = null;
 
 	public AbstractSQLAction(@NotNull SQLManagerImpl manager, @NotNull String sql) {
 		this(manager, sql, System.currentTimeMillis());

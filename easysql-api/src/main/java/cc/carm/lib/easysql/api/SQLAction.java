@@ -3,10 +3,12 @@ package cc.carm.lib.easysql.api;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.api.function.SQLHandler;
+import cc.carm.lib.easysql.api.function.impl.DefaultSQLExceptionHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -147,7 +149,7 @@ public interface SQLAction<T> {
 					  @Nullable SQLExceptionHandler failure);
 
 	default void handleException(@Nullable SQLExceptionHandler handler, SQLException exception) {
-		if (handler == null) handler = getExceptionHandler();
+		if (handler == null) handler = defaultExceptionHandler();
 		handler.accept(exception, this);
 	}
 
@@ -155,21 +157,9 @@ public interface SQLAction<T> {
 	 * @return 默认的异常处理器
 	 */
 	default SQLExceptionHandler defaultExceptionHandler() {
-		return (exception, action) -> {
-			getManager().getLogger().severe("Error when execute [" + action.getSQLContent() + "]");
-			getManager().getLogger().severe(exception.getLocalizedMessage());
-			exception.printStackTrace();
-		};
+		return Optional.ofNullable(DefaultSQLExceptionHandler.getCustomHandler())
+				.orElse(new DefaultSQLExceptionHandler(getManager()));
 	}
-
-	/**
-	 * 得到通用的异常处理器。
-	 * <br> 若未使用 {@link #setExceptionHandler(SQLExceptionHandler)} 方法
-	 * <br> 则会返回 {@link #defaultExceptionHandler()} 。
-	 *
-	 * @return 通用异常处理器。
-	 */
-	@NotNull SQLExceptionHandler getExceptionHandler();
 
 	/**
 	 * 设定通用的异常处理器。
@@ -178,6 +168,8 @@ public interface SQLAction<T> {
 	 *
 	 * @param handler 异常处理器
 	 */
-	void setExceptionHandler(@Nullable SQLExceptionHandler handler);
+	default void setExceptionHandler(@Nullable SQLExceptionHandler handler) {
+		DefaultSQLExceptionHandler.setCustomHandler(handler);
+	}
 
 }
