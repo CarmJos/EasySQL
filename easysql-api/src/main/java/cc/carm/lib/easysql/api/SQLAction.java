@@ -87,24 +87,6 @@ public interface SQLAction<T> {
 	/**
 	 * 执行语句并处理返回值
 	 *
-	 * @param function 处理方法
-	 * @param <R>      需要返回的内容
-	 * @return 指定类型数据
-	 * @throws SQLException 当SQL操作出现问题时抛出
-	 */
-	@Nullable
-	default <R> R executeFunction(@NotNull SQLFunction<T, R> function) throws SQLException {
-		try {
-			T value = execute();
-			return function.apply(value);
-		} catch (SQLException exception) {
-			throw new SQLException(exception);
-		}
-	}
-
-	/**
-	 * 执行语句并处理返回值
-	 *
 	 * @param function         处理方法
 	 * @param exceptionHandler 异常处理器 默认为 {@link #defaultExceptionHandler()}
 	 * @param <R>              需要返回的内容
@@ -118,6 +100,24 @@ public interface SQLAction<T> {
 		} catch (SQLException exception) {
 			handleException(exceptionHandler, exception);
 			return null;
+		}
+	}
+
+	/**
+	 * 执行语句并处理返回值
+	 *
+	 * @param function 处理方法
+	 * @param <R>      需要返回的内容
+	 * @return 指定类型数据
+	 * @throws SQLException 当SQL操作出现问题时抛出
+	 */
+	@Nullable
+	default <R> R executeFunction(@NotNull SQLFunction<T, R> function) throws SQLException {
+		try {
+			T value = execute();
+			return function.apply(value);
+		} catch (SQLException exception) {
+			throw new SQLException(exception);
 		}
 	}
 
@@ -147,7 +147,7 @@ public interface SQLAction<T> {
 					  @Nullable SQLExceptionHandler failure);
 
 	default void handleException(@Nullable SQLExceptionHandler handler, SQLException exception) {
-		if (handler == null) handler = defaultExceptionHandler();
+		if (handler == null) handler = getExceptionHandler();
 		handler.accept(exception, this);
 	}
 
@@ -162,5 +162,22 @@ public interface SQLAction<T> {
 		};
 	}
 
+	/**
+	 * 得到通用的异常处理器。
+	 * <br> 若未使用 {@link #setExceptionHandler(SQLExceptionHandler)} 方法
+	 * <br> 则会返回 {@link #defaultExceptionHandler()} 。
+	 *
+	 * @return 通用异常处理器。
+	 */
+	@NotNull SQLExceptionHandler getExceptionHandler();
+
+	/**
+	 * 设定通用的异常处理器。
+	 * <br> 在使用 {@link #execute(SQLExceptionHandler)} 等相关方法时，若传入的处理器为null，则会采用此处理器。
+	 * <br> 若该方法传入参数为 null，则会使用 {@link #defaultExceptionHandler()} 。
+	 *
+	 * @param handler 异常处理器
+	 */
+	void setExceptionHandler(@Nullable SQLExceptionHandler handler);
 
 }
