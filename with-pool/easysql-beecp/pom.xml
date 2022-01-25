@@ -5,7 +5,7 @@
     <parent>
         <artifactId>easysql-parent</artifactId>
         <groupId>cc.carm.lib</groupId>
-        <version>0.3.0</version>
+        <version>0.3.1</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -57,6 +57,13 @@
 
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
+            <artifactId>easysql-api</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>easysql-impl</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
@@ -86,6 +93,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

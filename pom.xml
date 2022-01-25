@@ -16,7 +16,7 @@
     <groupId>cc.carm.lib</groupId>
     <artifactId>easysql-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.3.0</version>
+    <version>0.3.1</version>
 
     <modules>
         <module>easysql-api</module>
@@ -172,14 +172,17 @@
                     <version>3.2.0</version>
                     <configuration>
                         <classifier>javadoc</classifier>
-                        <links>
-                            <link>https://javadoc.io/doc/org.jetbrains/annotations/</link>
-                        </links>
                         <detectJavaApiLink>false</detectJavaApiLink>
                         <encoding>UTF-8</encoding>
                         <charset>UTF-8</charset>
                         <docencoding>UTF-8</docencoding>
                         <locale>zh_CN</locale>
+
+                        <includeDependencySources>true</includeDependencySources>
+                        <dependencySourceIncludes>
+                            <dependencySourceInclude>cc.carm.lib:*</dependencySourceInclude>
+                            <dependencySourceInclude>cn.beecp:*</dependencySourceInclude>
+                        </dependencySourceIncludes>
                     </configuration>
                     <executions>
                         <execution>
