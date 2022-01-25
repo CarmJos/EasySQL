@@ -143,8 +143,6 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <keyname>0x37986DF7</keyname>
-                    <passphraseServerId>0x37986DF7</passphraseServerId>
                     <gpgArguments>
                         <arg>--pinentry-mode</arg>
                         <arg>loopback</arg>
