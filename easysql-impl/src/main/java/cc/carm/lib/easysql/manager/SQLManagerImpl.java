@@ -130,6 +130,11 @@ public class SQLManagerImpl implements SQLManager {
 	}
 
 	@Override
+	public TableAlertBuilder alterTable(@NotNull String tableName) {
+		return new TableAlterBuilderImpl(this, tableName);
+	}
+
+	@Override
 	public QueryBuilder createQuery() {
 		return new QueryBuilderImpl(this);
 	}

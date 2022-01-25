@@ -25,7 +25,15 @@ public class SQLQueryImpl implements SQLQuery {
 			SQLManagerImpl sqlManager, QueryActionImpl queryAction,
 			Connection connection, Statement statement, ResultSet resultSet
 	) {
-		this.executeTime = System.currentTimeMillis();
+		this(sqlManager, queryAction, connection, statement, resultSet, System.currentTimeMillis());
+	}
+
+	public SQLQueryImpl(
+			SQLManagerImpl sqlManager, QueryActionImpl queryAction,
+			Connection connection, Statement statement, ResultSet resultSet,
+			long executeTime
+	) {
+		this.executeTime = executeTime;
 		this.sqlManager = sqlManager;
 		this.queryAction = queryAction;
 		this.connection = connection;

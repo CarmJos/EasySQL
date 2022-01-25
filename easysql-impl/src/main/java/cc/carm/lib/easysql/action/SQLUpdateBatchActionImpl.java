@@ -39,6 +39,7 @@ public class SQLUpdateBatchActionImpl
 		Connection connection = getManager().getConnection();
 		Statement statement = connection.createStatement();
 		outputDebugMessage();
+
 		for (String content : this.sqlContents) {
 			statement.addBatch(content);
 		}
@@ -50,4 +51,13 @@ public class SQLUpdateBatchActionImpl
 
 		return returnedValues;
 	}
+
+	@Override
+	protected void outputDebugMessage() {
+		getManager().debug("#" + getShortID() + " -> {");
+		for (String content : getSQLContents()) getManager().debug("  " + content);
+		getManager().debug("}");
+
+	}
+
 }

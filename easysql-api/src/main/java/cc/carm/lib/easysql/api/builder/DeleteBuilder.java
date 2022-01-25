@@ -1,9 +1,9 @@
 package cc.carm.lib.easysql.api.builder;
 
-import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
+import cc.carm.lib.easysql.api.SQLAction;
 
-public interface DeleteBuilder extends ConditionalBuilder<DeleteBuilder, PreparedSQLUpdateAction> {
+public interface DeleteBuilder extends ConditionalBuilder<DeleteBuilder, SQLAction<Integer>> {
 
-    String getTableName();
+	String getTableName();
 
 }

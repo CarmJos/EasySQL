@@ -1,6 +1,7 @@
-package cc.carm.lib.easysql.api.function.impl;
+package cc.carm.lib.easysql.api.function.defaults;
 
 import cc.carm.lib.easysql.api.SQLAction;
+import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,8 +38,18 @@ public class DefaultSQLExceptionHandler implements SQLExceptionHandler {
 
 	@Override
 	public void accept(SQLException exception, SQLAction<?> sqlAction) {
-		getLogger().severe("Error when execute [" + sqlAction.getSQLContent() + "]");
-		getLogger().severe(exception.getLocalizedMessage());
+		if (sqlAction instanceof SQLUpdateBatchAction) {
+
+			getLogger().severe("Error when execute SQLs : ");
+			int i = 1;
+			for (String content : ((SQLUpdateBatchAction) sqlAction).getSQLContents()) {
+				getLogger().severe("#" + i + " {" + content + "}");
+				i++;
+			}
+
+		} else {
+			getLogger().severe("Error when execute { " + sqlAction.getSQLContent() + " }");
+		}
 		exception.printStackTrace();
 	}
 

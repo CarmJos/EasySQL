@@ -1,5 +1,8 @@
 import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.SQLQuery;
+import cc.carm.lib.easysql.api.enums.ForeignKeyRule;
+import cc.carm.lib.easysql.api.enums.IndexType;
+import cc.carm.lib.easysql.api.enums.NumberType;
 import cc.carm.lib.easysql.api.util.TimeDateUtils;
 import cc.carm.lib.easysql.api.util.UUIDUtil;
 
@@ -12,16 +15,38 @@ public class EasySQLDemo {
 	public void createTable(SQLManager sqlManager) {
 		// 同步创建表
 		sqlManager.createTable("users")
-				.addColumn("id", "INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY")
+//				.addColumn("id", "INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY")
+				.addAutoIncrementColumn("id", NumberType.INT, true, true)
 				.addColumn("uuid", "VARCHAR(32) NOT NULL UNIQUE KEY")
-				.addColumn("username", "VARCHAR(16) NOT NULL UNIQUE KEY")
-				.addColumn("age", "INT(3) NOT NULL DEFAULT 1")
+				.addColumn("username", "VARCHAR(16) NOT NULL")
+				.addColumn("age", "TINYINT NOT NULL DEFAULT 1")
 				.addColumn("email", "VARCHAR(32)")
 				.addColumn("phone", "VARCHAR(16)")
 				.addColumn("registerTime", "DATETIME NOT NULL")
-				.addColumn("INDEX `phone`") // 添加索引
+//				.addColumn("INDEX `phone`") // 原始方法添加索引
+				.setIndex(IndexType.UNIQUE_KEY, "username") // 添加唯一索引
+				.setIndex(IndexType.INDEX, "contact", "email", "phone") //添加联合索引 (示例)
+				.build().execute(null /* 不处理错误 */);
+
+		sqlManager.createTable("user_ipaddr")
+				.addAutoIncrementColumn("id", NumberType.INT, true, true)
+				.addColumn("uuid", "VARCHAR(32) NOT NULL")
+				.addColumn("ip", "VARCHAR(16)")
+				.addColumn("time", "DATETIME NOT NULL")
+				.addForeignKey("uuid", null,
+						"users", "uuid",
+						ForeignKeyRule.CASCADE, ForeignKeyRule.CASCADE
+				)
 				.build().execute(null /* 不处理错误 */);
 	}
+
+	public void alertTable(SQLManager sqlManager) {
+		// 同步更新表
+		sqlManager.alterTable("users")
+				.modifyColumn("age", "TINYINT NOT NULL DEFAULT 0")
+				.execute(null /* 不处理错误 */);
+	}
+
 
 	public void sqlQuery(SQLManager sqlManager) {
 		// 同步SQL查询

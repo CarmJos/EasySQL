@@ -28,7 +28,7 @@ public interface SQLManager {
 	default void setDebugMode(boolean enable) {
 		setDebugMode(() -> enable);
 	}
-	
+
 	/**
 	 * 得到连接池源
 	 *
@@ -108,6 +108,14 @@ public interface SQLManager {
 	 * @return {@link TableCreateBuilder}
 	 */
 	TableCreateBuilder createTable(@NotNull String tableName);
+
+	/**
+	 * 对库中的某个表执行更改
+	 *
+	 * @param tableName 表名
+	 * @return {@link TableAlertBuilder}
+	 */
+	TableAlertBuilder alterTable(@NotNull String tableName);
 
 	/**
 	 * 新建一个查询

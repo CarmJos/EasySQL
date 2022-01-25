@@ -50,8 +50,9 @@ public class PreparedQueryActionImpl extends QueryActionImpl implements Prepared
 
 	@Override
 	public @NotNull SQLQueryImpl execute() throws SQLException {
+		outputDebugMessage();
+
 		Connection connection = getManager().getConnection();
-		getManager().debug("#" + getShortID() + " ->" + getSQLContent());
 		PreparedStatement preparedStatement;
 		if (handler == null) {
 			preparedStatement = StatementUtil.createPrepareStatement(connection, getSQLContent(), this.params);
@@ -60,8 +61,14 @@ public class PreparedQueryActionImpl extends QueryActionImpl implements Prepared
 			handler.accept(preparedStatement);
 		}
 
+		long executeTime = System.currentTimeMillis();
 		ResultSet resultSet = preparedStatement.executeQuery();
 
-		return new SQLQueryImpl(getManager(), this, connection, preparedStatement, resultSet);
+		return new SQLQueryImpl(
+				getManager(), this,
+				connection, preparedStatement, resultSet,
+				executeTime
+		);
+
 	}
 }

@@ -3,13 +3,14 @@ package cc.carm.lib.easysql.api;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.api.function.SQLHandler;
-import cc.carm.lib.easysql.api.function.impl.DefaultSQLExceptionHandler;
+import cc.carm.lib.easysql.api.function.defaults.DefaultSQLExceptionHandler;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 /**
  * SQLAction 是用于承载SQL语句并进行处理、返回的基本类。
@@ -188,7 +189,10 @@ public interface SQLAction<T> {
 	}
 
 	/**
-	 * @return 默认的异常处理器
+	 * 默认的异常处理器
+	 *
+	 * @return {@link DefaultSQLExceptionHandler#get(Logger)}
+	 * @see DefaultSQLExceptionHandler
 	 */
 	default SQLExceptionHandler defaultExceptionHandler() {
 		return DefaultSQLExceptionHandler.get(getManager().getLogger());

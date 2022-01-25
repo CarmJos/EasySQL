@@ -7,5 +7,6 @@ import java.util.function.BiConsumer;
 
 @FunctionalInterface
 public interface SQLExceptionHandler extends BiConsumer<SQLException, SQLAction<?>> {
+	
 
 }
