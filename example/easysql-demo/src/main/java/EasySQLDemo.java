@@ -5,11 +5,14 @@ import cc.carm.lib.easysql.api.enums.IndexType;
 import cc.carm.lib.easysql.api.enums.NumberType;
 import cc.carm.lib.easysql.api.util.TimeDateUtils;
 import cc.carm.lib.easysql.api.util.UUIDUtil;
+import org.jetbrains.annotations.TestOnly;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
+@TestOnly
+@SuppressWarnings("all")
 public class EasySQLDemo {
 
 	public void createTable(SQLManager sqlManager) {

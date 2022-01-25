@@ -35,7 +35,7 @@
 
 ### 示例代码
 
-您可以 [点击这里](easysql-demo/src/main/java/EasySQLDemo.java) 查看部分代码演示，更多演示详见 [开发介绍](.documentation/README.md) 。
+您可以 [点击这里](example/easysql-demo/src/main/java/EasySQLDemo.java) 查看部分代码演示，更多演示详见 [开发介绍](.documentation/README.md) 。
 
 ### 依赖方式
 

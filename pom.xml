@@ -22,9 +22,9 @@
         <module>easysql-api</module>
         <module>easysql-impl</module>
 
-        <module>easysql-beecp</module>
-        <module>easysql-hikaricp</module>
-        <module>easysql-demo</module>
+        <module>with-cp/easysql-beecp</module>
+        <module>with-cp/easysql-hikaricp</module>
+        <module>example/easysql-demo</module>
 
     </modules>
 
