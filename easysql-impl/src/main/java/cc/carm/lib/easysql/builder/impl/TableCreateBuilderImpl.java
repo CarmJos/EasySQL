@@ -5,6 +5,7 @@ import cc.carm.lib.easysql.api.action.SQLUpdateAction;
 import cc.carm.lib.easysql.api.builder.TableCreateBuilder;
 import cc.carm.lib.easysql.api.enums.ForeignKeyRule;
 import cc.carm.lib.easysql.api.enums.IndexType;
+import cc.carm.lib.easysql.api.enums.NumberType;
 import cc.carm.lib.easysql.builder.AbstractSQLBuilder;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
@@ -45,21 +46,15 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
 		StringBuilder createSQL = new StringBuilder();
 		createSQL.append("CREATE TABLE IF NOT EXISTS `").append(tableName).append("`");
 		createSQL.append("(");
-		for (int i = 0; i < columns.size(); i++) {
-			createSQL.append(columns.get(i));
-			if (i != columns.size() - 1) createSQL.append(", ");
+		createSQL.append(String.join(", ", columns));
+		if (indexes.size() > 0) {
+			createSQL.append(", ");
+			createSQL.append(String.join(", ", indexes));
 		}
-
-		for (int i = 0; i < indexes.size(); i++) {
-			createSQL.append(indexes.get(i));
-			if (i != indexes.size() - 1) createSQL.append(", ");
+		if (foreignKeys.size() > 0) {
+			createSQL.append(", ");
+			createSQL.append(String.join(", ", foreignKeys));
 		}
-
-		for (int i = 0; i < foreignKeys.size(); i++) {
-			createSQL.append(foreignKeys.get(i));
-			if (i != foreignKeys.size() - 1) createSQL.append(", ");
-		}
-
 		createSQL.append(") ").append(getTableSettings());
 
 		if (tableComment != null) {
@@ -73,6 +68,16 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
 	public TableCreateBuilder addColumn(@NotNull String column) {
 		this.columns.add(column);
 		return this;
+	}
+
+	@Override
+	public TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName, @Nullable NumberType numberType,
+													 boolean asPrimaryKey, boolean unsigned) {
+		return addColumn(columnName,
+				(numberType == null ? NumberType.INT : numberType).name()
+						+ (unsigned ? " UNSIGNED " : " ")
+						+ "NOT NULL AUTO_INCREMENT " + (asPrimaryKey ? "PRIMARY KEY" : "UNIQUE KEY")
+		);
 	}
 
 	@Override
@@ -124,7 +129,7 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
 	}
 
 	protected static String buildIndexSettings(@NotNull IndexType indexType, @Nullable String indexName,
-											 @NotNull String columnName, @NotNull String... moreColumns) {
+											   @NotNull String columnName, @NotNull String... moreColumns) {
 
 		StringBuilder indexBuilder = new StringBuilder();
 

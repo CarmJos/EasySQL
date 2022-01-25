@@ -113,9 +113,9 @@ public interface SQLManager {
 	 * 对库中的某个表执行更改
 	 *
 	 * @param tableName 表名
-	 * @return {@link TableAlertBuilder}
+	 * @return {@link TableAlterBuilder}
 	 */
-	TableAlertBuilder alterTable(@NotNull String tableName);
+	TableAlterBuilder alterTable(@NotNull String tableName);
 
 	/**
 	 * 新建一个查询

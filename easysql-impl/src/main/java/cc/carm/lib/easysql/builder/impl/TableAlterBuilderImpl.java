@@ -2,14 +2,14 @@ package cc.carm.lib.easysql.builder.impl;
 
 import cc.carm.lib.easysql.action.SQLUpdateActionImpl;
 import cc.carm.lib.easysql.api.SQLAction;
-import cc.carm.lib.easysql.api.builder.TableAlertBuilder;
+import cc.carm.lib.easysql.api.builder.TableAlterBuilder;
 import cc.carm.lib.easysql.api.enums.IndexType;
 import cc.carm.lib.easysql.builder.AbstractSQLBuilder;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAlertBuilder {
+public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAlterBuilder {
 
 	protected final @NotNull String tableName;
 
@@ -25,28 +25,28 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
 	@Override
 	public SQLAction<Integer> renameTo(@NotNull String newTableName) {
 		return new SQLUpdateActionImpl(getManager(),
-				"ALERT TABLE `" + getTableName() + "` RENAME TO `" + newTableName + "`"
+				"ALTER TABLE `" + getTableName() + "` RENAME TO `" + newTableName + "`"
 		);
 	}
 
 	@Override
 	public SQLAction<Integer> changeComment(@NotNull String newTableComment) {
 		return new SQLUpdateActionImpl(getManager(),
-				"ALERT TABLE `" + getTableName() + "` COMMENT '" + newTableComment + "'"
+				"ALTER TABLE `" + getTableName() + "` COMMENT '" + newTableComment + "'"
 		);
 	}
 
 	@Override
 	public SQLAction<Integer> setAutoIncrementIndex(int index) {
 		return new SQLUpdateActionImpl(getManager(),
-				"ALERT TABLE `" + getTableName() + "` AUTO_INCREMENT=" + index
+				"ALTER TABLE `" + getTableName() + "` AUTO_INCREMENT=" + index
 		);
 	}
 
 	@Override
 	public SQLAction<Integer> addIndex(@NotNull IndexType indexType, @NotNull String indexName, @NotNull String columnName, @NotNull String... moreColumns) {
 		return createAction(
-				"ALERT TABLE `" + getTableName() + "` ADD "
+				"ALTER TABLE `" + getTableName() + "` ADD "
 						+ TableCreateBuilderImpl.buildIndexSettings(indexType, indexName, columnName, moreColumns)
 		);
 	}
@@ -54,63 +54,73 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
 	@Override
 	public SQLAction<Integer> dropIndex(@NotNull String indexName) {
 		return createAction(
-				"ALERT TABLE `" + getTableName() + "` DROP INDEX `" + indexName + "`"
+				"ALTER TABLE `" + getTableName() + "` DROP INDEX `" + indexName + "`"
 		);
 	}
 
 	@Override
 	public SQLAction<Integer> dropForeignKey(@NotNull String keySymbol) {
 		return createAction(
-				"ALERT TABLE `" + getTableName() + "` DROP FOREIGN KEY `" + keySymbol + "`"
+				"ALTER TABLE `" + getTableName() + "` DROP FOREIGN KEY `" + keySymbol + "`"
 		);
 	}
 
 	@Override
 	public SQLAction<Integer> dropPrimaryKey() {
 		return createAction(
-				"ALERT TABLE `" + getTableName() + "` DROP PRIMARY KEY"
+				"ALTER TABLE `" + getTableName() + "` DROP PRIMARY KEY"
 		);
 	}
 
 	@Override
 	public SQLAction<Integer> addColumn(@NotNull String columnName, @NotNull String settings, @Nullable String afterColumn) {
+		String orderSettings = null;
+		if (afterColumn != null) {
+			if (afterColumn.length() > 0) {
+				orderSettings = "AFTER `" + afterColumn + "`";
+			} else {
+				orderSettings = "FIRST";
+			}
+		}
+
 		return createAction(
-				"ALERT TABLE `" + getTableName() + "` ADD `" + columnName + "` " + settings
+				"ALTER TABLE `" + getTableName() + "` ADD `" + columnName + "` " + settings
+						+ (orderSettings != null ? " " + orderSettings : "")
 		);
 	}
 
 	@Override
 	public SQLAction<Integer> renameColumn(@NotNull String columnName, @NotNull String newName) {
 		return createAction(
-				"ALERT TABLE `" + getTableName() + "` RENAME COLUMN `" + columnName + "` TO `" + newName + "`"
+				"ALTER TABLE `" + getTableName() + "` RENAME COLUMN `" + columnName + "` TO `" + newName + "`"
 		);
 	}
 
 	@Override
 	public SQLAction<Integer> modifyColumn(@NotNull String columnName, @NotNull String settings) {
 		return createAction(
-				"ALERT TABLE `" + getTableName() + "` MODIFY COLUMN `" + columnName + "` " + settings
+				"ALTER TABLE `" + getTableName() + "` MODIFY COLUMN `" + columnName + "` " + settings
 		);
 	}
 
 	@Override
 	public SQLAction<Integer> removeColumn(@NotNull String columnName) {
 		return createAction(
-				"ALERT TABLE `" + getTableName() + "` DROP `" + columnName + "`"
+				"ALTER TABLE `" + getTableName() + "` DROP `" + columnName + "`"
 		);
 	}
 
 	@Override
 	public SQLAction<Integer> setColumnDefault(@NotNull String columnName, @NotNull String defaultValue) {
 		return createAction(
-				"ALERT TABLE `" + getTableName() + "` ALERT `" + columnName + "` SET DEFAULT " + defaultValue
+				"ALTER TABLE `" + getTableName() + "` ALTER `" + columnName + "` SET DEFAULT " + defaultValue
 		);
 	}
 
 	@Override
 	public SQLAction<Integer> removeColumnDefault(@NotNull String columnName) {
 		return createAction(
-				"ALERT TABLE `" + getTableName() + "` ALERT `" + columnName + "` DROP DEFAULT"
+				"ALTER TABLE `" + getTableName() + "` ALTER `" + columnName + "` DROP DEFAULT"
 		);
 	}
 

@@ -16,15 +16,16 @@
     <groupId>cc.carm.lib</groupId>
     <artifactId>easysql-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.3.0</version>
 
     <modules>
         <module>easysql-api</module>
         <module>easysql-impl</module>
 
-        <module>with-cp/easysql-beecp</module>
-        <module>with-cp/easysql-hikaricp</module>
+        <module>with-pool/easysql-beecp</module>
+        <module>with-pool/easysql-hikaricp</module>
         <module>example/easysql-demo</module>
+        <module>example/easysql-test</module>
 
     </modules>
 

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>easysql-parent</artifactId>
         <groupId>cc.carm.lib</groupId>
-        <version>0.3.0-SNAPSHOT</version>
+        <version>0.3.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -17,10 +17,11 @@
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     </properties>
 
-    <artifactId>easysql-hikaricp</artifactId>
+    <artifactId>easysql-beecp</artifactId>
+    <packaging>jar</packaging>
 
-    <name>11-EasySQL-HikariCP</name>
-    <description>EasySQL的应用部分。此为HikariCP版本。</description>
+    <name>12-EasySQL-BeeCP</name>
+    <description>EasySQL的应用部分。此为BeeCP版本。</description>
     <url>https://github.com/CarmJos/EasySQL</url>
 
     <developers>
@@ -62,10 +63,10 @@
         </dependency>
 
         <dependency>
-            <!--项目地址 https://github.com/brettwooldridge/HikariCP/  -->
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version>
+            <!--项目地址 https://github.com/Chris2018998/BeeCP  -->
+            <groupId>com.github.chris2018998</groupId>
+            <artifactId>beecp</artifactId>
+            <version>3.3.0</version>
             <optional>true</optional>
             <scope>compile</scope>
         </dependency>
@@ -101,8 +102,8 @@
                 <configuration>
                     <relocations>
                         <relocation>
-                            <pattern>com.zaxxer.hikari</pattern>
-                            <shadedPattern>cc.carm.lib.easysql.hikari</shadedPattern>
+                            <pattern>cn.beecp</pattern>
+                            <shadedPattern>cc.carm.lib.easysql.beecp</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>

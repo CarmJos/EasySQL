@@ -106,6 +106,7 @@ public interface SQLAction<T> {
 	 * 执行语句并处理返回值
 	 *
 	 * @param function         处理方法
+	 * @param defaultResult    默认结果，若处理后的结果为null，则返回该值
 	 * @param exceptionHandler 异常处理器 默认为 {@link #defaultExceptionHandler()}
 	 * @param <R>              需要返回的内容
 	 * @return 指定类型数据
@@ -139,8 +140,8 @@ public interface SQLAction<T> {
 	/**
 	 * 执行语句并处理返回值
 	 *
-	 * @param defaultResult 默认结果，若处理后的结果为null，则返回该值
 	 * @param function      处理方法
+	 * @param defaultResult 默认结果，若处理后的结果为null，则返回该值
 	 * @param <R>           需要返回的内容
 	 * @return 指定类型数据
 	 * @throws SQLException 当SQL操作出现问题时抛出

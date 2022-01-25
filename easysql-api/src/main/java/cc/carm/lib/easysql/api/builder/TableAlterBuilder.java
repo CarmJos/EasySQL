@@ -8,7 +8,7 @@ import cc.carm.lib.easysql.api.enums.NumberType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface TableAlertBuilder extends SQLBuilder {
+public interface TableAlterBuilder extends SQLBuilder {
 
 	SQLAction<Integer> renameTo(@NotNull String newTableName);
 
@@ -23,7 +23,7 @@ public interface TableAlertBuilder extends SQLBuilder {
 	 * 为该表移除一个索引
 	 *
 	 * @param indexName 索引名
-	 * @return @return {@link SQLUpdateAction}
+	 * @return {@link SQLUpdateAction}
 	 */
 	SQLAction<Integer> dropIndex(@NotNull String indexName);
 
@@ -31,14 +31,14 @@ public interface TableAlertBuilder extends SQLBuilder {
 	 * 为该表移除一个外键
 	 *
 	 * @param keySymbol 外键名
-	 * @return @return {@link SQLUpdateAction}
+	 * @return {@link SQLUpdateAction}
 	 */
 	SQLAction<Integer> dropForeignKey(@NotNull String keySymbol);
 
 	/**
 	 * 为该表移除主键(须添加新主键)
 	 *
-	 * @return @return {@link SQLUpdateAction}
+	 * @return {@link SQLUpdateAction}
 	 */
 	SQLAction<Integer> dropPrimaryKey();
 
@@ -107,7 +107,7 @@ public interface TableAlertBuilder extends SQLBuilder {
 	 *
 	 * @param columnName 列名
 	 * @param numberType 数字类型，若省缺则为 {@link NumberType#INT}
-	 * @return {@link TableAlertBuilder}
+	 * @return {@link TableAlterBuilder}
 	 */
 	default SQLAction<Integer> addAutoIncrementColumn(@NotNull String columnName, @NotNull NumberType numberType) {
 		return addAutoIncrementColumn(columnName, numberType, false, true);
@@ -120,7 +120,7 @@ public interface TableAlertBuilder extends SQLBuilder {
 	 * <p> 注意：一个表只允许有一个自增列！
 	 *
 	 * @param columnName 列名
-	 * @return {@link TableAlertBuilder}
+	 * @return {@link TableAlterBuilder}
 	 */
 	default SQLAction<Integer> addAutoIncrementColumn(@NotNull String columnName) {
 		return addAutoIncrementColumn(columnName, NumberType.INT);

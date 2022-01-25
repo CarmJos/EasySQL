@@ -27,7 +27,7 @@ public class EasySQLDemo {
 				.addColumn("phone", "VARCHAR(16)")
 				.addColumn("registerTime", "DATETIME NOT NULL")
 //				.addColumn("INDEX `phone`") // 原始方法添加索引
-				.setIndex(IndexType.UNIQUE_KEY, "username") // 添加唯一索引
+				.setIndex("username", IndexType.UNIQUE_KEY) // 添加唯一索引
 				.setIndex(IndexType.INDEX, "contact", "email", "phone") //添加联合索引 (示例)
 				.build().execute(null /* 不处理错误 */);
 

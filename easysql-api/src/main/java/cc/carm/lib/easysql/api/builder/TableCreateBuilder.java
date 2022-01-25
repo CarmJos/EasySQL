@@ -84,45 +84,54 @@ public interface TableCreateBuilder extends SQLBuilder {
 	 * <p> 自增列强制要求为数字类型，非空，且为UNIQUE。
 	 * <p> 注意：一个表只允许有一个自增列！
 	 *
-	 * @param columnName 列名
-	 * @param numberType 数字类型，若省缺则为 {@link NumberType#INT}
-	 * @param primary    是否为主键，若为false则设定为唯一键
-	 * @param unsigned   是否采用 UNSIGNED (即无负数，可以增加自增键的最高数，建议为true)
+	 * @param columnName   列名
+	 * @param numberType   数字类型，若省缺则为 {@link NumberType#INT}
+	 * @param asPrimaryKey 是否为主键，若为false则设定为唯一键
+	 * @param unsigned     是否采用 UNSIGNED (即无负数，可以增加自增键的最高数，建议为true)
 	 * @return {@link TableCreateBuilder}
 	 */
-	default TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName, @Nullable NumberType numberType,
-													  boolean primary, boolean unsigned) {
-		return addColumn(columnName,
-				(numberType == null ? NumberType.INT : numberType).name()
-						+ (unsigned ? " UNSIGNED " : " ")
-						+ "NOT NULL AUTO_INCREMENT " + (primary ? "PRIMARY KEY" : "UNIQUE KEY")
-		);
-	}
+	TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName, @Nullable NumberType numberType,
+											  boolean asPrimaryKey, boolean unsigned);
 
 	/**
-	 * 为该表添加一个自增主键列
+	 * 为该表添加一个INT类型的自增主键列
 	 * <p> 自增列强制要求为数字类型，非空，且为UNIQUE。
 	 * <p> 注意：一个表只允许有一个自增列！
 	 *
-	 * @param columnName 列名
-	 * @param numberType 数字类型，若省缺则为 {@link NumberType#INT}
+	 * @param columnName   列名
+	 * @param asPrimaryKey 是否为主键，若为false则设定为唯一键
+	 * @param unsigned     是否采用 UNSIGNED (即无负数，可以增加自增键的最高数，建议为true)
 	 * @return {@link TableCreateBuilder}
 	 */
-	default TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName, @Nullable NumberType numberType) {
-		return addAutoIncrementColumn(columnName, numberType, true, true);
+	default TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName,
+													  boolean asPrimaryKey, boolean unsigned) {
+		return addAutoIncrementColumn(columnName, NumberType.INT, asPrimaryKey, unsigned);
+	}
+
+
+	/**
+	 * 为该表添加一个INT类型的自增列
+	 * <p> 自增列强制要求为数字类型，非空，且为UNIQUE。
+	 * <p> 注意：一个表只允许有一个自增列！
+	 *
+	 * @param columnName   列名
+	 * @param asPrimaryKey 是否为主键，若为false则设定为唯一键
+	 * @return {@link TableCreateBuilder}
+	 */
+	default TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName, boolean asPrimaryKey) {
+		return addAutoIncrementColumn(columnName, asPrimaryKey, true);
 	}
 
 	/**
 	 * 为该表添加一个INT类型的自增主键列
 	 * <p> 自增列强制要求为数字类型，非空，且为UNIQUE。
-	 * <p> 本方法采用的类型为 INT 如有其他需要请自行使用 {@link #addAutoIncrementColumn(String, NumberType)} 方法。
 	 * <p> 注意：一个表只允许有一个自增列！
 	 *
 	 * @param columnName 列名
 	 * @return {@link TableCreateBuilder}
 	 */
 	default TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName) {
-		return addAutoIncrementColumn(columnName, null);
+		return addAutoIncrementColumn(columnName, true);
 	}
 
 	/**
@@ -136,8 +145,8 @@ public interface TableCreateBuilder extends SQLBuilder {
 	 * @param columnName 索引包含的列
 	 * @return {@link TableCreateBuilder}
 	 */
-	default TableCreateBuilder setIndex(@NotNull IndexType type,
-										@NotNull String columnName) {
+	default TableCreateBuilder setIndex(@NotNull String columnName,
+										@NotNull IndexType type) {
 		return setIndex(type, null, columnName);
 	}
 
