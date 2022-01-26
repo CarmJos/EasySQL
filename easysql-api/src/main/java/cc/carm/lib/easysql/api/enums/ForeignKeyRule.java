@@ -28,7 +28,7 @@ public enum ForeignKeyRule {
 	 */
 	CASCADE("CASCADE");
 
-	String ruleName;
+	final String ruleName;
 
 	ForeignKeyRule(String ruleName) {
 		this.ruleName = ruleName;

@@ -9,12 +9,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Scanner;
 import java.util.Set;
 
 @TestOnly
+@SuppressWarnings("all")
 public class Main {
 
 	public static void main(String[] args) {
@@ -85,8 +87,8 @@ public class Main {
 	public static @Nullable EasySQLTest cast(@NotNull Class<?> value) {
 		if (!EasySQLTest.class.isAssignableFrom(value)) return null;
 		try {
-			return (EasySQLTest) value.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
+			return (EasySQLTest) value.getDeclaredConstructor().newInstance();
+		} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
 			return null;
 		}
 

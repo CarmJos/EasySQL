@@ -29,7 +29,7 @@ public enum IndexType {
 	FULLTEXT_INDEX("FULLTEXT");
 
 
-	String name;
+	final String name;
 
 	IndexType(String name) {
 		this.name = name;
