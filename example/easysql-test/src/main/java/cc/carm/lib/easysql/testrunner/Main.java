@@ -21,7 +21,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		if (args.length < 4) {
-			print("请提供以下参数： 数据库地址 数据库用户名 数据库密码");
+			print("请提供以下参数：<数据库驱动> <数据库地址(JDBC)> <数据库用户> <数据库密码> [是否采用DEBUG(y/n)]");
 			return;
 		}
 
