@@ -181,7 +181,6 @@
                         <includeDependencySources>true</includeDependencySources>
                         <dependencySourceIncludes>
                             <dependencySourceInclude>cc.carm.lib:*</dependencySourceInclude>
-                            <dependencySourceInclude>cn.beecp:*</dependencySourceInclude>
                         </dependencySourceIncludes>
                     </configuration>
                     <executions>
