@@ -63,7 +63,7 @@ public class TableQueryBuilderImpl
     }
 
     @Override
-    public TableQueryBuilderImpl selectColumns(@NotNull String[] columnNames) {
+    public TableQueryBuilderImpl selectColumns(@NotNull String... columnNames) {
         this.columns = columnNames;
         return this;
     }

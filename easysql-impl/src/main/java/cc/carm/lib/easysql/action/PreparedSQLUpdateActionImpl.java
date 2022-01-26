@@ -35,7 +35,7 @@ public class PreparedSQLUpdateActionImpl
 	}
 
 	@Override
-	public PreparedSQLUpdateActionImpl setParams(Object[] params) {
+	public PreparedSQLUpdateActionImpl setParams(Object... params) {
 		this.params = params;
 		return this;
 	}

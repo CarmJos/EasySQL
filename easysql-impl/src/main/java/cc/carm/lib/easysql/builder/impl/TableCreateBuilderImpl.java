@@ -111,7 +111,7 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
 	}
 
 	@Override
-	public TableCreateBuilder setColumns(@NotNull String[] columns) {
+	public TableCreateBuilder setColumns(@NotNull String... columns) {
 		this.columns = Arrays.asList(columns);
 		return this;
 	}

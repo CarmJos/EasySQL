@@ -15,6 +15,7 @@ public interface SQLUpdateBatchAction extends SQLAction<List<Integer>> {
 	 */
 	SQLUpdateBatchAction addBatch(@NotNull String sql);
 
+	@Override
 	default @NotNull String getSQLContent() {
 		return getSQLContents().get(0);
 	}

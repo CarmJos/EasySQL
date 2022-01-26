@@ -7,12 +7,14 @@ import cc.carm.lib.easysql.testrunner.tests.TableCreateTest;
 import cc.carm.lib.easysql.testrunner.tests.TableRenameTest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.TestOnly;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+@TestOnly
 public class Main {
 
 	public static void main(String[] args) {

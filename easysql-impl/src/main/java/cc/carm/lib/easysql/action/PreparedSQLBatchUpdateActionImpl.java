@@ -35,7 +35,7 @@ public class PreparedSQLBatchUpdateActionImpl
     }
 
     @Override
-    public PreparedSQLUpdateBatchAction addParamsBatch(Object[] params) {
+    public PreparedSQLUpdateBatchAction addParamsBatch(Object... params) {
         this.allParams.add(params);
         return this;
     }

@@ -62,7 +62,7 @@ public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B,
 	public B addCondition(
 			@NotNull String[] queryNames, @Nullable Object[] queryValues
 	) {
-		if (queryNames.length != queryValues.length) {
+		if (queryValues == null || queryNames.length != queryValues.length) {
 			throw new RuntimeException("queryNames are not match with queryValues");
 		}
 		for (int i = 0; i < queryNames.length; i++) {

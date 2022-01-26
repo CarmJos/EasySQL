@@ -25,7 +25,7 @@ public class PreparedQueryActionImpl extends QueryActionImpl implements Prepared
 	}
 
 	@Override
-	public PreparedQueryActionImpl setParams(@Nullable Object[] params) {
+	public PreparedQueryActionImpl setParams(@Nullable Object... params) {
 		this.params = params;
 		return this;
 	}

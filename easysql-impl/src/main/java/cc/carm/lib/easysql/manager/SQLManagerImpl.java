@@ -62,6 +62,7 @@ public class SQLManagerImpl implements SQLManager {
 		if (isDebugMode()) getLogger().info("[DEBUG] " + msg);
 	}
 
+	@Override
 	public Logger getLogger() {
 		return LOGGER;
 	}
@@ -103,7 +104,7 @@ public class SQLManagerImpl implements SQLManager {
 	}
 
 	@Override
-	public List<Integer> executeSQLBatch(@NotNull String sql, String[] moreSQL) {
+	public List<Integer> executeSQLBatch(@NotNull String sql, String... moreSQL) {
 		SQLUpdateBatchAction action = new SQLUpdateBatchActionImpl(this, sql);
 		if (moreSQL != null && moreSQL.length > 0) {
 			Arrays.stream(moreSQL).forEach(action::addBatch);

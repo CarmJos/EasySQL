@@ -128,16 +128,12 @@ public class StatementUtil {
 	 * @return 数据类型，默认为 {@link Types#VARCHAR}
 	 */
 	public static int getNullType(PreparedStatement statement, int paramIndex) {
-		int sqlType = Types.VARCHAR;
-
-		final ParameterMetaData pmd;
 		try {
-			pmd = statement.getParameterMetaData();
-			sqlType = pmd.getParameterType(paramIndex);
+			ParameterMetaData pmd = statement.getParameterMetaData();
+			return pmd.getParameterType(paramIndex);
 		} catch (SQLException ignore) {
+			return Types.VARCHAR;
 		}
-
-		return sqlType;
 	}
 
 	/**
