@@ -20,7 +20,7 @@
     <artifactId>easysql-beecp</artifactId>
     <packaging>jar</packaging>
 
-    <name>12-EasySQL-BeeCP</name>
+    <name>EasySQL-BeeCP</name>
     <description>EasySQL的应用部分。此为BeeCP版本。</description>
     <url>https://github.com/CarmJos/EasySQL</url>
 

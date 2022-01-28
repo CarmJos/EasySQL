@@ -21,7 +21,7 @@
 
     <artifactId>easysql-test</artifactId>
 
-    <name>98-EasySQL-Demo</name>
+    <name>EasySQL-Demo</name>
     <description>EasySQL的测试代码</description>
     <url>https://github.com/CarmJos/EasySQL</url>
 

@@ -19,7 +19,7 @@
     <artifactId>easysql-impl</artifactId>
     <packaging>jar</packaging>
 
-    <name>01-EasySQL-Impl</name>
+    <name>EasySQL-Impl</name>
     <description>EasySQL的实现部分。</description>
     <url>https://github.com/CarmJos/EasySQL</url>
 

@@ -22,7 +22,7 @@
     <artifactId>easysql-demo</artifactId>
     <packaging>jar</packaging>
 
-    <name>99-EasySQL-Demo</name>
+    <name>EasySQL-Demo</name>
     <description>EasySQL的演示部分</description>
     <url>https://github.com/CarmJos/EasySQL</url>
 

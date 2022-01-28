@@ -19,7 +19,7 @@
 
     <artifactId>easysql-hikaricp</artifactId>
 
-    <name>11-EasySQL-HikariCP</name>
+    <name>EasySQL-HikariCP</name>
     <description>EasySQL的应用部分。此为HikariCP版本。</description>
     <url>https://github.com/CarmJos/EasySQL</url>
 
