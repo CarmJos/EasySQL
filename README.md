@@ -48,8 +48,16 @@
 
 <project>
     <repositories>
+
         <repository>
-            <!--采用github依赖库，安全稳定，但需要配置 (推荐)-->
+            <!--采用Maven中心库，安全稳定，但版本更新需要等待同步-->
+            <id>maven</id>
+            <name>Maven Central</name>
+            <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
+        </repository>
+        
+        <repository>
+            <!--采用github依赖库，实时更新，但需要配置 (推荐) -->
             <id>EasySQL</id>
             <name>GitHub Packages</name>
             <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
@@ -130,7 +138,11 @@
 
 ```groovy
 repositories {
-    // 采用github依赖库，安全稳定，但需要配置 (推荐)
+
+    // 采用Maven中心库，安全稳定，但版本更新需要等待同步 
+    mavenCentral()
+    
+    // 采用github依赖库，实时更新，但需要配置 (推荐)
     maven { url 'https://maven.pkg.github.com/CarmJos/EasySQL' }
 
     // 采用我的私人依赖库，简单方便，但可能因为变故而无法使用
