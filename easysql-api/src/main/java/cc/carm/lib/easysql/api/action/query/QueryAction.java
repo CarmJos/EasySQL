@@ -32,20 +32,10 @@ import java.sql.SQLException;
  */
 public interface QueryAction extends SQLAction<SQLQuery> {
 
-	/**
-	 * 执行语句并处理返回值
-	 *
-	 * @param defaultResult 默认结果，若处理后的结果为null，则返回该值
-	 * @param function      处理方法
-	 * @param <R>           需要返回的内容
-	 * @return 指定类型数据
-	 * @throws SQLException 当SQL操作出现问题时抛出
-	 */
-	@Nullable
-	@Contract("!null, _ -> !null")
-	default <R> R executeFunction(@Nullable R defaultResult,
-								  @NotNull SQLFunction<SQLQuery, R> function) throws SQLException {
-
+	@Override
+	@Contract("_,!null -> !null")
+	default <R> @Nullable R executeFunction(@NotNull SQLFunction<@NotNull SQLQuery, R> function,
+	                                        @Nullable R defaultResult) throws SQLException {
 		try (SQLQuery value = execute()) {
 			R result = function.apply(value);
 			return result == null ? defaultResult : result;

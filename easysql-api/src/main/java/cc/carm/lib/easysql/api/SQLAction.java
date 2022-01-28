@@ -98,7 +98,7 @@ public interface SQLAction<T> {
 	 */
 	@Nullable
 	default <R> R execute(@NotNull SQLFunction<T, R> function,
-						  @Nullable SQLExceptionHandler exceptionHandler) {
+	                      @Nullable SQLExceptionHandler exceptionHandler) {
 		return execute(function, null, exceptionHandler);
 	}
 
@@ -114,8 +114,8 @@ public interface SQLAction<T> {
 	@Nullable
 	@Contract("_,!null,_ -> !null")
 	default <R> R execute(@NotNull SQLFunction<T, R> function,
-						  @Nullable R defaultResult,
-						  @Nullable SQLExceptionHandler exceptionHandler) {
+	                      @Nullable R defaultResult,
+	                      @Nullable SQLExceptionHandler exceptionHandler) {
 		try {
 			return executeFunction(function, defaultResult);
 		} catch (SQLException exception) {
@@ -133,7 +133,7 @@ public interface SQLAction<T> {
 	 * @throws SQLException 当SQL操作出现问题时抛出
 	 */
 	@Nullable
-	default <R> R executeFunction(@NotNull SQLFunction<T, R> function) throws SQLException {
+	default <R> R executeFunction(@NotNull SQLFunction<@NotNull T, R> function) throws SQLException {
 		return executeFunction(function, null);
 	}
 
@@ -148,11 +148,10 @@ public interface SQLAction<T> {
 	 */
 	@Nullable
 	@Contract("_,!null -> !null")
-	default <R> R executeFunction(@NotNull SQLFunction<T, R> function,
-								  @Nullable R defaultResult) throws SQLException {
+	default <R> R executeFunction(@NotNull SQLFunction<@NotNull T, R> function,
+	                              @Nullable R defaultResult) throws SQLException {
 		try {
-			T value = execute();
-			R result = function.apply(value);
+			R result = function.apply(execute());
 			return result == null ? defaultResult : result;
 		} catch (SQLException exception) {
 			throw new SQLException(exception);
@@ -182,7 +181,7 @@ public interface SQLAction<T> {
 	 * @param failure 异常处理器 默认为 {@link SQLAction#defaultExceptionHandler()}
 	 */
 	void executeAsync(@Nullable SQLHandler<T> success,
-					  @Nullable SQLExceptionHandler failure);
+	                  @Nullable SQLExceptionHandler failure);
 
 	default void handleException(@Nullable SQLExceptionHandler handler, SQLException exception) {
 		if (handler == null) handler = defaultExceptionHandler();

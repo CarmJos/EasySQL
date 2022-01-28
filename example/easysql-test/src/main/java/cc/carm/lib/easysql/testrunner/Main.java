@@ -2,8 +2,8 @@ package cc.carm.lib.easysql.testrunner;
 
 import cc.carm.lib.easysql.EasySQL;
 import cc.carm.lib.easysql.api.SQLManager;
-import cc.carm.lib.easysql.testrunner.tests.SQLUpdateBatchTests;
-import cc.carm.lib.easysql.testrunner.tests.SQLUpdateReturnKeysTest;
+import cc.carm.lib.easysql.testrunner.tests.QueryCloseTest;
+import cc.carm.lib.easysql.testrunner.tests.QueryFunctionTest;
 import cc.carm.lib.easysql.testrunner.tests.TableCreateTest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
@@ -45,9 +45,10 @@ public class Main {
 //		tests.add(new TableAlterTest());
 //		tests.add(new TableRenameTest());
 //		tests.add(new QueryNotCloseTest());
-//		tests.add(new QueryCloseTest());
-		tests.add(new SQLUpdateBatchTests());
-		tests.add(new SQLUpdateReturnKeysTest());
+		tests.add(new QueryCloseTest());
+//		tests.add(new SQLUpdateBatchTests());
+//		tests.add(new SQLUpdateReturnKeysTest());
+		tests.add(new QueryFunctionTest());
 
 		print("准备进行测试...");
 
