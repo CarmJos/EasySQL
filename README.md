@@ -202,4 +202,4 @@ dependencies {
 > MIT 协议是所有开源许可中最宽松的一个，除了必须包含许可声明外，再无任何限制。
 >
 > *以上文字来自 [五种开源协议GPL,LGPL,BSD,MIT,Apache](https://www.oschina.net/question/54100_9455) 。*
-</details>
+</details> 
