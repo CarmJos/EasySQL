@@ -36,20 +36,21 @@ public class SQLUpdateBatchActionImpl
 
 	@Override
 	public @NotNull List<Integer> execute() throws SQLException {
-		Connection connection = getManager().getConnection();
-		Statement statement = connection.createStatement();
-		outputDebugMessage();
+		try (Connection connection = getManager().getConnection()) {
 
-		for (String content : this.sqlContents) {
-			statement.addBatch(content);
+			try (Statement statement = connection.createStatement()) {
+				outputDebugMessage();
+
+				for (String content : this.sqlContents) {
+					statement.addBatch(content);
+				}
+
+				int[] executed = statement.executeBatch();
+
+				return Arrays.stream(executed).boxed().collect(Collectors.toList());
+			}
+
 		}
-		int[] executed = statement.executeBatch();
-		List<Integer> returnedValues = Arrays.stream(executed).boxed().collect(Collectors.toList());
-
-		statement.close();
-		connection.close();
-
-		return returnedValues;
 	}
 
 	@Override

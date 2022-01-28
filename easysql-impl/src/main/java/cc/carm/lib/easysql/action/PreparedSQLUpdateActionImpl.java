@@ -24,12 +24,12 @@ public class PreparedSQLUpdateActionImpl
 	}
 
 	public PreparedSQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql,
-									   @Nullable List<Object> params) {
+	                                   @Nullable List<Object> params) {
 		this(manager, sql, params == null ? null : params.toArray());
 	}
 
 	public PreparedSQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql,
-									   @Nullable Object[] params) {
+	                                   @Nullable Object[] params) {
 		super(manager, sql);
 		this.params = params;
 	}
@@ -53,28 +53,25 @@ public class PreparedSQLUpdateActionImpl
 
 	@Override
 	public @NotNull Integer execute() throws SQLException {
-		int value = -1;
+		try (Connection connection = getManager().getConnection()) {
 
-		Connection connection = getManager().getConnection();
-		PreparedStatement statement = StatementUtil.createPrepareStatement(
-				connection, getSQLContent(), params, keyIndex > 0
-		);
-		outputDebugMessage();
-		if (keyIndex > 0) {
-			statement.executeUpdate();
-			ResultSet resultSet = statement.getGeneratedKeys();
-			if (resultSet != null) {
-				if (resultSet.next()) value = resultSet.getInt(keyIndex);
-				resultSet.close();
+			try (PreparedStatement statement = StatementUtil.createPrepareStatement(
+					connection, getSQLContent(), params, returnGeneratedKeys
+			)) {
+
+				outputDebugMessage();
+
+				int changes = statement.executeUpdate();
+				if (!returnGeneratedKeys) return changes;
+				else {
+					try (ResultSet resultSet = statement.getGeneratedKeys()) {
+						return resultSet.next() ? resultSet.getInt(1) : -1;
+					}
+				}
+
 			}
-		} else {
-			value = statement.executeUpdate();
 		}
 
-		statement.close();
-		connection.close();
-
-		return value;
 	}
 
 }

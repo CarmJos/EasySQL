@@ -10,7 +10,6 @@ import cc.carm.lib.easysql.query.SQLQueryImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -24,21 +23,32 @@ public class QueryActionImpl extends AbstractSQLAction<SQLQuery> implements Quer
 	public @NotNull SQLQueryImpl execute() throws SQLException {
 
 		Connection connection = getManager().getConnection();
-		Statement statement = connection.createStatement();
+		Statement statement;
 
+		try {
+			statement = connection.createStatement();
+		} catch (SQLException ex) {
+			connection.close();
+			throw ex;
+		}
+		
 		outputDebugMessage();
+		try {
+			long executeTime = System.currentTimeMillis();
+			SQLQueryImpl query = new SQLQueryImpl(
+					getManager(), this,
+					connection, statement,
+					statement.executeQuery(getSQLContent()),
+					executeTime
+			);
+			getManager().getActiveQuery().put(getActionUUID(), query);
 
-		long executeTime = System.currentTimeMillis();
-		ResultSet resultSet = statement.executeQuery(getSQLContent());
-		SQLQueryImpl query = new SQLQueryImpl(
-				getManager(), this,
-				connection, statement, resultSet,
-				executeTime
-		);
-
-		getManager().getActiveQuery().put(getActionUUID(), query);
-
-		return query;
+			return query;
+		} catch (SQLException exception) {
+			statement.close();
+			connection.close();
+			throw exception;
+		}
 	}
 
 

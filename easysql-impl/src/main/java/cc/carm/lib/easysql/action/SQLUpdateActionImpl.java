@@ -13,42 +13,36 @@ public class SQLUpdateActionImpl
 		extends AbstractSQLAction<Integer>
 		implements SQLUpdateAction {
 
-    int keyIndex = -1;
+	boolean returnGeneratedKeys = false;
 
-    public SQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
-        super(manager, sql);
-    }
+	public SQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
+		super(manager, sql);
+	}
 
-    @Override
-    public @NotNull Integer execute() throws SQLException {
-        int returnedValue = -1;
-        Connection connection = getManager().getConnection();
-        Statement statement = connection.createStatement();
-        outputDebugMessage();
-        if (keyIndex > 0) {
-            statement.executeUpdate(getSQLContent(), Statement.RETURN_GENERATED_KEYS);
-            ResultSet resultSet = statement.getGeneratedKeys();
-            if (resultSet != null) {
-                if (resultSet.next()) {
-                    returnedValue = resultSet.getInt(keyIndex);
-                }
-                resultSet.close();
-            }
-        } else {
-            returnedValue = statement.executeUpdate(getSQLContent());
-        }
+	@Override
+	public @NotNull Integer execute() throws SQLException {
+		try (Connection connection = getManager().getConnection()) {
+			try (Statement statement = connection.createStatement()) {
+				outputDebugMessage();
 
-        statement.close();
-        connection.close();
+				if (!returnGeneratedKeys) {
+					return statement.executeUpdate(getSQLContent());
+				} else {
+					statement.executeUpdate(getSQLContent(), Statement.RETURN_GENERATED_KEYS);
 
-        return returnedValue;
-    }
+					try (ResultSet resultSet = statement.getGeneratedKeys()) {
+						return resultSet.next() ? resultSet.getInt(1) : -1;
+					}
+				}
+			}
+		}
+	}
 
 
-    @Override
-    public SQLUpdateActionImpl setKeyIndex(int keyIndex) {
-        this.keyIndex = keyIndex;
-        return this;
-    }
+	@Override
+	public SQLUpdateAction setReturnGeneratedKey(boolean returnGeneratedKey) {
+		this.returnGeneratedKeys = returnGeneratedKey;
+		return this;
+	}
 
 }

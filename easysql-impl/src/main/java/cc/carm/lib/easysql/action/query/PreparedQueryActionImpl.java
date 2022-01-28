@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,21 +53,34 @@ public class PreparedQueryActionImpl extends QueryActionImpl implements Prepared
 
 		Connection connection = getManager().getConnection();
 		PreparedStatement preparedStatement;
-		if (handler == null) {
-			preparedStatement = StatementUtil.createPrepareStatement(connection, getSQLContent(), this.params);
-		} else {
-			preparedStatement = connection.prepareStatement(getSQLContent());
-			handler.accept(preparedStatement);
+		try {
+			if (handler == null) {
+				preparedStatement = StatementUtil.createPrepareStatement(connection, getSQLContent(), this.params);
+			} else {
+				preparedStatement = connection.prepareStatement(getSQLContent());
+				handler.accept(preparedStatement);
+			}
+		} catch (SQLException exception) {
+			connection.close();
+			throw exception;
 		}
 
-		long executeTime = System.currentTimeMillis();
-		ResultSet resultSet = preparedStatement.executeQuery();
+		try {
+			long executeTime = System.currentTimeMillis();
+			SQLQueryImpl query = new SQLQueryImpl(
+					getManager(), this,
+					connection, preparedStatement,
+					preparedStatement.executeQuery(),
+					executeTime
+			);
+			getManager().getActiveQuery().put(getActionUUID(), query);
 
-		return new SQLQueryImpl(
-				getManager(), this,
-				connection, preparedStatement, resultSet,
-				executeTime
-		);
+			return query;
+		} catch (SQLException exception) {
+			preparedStatement.close();
+			connection.close();
+			throw exception;
+		}
 
 	}
 }

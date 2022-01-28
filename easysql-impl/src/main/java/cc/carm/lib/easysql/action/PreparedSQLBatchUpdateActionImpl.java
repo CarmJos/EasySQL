@@ -15,63 +15,60 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PreparedSQLBatchUpdateActionImpl
-        extends AbstractSQLAction<List<Integer>>
-        implements PreparedSQLUpdateBatchAction {
+		extends AbstractSQLAction<List<Integer>>
+		implements PreparedSQLUpdateBatchAction {
 
-    int keyIndex = -1;
-    List<Object[]> allParams;
+	boolean returnKeys = false;
+	List<Object[]> allParams;
 
-    public PreparedSQLBatchUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
-        super(manager, sql);
-        this.allParams = new ArrayList<>();
-    }
+	public PreparedSQLBatchUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
+		super(manager, sql);
+		this.allParams = new ArrayList<>();
+	}
 
-    @Override
-    public PreparedSQLUpdateBatchAction setAllParams(Iterable<Object[]> allParams) {
-        List<Object[]> paramsList = new ArrayList<>();
-        allParams.forEach(paramsList::add);
-        this.allParams = paramsList;
-        return this;
-    }
+	@Override
+	public PreparedSQLUpdateBatchAction setAllParams(Iterable<Object[]> allParams) {
+		List<Object[]> paramsList = new ArrayList<>();
+		allParams.forEach(paramsList::add);
+		this.allParams = paramsList;
+		return this;
+	}
 
-    @Override
-    public PreparedSQLUpdateBatchAction addParamsBatch(Object... params) {
-        this.allParams.add(params);
-        return this;
-    }
+	@Override
+	public PreparedSQLUpdateBatchAction addParamsBatch(Object... params) {
+		this.allParams.add(params);
+		return this;
+	}
 
-    @Override
-    public PreparedSQLUpdateBatchAction setKeyIndex(int keyColumnIndex) {
-        this.keyIndex = keyColumnIndex;
-        return this;
-    }
+	@Override
+	public PreparedSQLUpdateBatchAction setReturnGeneratedKeys(boolean returnGeneratedKey) {
+		this.returnKeys = returnGeneratedKey;
+		return this;
+	}
 
-    @Override
-    public @NotNull List<Integer> execute() throws SQLException {
-        List<Integer> returnedValues;
-        Connection connection = getManager().getConnection();
-        PreparedStatement statement = StatementUtil.createPrepareStatementBatch(
-                connection, getSQLContent(), allParams, keyIndex > 0
-        );
-        outputDebugMessage();
-        if (keyIndex > 0) {
-            statement.executeBatch();
-            List<Integer> generatedKeys = new ArrayList<>();
-            ResultSet resultSet = statement.getGeneratedKeys();
-            if (resultSet != null) {
-                while (resultSet.next()) generatedKeys.add(resultSet.getInt(keyIndex));
-                resultSet.close();
-            }
-            returnedValues = generatedKeys;
-        } else {
-            int[] executed = statement.executeBatch();
-            returnedValues = Arrays.stream(executed).boxed().collect(Collectors.toList());
-        }
+	@Override
+	public @NotNull List<Integer> execute() throws SQLException {
+		try (Connection connection = getManager().getConnection()) {
+			try (PreparedStatement statement = StatementUtil.createPrepareStatementBatch(
+					connection, getSQLContent(), allParams, returnKeys
+			)) {
 
-        statement.close();
-        connection.close();
+				outputDebugMessage();
+				int[] executed = statement.executeBatch();
 
-        return returnedValues;
-    }
+				if (!returnKeys) return Arrays.stream(executed).boxed().collect(Collectors.toList());
+				else {
+					try (ResultSet resultSet = statement.getGeneratedKeys()) {
+						List<Integer> generatedKeys = new ArrayList<>();
+						while (resultSet.next()) {
+							generatedKeys.add(resultSet.getInt(1));
+						}
+						return generatedKeys;
+					}
+				}
+			}
+
+		}
+	}
 
 }

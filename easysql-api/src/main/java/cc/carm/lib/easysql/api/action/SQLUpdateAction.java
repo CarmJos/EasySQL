@@ -4,24 +4,34 @@ import cc.carm.lib.easysql.api.SQLAction;
 
 public interface SQLUpdateAction extends SQLAction<Integer> {
 
-    /**
-     * 设定自增主键的序列
-     *
-     * @param keyColumnIndex 自增主键的序列
-     *                       <br>若该值 ＞ 0，则 {@link #execute()} 返回自增主键数值
-     *                       <br>若该值 ≤ 0，则 {@link #execute()} 返回变更的行数
-     * @return {@link SQLUpdateAction}
-     */
-    SQLUpdateAction setKeyIndex(int keyColumnIndex);
+	/**
+	 * 设定自增主键的序列
+	 *
+	 * @param keyColumnIndex 自增主键的序列
+	 *                       <br>若该值 ＞ 0，则 {@link #execute()} 返回自增主键数值
+	 *                       <br>若该值 ≤ 0，则 {@link #execute()} 返回变更的行数
+	 * @return {@link SQLUpdateAction}
+	 * @see #setReturnGeneratedKey(boolean)
+	 */
+	@Deprecated
+	default SQLUpdateAction setKeyIndex(int keyColumnIndex) {
+		return setReturnGeneratedKey(keyColumnIndex > 0);
+	}
 
-    /**
-     * 默认主键序列的数值为 -1 (≤0) ，即默认返回发生变更的行数。
-     *
-     * @return 默认主键序列
-     */
-    default SQLUpdateAction defaultKeyIndex() {
-        return setKeyIndex(-1); // will return changed lines number
-    }
+	/**
+	 * 设定该操作返回自增键序列。
+	 *
+	 * @return {@link SQLUpdateAction}
+	 */
+	default SQLUpdateAction returnGeneratedKey() {
+		return setReturnGeneratedKey(true);
+	}
 
+	/**
+	 * 设定该操作是否返回自增键序列。
+	 *
+	 * @return {@link SQLUpdateAction}
+	 */
+	SQLUpdateAction setReturnGeneratedKey(boolean returnGeneratedKey);
 
 }

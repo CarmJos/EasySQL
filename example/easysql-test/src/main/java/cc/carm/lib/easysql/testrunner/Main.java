@@ -2,14 +2,12 @@ package cc.carm.lib.easysql.testrunner;
 
 import cc.carm.lib.easysql.EasySQL;
 import cc.carm.lib.easysql.api.SQLManager;
-import cc.carm.lib.easysql.testrunner.tests.TableAlterTest;
+import cc.carm.lib.easysql.testrunner.tests.SQLUpdateBatchTests;
+import cc.carm.lib.easysql.testrunner.tests.SQLUpdateReturnKeysTest;
 import cc.carm.lib.easysql.testrunner.tests.TableCreateTest;
-import cc.carm.lib.easysql.testrunner.tests.TableRenameTest;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Scanner;
@@ -44,8 +42,12 @@ public class Main {
 		print("加载测试类...");
 		Set<EasySQLTest> tests = new LinkedHashSet<>();
 		tests.add(new TableCreateTest());
-		tests.add(new TableAlterTest());
-		tests.add(new TableRenameTest());
+//		tests.add(new TableAlterTest());
+//		tests.add(new TableRenameTest());
+//		tests.add(new QueryNotCloseTest());
+//		tests.add(new QueryCloseTest());
+		tests.add(new SQLUpdateBatchTests());
+		tests.add(new SQLUpdateReturnKeysTest());
 
 		print("准备进行测试...");
 
@@ -77,21 +79,12 @@ public class Main {
 				success, (tests.size() - success)
 		);
 
-	}
+		EasySQL.shutdownManager(sqlManager);
 
+	}
 
 	public static void print(@NotNull String format, Object... params) {
 		System.out.printf((format) + "%n", params);
-	}
-
-	public static @Nullable EasySQLTest cast(@NotNull Class<?> value) {
-		if (!EasySQLTest.class.isAssignableFrom(value)) return null;
-		try {
-			return (EasySQLTest) value.getDeclaredConstructor().newInstance();
-		} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-			return null;
-		}
-
 	}
 
 }
