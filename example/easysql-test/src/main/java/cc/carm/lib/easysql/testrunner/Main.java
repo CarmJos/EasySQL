@@ -2,6 +2,7 @@ package cc.carm.lib.easysql.testrunner;
 
 import cc.carm.lib.easysql.EasySQL;
 import cc.carm.lib.easysql.api.SQLManager;
+import cc.carm.lib.easysql.testrunner.tests.DeleteTest;
 import cc.carm.lib.easysql.testrunner.tests.QueryCloseTest;
 import cc.carm.lib.easysql.testrunner.tests.QueryFunctionTest;
 import cc.carm.lib.easysql.testrunner.tests.TableCreateTest;
@@ -49,6 +50,7 @@ public class Main {
 //		tests.add(new SQLUpdateBatchTests());
 //		tests.add(new SQLUpdateReturnKeysTest());
 		tests.add(new QueryFunctionTest());
+		tests.add(new DeleteTest());
 
 		print("准备进行测试...");
 
