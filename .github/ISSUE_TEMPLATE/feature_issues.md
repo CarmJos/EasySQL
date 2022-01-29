@@ -1,7 +1,9 @@
 ---
-name: 功能需求 about: 希望我们提供更多的功能。 title: ''
-labels: enhancement assignees: ''
-
+name: 功能需求 
+about: 希望我们提供更多的功能。 
+title: ''
+labels: enhancement 
+assignees: ''
 ---
 
 ### **功能简述**
