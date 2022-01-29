@@ -8,6 +8,10 @@ import cc.carm.lib.easysql.api.enums.NumberType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
+import static cc.carm.lib.easysql.api.SQLBuilder.withQuote;
+
+
 public interface TableCreateBuilder extends SQLBuilder {
 
 	/**
@@ -63,7 +67,7 @@ public interface TableCreateBuilder extends SQLBuilder {
 	 * @return {@link TableCreateBuilder}
 	 */
 	default TableCreateBuilder addColumn(@NotNull String columnName, @NotNull String settings) {
-		return addColumn("`" + columnName + "` " + settings);
+		return addColumn(withBackQuote(columnName) + " " + settings);
 	}
 
 	/**
@@ -76,7 +80,7 @@ public interface TableCreateBuilder extends SQLBuilder {
 	 * @return {@link TableCreateBuilder}
 	 */
 	default TableCreateBuilder addColumn(@NotNull String columnName, @NotNull String settings, @NotNull String comments) {
-		return addColumn(columnName, settings + " COMMENT '" + comments + "'");
+		return addColumn(columnName, settings + " COMMENT " + withQuote(comments));
 	}
 
 	/**
@@ -91,7 +95,7 @@ public interface TableCreateBuilder extends SQLBuilder {
 	 * @return {@link TableCreateBuilder}
 	 */
 	TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName, @Nullable NumberType numberType,
-											  boolean asPrimaryKey, boolean unsigned);
+	                                          boolean asPrimaryKey, boolean unsigned);
 
 	/**
 	 * 为该表添加一个INT类型的自增主键列
@@ -104,7 +108,7 @@ public interface TableCreateBuilder extends SQLBuilder {
 	 * @return {@link TableCreateBuilder}
 	 */
 	default TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName,
-													  boolean asPrimaryKey, boolean unsigned) {
+	                                                  boolean asPrimaryKey, boolean unsigned) {
 		return addAutoIncrementColumn(columnName, NumberType.INT, asPrimaryKey, unsigned);
 	}
 
@@ -146,7 +150,7 @@ public interface TableCreateBuilder extends SQLBuilder {
 	 * @return {@link TableCreateBuilder}
 	 */
 	default TableCreateBuilder setIndex(@NotNull String columnName,
-										@NotNull IndexType type) {
+	                                    @NotNull IndexType type) {
 		return setIndex(type, null, columnName);
 	}
 
@@ -164,7 +168,7 @@ public interface TableCreateBuilder extends SQLBuilder {
 	 * @return {@link TableCreateBuilder}
 	 */
 	TableCreateBuilder setIndex(@NotNull IndexType type, @Nullable String indexName,
-								@NotNull String columnName, @NotNull String... moreColumns);
+	                            @NotNull String columnName, @NotNull String... moreColumns);
 
 
 	/**
@@ -197,7 +201,7 @@ public interface TableCreateBuilder extends SQLBuilder {
 	 * @return {@link TableCreateBuilder}
 	 */
 	default TableCreateBuilder addForeignKey(@NotNull String tableColumn,
-											 @NotNull String foreignTable, @NotNull String foreignColumn) {
+	                                         @NotNull String foreignTable, @NotNull String foreignColumn) {
 		return addForeignKey(tableColumn, null, foreignTable, foreignColumn);
 	}
 
@@ -217,7 +221,7 @@ public interface TableCreateBuilder extends SQLBuilder {
 	 * @return {@link TableCreateBuilder}
 	 */
 	default TableCreateBuilder addForeignKey(@NotNull String tableColumn, @Nullable String constraintName,
-											 @NotNull String foreignTable, @NotNull String foreignColumn) {
+	                                         @NotNull String foreignTable, @NotNull String foreignColumn) {
 		return addForeignKey(tableColumn, constraintName, foreignTable, foreignColumn, null, null);
 	}
 
@@ -239,8 +243,8 @@ public interface TableCreateBuilder extends SQLBuilder {
 	 * @return {@link TableCreateBuilder}
 	 */
 	TableCreateBuilder addForeignKey(@NotNull String tableColumn, @Nullable String constraintName,
-									 @NotNull String foreignTable, @NotNull String foreignColumn,
-									 @Nullable ForeignKeyRule updateRule, @Nullable ForeignKeyRule deleteRule);
+	                                 @NotNull String foreignTable, @NotNull String foreignColumn,
+	                                 @Nullable ForeignKeyRule updateRule, @Nullable ForeignKeyRule deleteRule);
 
 	default String defaultTablesSettings() {
 		return "ENGINE=InnoDB DEFAULT CHARSET=utf8";

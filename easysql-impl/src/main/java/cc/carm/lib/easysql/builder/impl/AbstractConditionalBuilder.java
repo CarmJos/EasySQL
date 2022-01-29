@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
+import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
+
 public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B, T>, T extends SQLAction<?>>
 		extends AbstractSQLBuilder implements ConditionalBuilder<B, T> {
 
@@ -53,7 +55,7 @@ public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B,
 	public B addCondition(
 			@NotNull String queryName, @NotNull String operator, @Nullable Object queryValue
 	) {
-		addCondition("`" + queryName + "` " + operator + " ?");
+		addCondition(withBackQuote(queryName) + " " + operator + " ?");
 		this.conditionParams.add(queryValue);
 		return getThis();
 	}
@@ -74,7 +76,7 @@ public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B,
 
 	@Override
 	public B addNotNullCondition(@NotNull String queryName) {
-		return addCondition("`" + queryName + "` IS NOT NULL");
+		return addCondition(withBackQuote(queryName) + " IS NOT NULL");
 	}
 
 
@@ -84,7 +86,7 @@ public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B,
 	) {
 		if (startDate == null && endDate == null) return getThis(); // 都不限定时间，不用判断了
 		if (startDate != null) {
-			addCondition("`" + queryName + "` BETWEEN ? AND ?");
+			addCondition(withBackQuote(queryName) + " BETWEEN ? AND ?");
 			this.conditionParams.add(startDate);
 			if (endDate != null) {
 				this.conditionParams.add(endDate);

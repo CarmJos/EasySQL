@@ -11,11 +11,22 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface SQLBuilder {
 
-    /**
-     * 得到承载该Builder的对应{@link SQLManager}
-     *
-     * @return {@link SQLManager}
-     */
-    @NotNull SQLManager getManager();
+	/**
+	 * 得到承载该Builder的对应{@link SQLManager}
+	 *
+	 * @return {@link SQLManager}
+	 */
+	@NotNull SQLManager getManager();
+
+
+	static @NotNull String withBackQuote(@NotNull String str) {
+		str = str.trim();
+		return str.startsWith("`") && str.endsWith("`") ? str : "`" + str + "`";
+	}
+
+	static @NotNull String withQuote(@NotNull String str) {
+		str = str.trim();
+		return str.startsWith("'") && str.endsWith("'") ? str : "'" + str + "'";
+	}
 
 }

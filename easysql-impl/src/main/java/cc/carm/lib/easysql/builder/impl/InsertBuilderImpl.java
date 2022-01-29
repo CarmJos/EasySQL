@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Iterator;
 import java.util.List;
 
+import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
+
 public abstract class InsertBuilderImpl<T extends SQLAction<?>>
 		extends AbstractSQLBuilder implements InsertBuilder<T> {
 
@@ -23,10 +25,10 @@ public abstract class InsertBuilderImpl<T extends SQLAction<?>>
 		int valueLength = columnNames.size();
 		StringBuilder sqlBuilder = new StringBuilder();
 
-		sqlBuilder.append("INSERT IGNORE INTO `").append(tableName).append("`(");
+		sqlBuilder.append("INSERT IGNORE INTO ").append(withBackQuote(tableName)).append("(");
 		Iterator<String> iterator = columnNames.iterator();
 		while (iterator.hasNext()) {
-			sqlBuilder.append("`").append(iterator.next()).append("`");
+			sqlBuilder.append(withBackQuote(iterator.next()));
 			if (iterator.hasNext()) sqlBuilder.append(", ");
 		}
 

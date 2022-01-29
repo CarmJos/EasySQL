@@ -7,6 +7,8 @@ import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
+
 public class TableQueryBuilderImpl
 		extends AbstractConditionalBuilder<TableQueryBuilder, PreparedQueryAction>
 		implements TableQueryBuilder {
@@ -33,15 +35,14 @@ public class TableQueryBuilderImpl
 		} else {
 			for (int i = 0; i < columns.length; i++) {
 				String name = columns[i];
-				sqlBuilder.append("`").append(name).append("`");
+				sqlBuilder.append(withBackQuote(name));
 				if (i != columns.length - 1) {
 					sqlBuilder.append(",");
 				}
 			}
 		}
 
-		sqlBuilder.append(" ").append("FROM").append(" ");
-		sqlBuilder.append("`").append(tableName).append("`");
+		sqlBuilder.append(" ").append("FROM").append(" ").append(withBackQuote(tableName));
 
 		if (hasConditions()) sqlBuilder.append(" ").append(buildConditionSQL());
 
@@ -71,7 +72,7 @@ public class TableQueryBuilderImpl
 
 	@Override
 	public TableQueryBuilder orderBy(@NotNull String columnName, boolean asc) {
-		this.orderBy = "ORDER BY `" + columnName + "` " + (asc ? "ASC" : "DESC");
+		this.orderBy = "ORDER BY " + withBackQuote(columnName) + " " + (asc ? "ASC" : "DESC");
 		return this;
 	}
 

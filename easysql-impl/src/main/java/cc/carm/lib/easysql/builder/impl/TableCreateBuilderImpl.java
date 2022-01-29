@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
+import static cc.carm.lib.easysql.api.SQLBuilder.withQuote;
+
 public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableCreateBuilder {
 
 	protected final @NotNull String tableName;
@@ -44,7 +47,7 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
 	@Override
 	public SQLUpdateAction build() {
 		StringBuilder createSQL = new StringBuilder();
-		createSQL.append("CREATE TABLE IF NOT EXISTS `").append(tableName).append("`");
+		createSQL.append("CREATE TABLE IF NOT EXISTS ").append(withBackQuote(tableName));
 		createSQL.append("(");
 		createSQL.append(String.join(", ", columns));
 		if (indexes.size() > 0) {
@@ -58,7 +61,7 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
 		createSQL.append(") ").append(getTableSettings());
 
 		if (tableComment != null) {
-			createSQL.append(" COMMENT '").append(tableComment).append("'");
+			createSQL.append(" COMMENT ").append(withQuote(tableComment));
 		}
 
 		return new SQLUpdateActionImpl(getManager(), createSQL.toString());
@@ -72,7 +75,7 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
 
 	@Override
 	public TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName, @Nullable NumberType numberType,
-													 boolean asPrimaryKey, boolean unsigned) {
+	                                                 boolean asPrimaryKey, boolean unsigned) {
 		return addColumn(columnName,
 				(numberType == null ? NumberType.INT : numberType).name()
 						+ (unsigned ? " UNSIGNED " : " ")
@@ -82,26 +85,26 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
 
 	@Override
 	public TableCreateBuilder setIndex(@NotNull IndexType type, @Nullable String indexName,
-									   @NotNull String columnName, @NotNull String... moreColumns) {
+	                                   @NotNull String columnName, @NotNull String... moreColumns) {
 		this.indexes.add(buildIndexSettings(type, indexName, columnName, moreColumns));
 		return this;
 	}
 
 	@Override
 	public TableCreateBuilder addForeignKey(@NotNull String tableColumn, @Nullable String constraintName,
-											@NotNull String foreignTable, @NotNull String foreignColumn,
-											@Nullable ForeignKeyRule updateRule, @Nullable ForeignKeyRule deleteRule) {
+	                                        @NotNull String foreignTable, @NotNull String foreignColumn,
+	                                        @Nullable ForeignKeyRule updateRule, @Nullable ForeignKeyRule deleteRule) {
 		StringBuilder keyBuilder = new StringBuilder();
 
 		keyBuilder.append("CONSTRAINT ");
 		if (constraintName == null) {
-			keyBuilder.append("`").append("fk_").append(tableColumn).append("_").append(foreignTable).append("`");
+			keyBuilder.append(withBackQuote("fk_" + tableColumn + "_" + foreignTable));
 		} else {
-			keyBuilder.append("`").append(constraintName).append("`");
+			keyBuilder.append(withBackQuote(constraintName));
 		}
 		keyBuilder.append(" ");
-		keyBuilder.append("FOREIGN KEY (`").append(tableColumn).append("`) ");
-		keyBuilder.append("REFERENCES `").append(foreignTable).append("`(`").append(foreignColumn).append("`)");
+		keyBuilder.append("FOREIGN KEY (").append(withBackQuote(tableColumn)).append(") ");
+		keyBuilder.append("REFERENCES ").append(withBackQuote(foreignTable)).append("(").append(withBackQuote(foreignColumn)).append(")");
 
 		if (updateRule != null) keyBuilder.append(" ON UPDATE ").append(updateRule.getRuleName());
 		if (deleteRule != null) keyBuilder.append(" ON DELETE ").append(deleteRule.getRuleName());
@@ -129,16 +132,16 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
 	}
 
 	protected static String buildIndexSettings(@NotNull IndexType indexType, @Nullable String indexName,
-											   @NotNull String columnName, @NotNull String... moreColumns) {
+	                                           @NotNull String columnName, @NotNull String... moreColumns) {
 
 		StringBuilder indexBuilder = new StringBuilder();
 
 		indexBuilder.append(indexType.getName()).append(" ");
 		if (indexName != null) {
-			indexBuilder.append("`").append(indexName).append("`");
+			indexBuilder.append(withBackQuote(indexName));
 		}
 		indexBuilder.append("(");
-		indexBuilder.append("`").append(columnName).append("`");
+		indexBuilder.append(withBackQuote(columnName));
 
 		if (moreColumns.length > 0) {
 			indexBuilder.append(", ");

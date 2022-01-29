@@ -55,9 +55,9 @@ public class SQLUpdateBatchActionImpl
 
 	@Override
 	protected void outputDebugMessage() {
-		getManager().debug("#" + getShortID() + " -> {");
-		for (String content : getSQLContents()) getManager().debug("  " + content);
-		getManager().debug("}");
+		getManager().debug("# " + getShortID() + " -> [");
+		for (String content : getSQLContents()) getManager().debug(" { " + content + " }");
+		getManager().debug("]");
 
 	}
 

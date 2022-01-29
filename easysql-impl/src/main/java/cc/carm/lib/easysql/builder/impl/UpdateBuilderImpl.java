@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
+
 public class UpdateBuilderImpl
 		extends AbstractConditionalBuilder<UpdateBuilder, SQLAction<Integer>>
 		implements UpdateBuilder {
@@ -28,11 +30,11 @@ public class UpdateBuilderImpl
 
 		StringBuilder sqlBuilder = new StringBuilder();
 
-		sqlBuilder.append("UPDATE `").append(getTableName()).append("` SET ");
+		sqlBuilder.append("UPDATE ").append(withBackQuote(getTableName())).append(" SET ");
 
 		Iterator<String> iterator = this.columnNames.iterator();
 		while (iterator.hasNext()) {
-			sqlBuilder.append("`").append(iterator.next()).append("` = ?");
+			sqlBuilder.append(withBackQuote(iterator.next())).append(" = ?");
 			if (iterator.hasNext()) sqlBuilder.append(" , ");
 		}
 		List<Object> allParams = new ArrayList<>(this.columnValues);

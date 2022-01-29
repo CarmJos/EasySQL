@@ -65,7 +65,7 @@ public abstract class AbstractSQLAction<T> implements SQLAction<T> {
 	}
 
 	protected void outputDebugMessage() {
-		getManager().debug("#" + getShortID() + " -> { " + getSQLContent() + " }");
+		getManager().debug("# " + getShortID() + " -> { " + getSQLContent() + " }");
 	}
 
 	@Override
