@@ -120,7 +120,7 @@ public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B,
 			Iterator<String> iterator = conditionSQLs.iterator();
 			while (iterator.hasNext()) {
 				conditionBuilder.append(iterator.next());
-				if (iterator.hasNext()) conditionBuilder.append(" ");
+				if (iterator.hasNext()) conditionBuilder.append(" AND");
 			}
 			return conditionBuilder.toString();
 		} else {
