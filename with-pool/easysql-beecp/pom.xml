@@ -45,12 +45,12 @@
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>${project.url}/issues</url>
+        <url>https://github.com/CarmJos/EasySQL/issues</url>
     </issueManagement>
 
     <ciManagement>
         <system>GitHub Actions</system>
-        <url>${project.url}/actions/workflows/maven.yml</url>
+        <url>https://github.com/CarmJos/EasySQL/actions/workflows/maven.yml</url>
     </ciManagement>
 
     <dependencies>

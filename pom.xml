@@ -31,7 +31,7 @@
 
     <name>EasySQL</name>
     <description>简单便捷的数据库操作工具，可自选连接池。</description>
-    <url>https://github.com/CarmJos/${project.name}</url>
+    <url>https://github.com/CarmJos/EasySQL</url>
 
     <developers>
         <developer>
@@ -59,12 +59,12 @@
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>${project.url}/issues</url>
+        <url>https://github.com/CarmJos/EasySQL/issues</url>
     </issueManagement>
 
     <ciManagement>
         <system>GitHub Actions</system>
-        <url>${project.url}/actions/workflows/maven.yml</url>
+        <url>https://github.com/CarmJos/EasySQL/actions/workflows/maven.yml</url>
     </ciManagement>
 
     <repositories>
@@ -95,11 +95,11 @@
 
     <distributionManagement>
 
-        <downloadUrl>${project.url}/releases</downloadUrl>
+        <downloadUrl>https://github.com/CarmJos/EasySQL/releases</downloadUrl>
         <site>
             <id>easysql-javadoc</id>
             <name>EasySQL JavaDoc (on Github Pages)</name>
-            <url>https://carmjos.github.io/EasySQL</url>
+            <url>https://CarmJos.github.io/EasySQL</url>
         </site>
 
     </distributionManagement>
