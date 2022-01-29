@@ -1,6 +1,9 @@
 ---
-name: 问题提交 about: 描述问题并提交，帮助我们对其进行检查与修复。 title: ''
-labels: bug assignees: ''
+name: 问题提交 
+about: 描述问题并提交，帮助我们对其进行检查与修复。 
+title: ''
+labels: bug 
+assignees: ''
 
 ---
 
