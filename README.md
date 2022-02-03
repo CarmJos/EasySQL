@@ -53,7 +53,7 @@
             <!--采用Maven中心库，安全稳定，但版本更新需要等待同步-->
             <id>maven</id>
             <name>Maven Central</name>
-            <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
+            <url>https://repo1.maven.org/maven2</url>
         </repository>
         
         <repository>
