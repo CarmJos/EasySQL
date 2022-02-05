@@ -197,6 +197,12 @@ public class StatementUtil {
 			// 其它数字类型按照默认类型传入
 		}
 
+		if (param instanceof Enum) {
+			//枚举类采用 name()
+			preparedStatement.setString(paramIndex, ((Enum<?>) param).name());
+			return;
+		}
+
 		// 其它参数类型直接传入
 		preparedStatement.setObject(paramIndex, param);
 	}
