@@ -147,7 +147,7 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
 			indexBuilder.append(", ");
 
 			for (int i = 0; i < moreColumns.length; i++) {
-				indexBuilder.append(moreColumns[i]);
+				indexBuilder.append(withBackQuote(moreColumns[i]));
 				if (i != moreColumns.length - 1) indexBuilder.append(", ");
 			}
 
