@@ -144,7 +144,7 @@ Steve 的公司老板开发了一个 IM 软件，但是 Steve 公司运维是土
                 .addColumn("message","TEXT NULL","网友发言")
                 .addAutoIncrementColumn("id") //设置 id 列自增
                 .setIndex(IndexType.PRIMARY_KEY,null,"id","sender") //配置主键
-                .setIndex(IndexType.PRIMARY_KEY,"sender_message_index","sender","message") //配置索引
+                .setIndex(IndexType.INDEX,"sender_message_index","sender","message") //配置索引
                 .build()
                 .executeAsync();
 ```
@@ -174,9 +174,9 @@ Steve 到达南极之后，南极的员工把2FA密钥塞给Steve便骑着海豚
 ```java
         sqlManager.createInsertBatch("polarbear")
                 .setColumnNames("name","temp","hunger")
-                .addParamsBatch("Karl", "-17C", "100")
-                .addParamsBatch("Lucy","-3C","80")
-                .addParamsBatch("Lily","-10C","70")
+                .addParamsBatch("Karl", -17, 100)
+                .addParamsBatch("Lucy",-3,80)
+                .addParamsBatch("Lily",-10,70)
                 .executeAsync((list) -> {/*RowIDs*/} );
 ```
 
@@ -210,8 +210,8 @@ Steve 翻看着跑路员工留下的为数不多的资料，发现公司在南�
                 .inTable("the_end")
                 .addCondition("thanks_read","this_stupid_guide")
                 .build()
-                .execute();
-        ResultSet set = query.getResultSet();) {
+                .execute()) {
+        ResultSet set = query.getResultSet(); // SQLQuery 关闭时，ResultSet 会一同关闭
             set.next();
             set.getString("see_you_next_time");
         }catch (Exception exception){
