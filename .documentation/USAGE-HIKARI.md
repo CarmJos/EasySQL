@@ -72,7 +72,7 @@ SQLAction 包含 EasySQL 在处理 SQL 请求时所使用到的信息：
 
 除了 SELECT 查询操作以外，EasySQL 也当然支持 INSERT 插入操作。
 
-```
+```java
         sqlManager.createInsert("table_name")
                 .setColumnNames("name", "sex", "age")
                 .setParams("Alex","female",16)
@@ -154,7 +154,7 @@ Steve 的公司老板开发了一个 IM 软件，但是 Steve 公司运维是土
 Steve 的公司老板和 Steve 提出了一个需求，迫不得已，Steve 要修改表结构。  
 然而此时表内已经存储了大量数据，不能删表再建，Steve 要想个办法对表做出相应的修改。
 
-```
+```java
         sqlManager.alterTable("steve_im_history")
                 .addColumn("ipAddress","VARCHAR(255)")
                 .executeAsync();
