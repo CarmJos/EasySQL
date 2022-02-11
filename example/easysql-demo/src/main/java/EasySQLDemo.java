@@ -120,7 +120,7 @@ public class EasySQLDemo {
             Integer userID = sqlManager.createInsert("users")
                     .setColumnNames("username", "phone", "email", "registerTime")
                     .setParams("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
-                    .setKeyIndex(1) // 设定自增主键的index，将会在后续返回自增主键
+                    .setReturnGeneratedKey(true)
                     .execute();
 
             System.out.println("新用户的ID为 " + userID);

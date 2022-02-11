@@ -59,8 +59,8 @@ public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T extend
      * 添加时间的限定条件。 若设定了开始时间，则限定条件为 {@code endMillis >= startMillis}；
      *
      * @param columnName  判断的行
-     * @param startMillis 开始时间戳，若<0则不作限定
-     * @param endMillis   结束时间戳，若<0则不作限定
+     * @param startMillis 开始时间戳，若{@code <0}则不作限定
+     * @param endMillis   结束时间戳，若{@code <0则不作限定
      * @return {@link B}
      */
     default B addTimeCondition(@NotNull String columnName, long startMillis, long endMillis) {
