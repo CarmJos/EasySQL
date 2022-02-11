@@ -60,7 +60,7 @@ public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T extend
      *
      * @param columnName  判断的行
      * @param startMillis 开始时间戳，若{@code <0}则不作限定
-     * @param endMillis   结束时间戳，若{@code <0则不作限定
+     * @param endMillis   结束时间戳，若{@code <0}则不作限定
      * @return {@link B}
      */
     default B addTimeCondition(@NotNull String columnName, long startMillis, long endMillis) {

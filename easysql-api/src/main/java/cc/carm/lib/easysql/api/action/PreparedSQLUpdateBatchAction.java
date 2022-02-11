@@ -48,6 +48,7 @@ public interface PreparedSQLUpdateBatchAction extends SQLAction<List<Integer>> {
 	/**
 	 * 设定该操作是否返回自增键序列。
 	 *
+	 * @param returnGeneratedKey 是否返回自增键序列
 	 * @return {@link PreparedSQLUpdateBatchAction}
 	 */
 	PreparedSQLUpdateBatchAction setReturnGeneratedKeys(boolean returnGeneratedKey);
