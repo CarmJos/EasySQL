@@ -6,78 +6,85 @@ import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
 import cc.carm.lib.easysql.api.builder.UpdateBuilder;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
 
 public class UpdateBuilderImpl
-		extends AbstractConditionalBuilder<UpdateBuilder, SQLAction<Integer>>
-		implements UpdateBuilder {
+        extends AbstractConditionalBuilder<UpdateBuilder, SQLAction<Integer>>
+        implements UpdateBuilder {
 
-	String tableName;
+    String tableName;
 
-	List<String> columnNames;
-	List<Object> columnValues;
+    @NotNull LinkedHashMap<String, Object> columnData;
 
-	public UpdateBuilderImpl(@NotNull SQLManagerImpl manager, @NotNull String tableName) {
-		super(manager);
-		this.tableName = tableName;
-	}
+    public UpdateBuilderImpl(@NotNull SQLManagerImpl manager, @NotNull String tableName) {
+        super(manager);
+        this.tableName = tableName;
+        this.columnData = new LinkedHashMap<>();
+    }
 
-	@Override
-	public PreparedSQLUpdateAction build() {
+    @Override
+    public PreparedSQLUpdateAction build() {
 
-		StringBuilder sqlBuilder = new StringBuilder();
+        StringBuilder sqlBuilder = new StringBuilder();
 
-		sqlBuilder.append("UPDATE ").append(withBackQuote(getTableName())).append(" SET ");
+        sqlBuilder.append("UPDATE ").append(withBackQuote(getTableName())).append(" SET ");
 
-		Iterator<String> iterator = this.columnNames.iterator();
-		while (iterator.hasNext()) {
-			sqlBuilder.append(withBackQuote(iterator.next())).append(" = ?");
-			if (iterator.hasNext()) sqlBuilder.append(" , ");
-		}
-		List<Object> allParams = new ArrayList<>(this.columnValues);
+        Iterator<String> iterator = this.columnData.keySet().iterator();
+        while (iterator.hasNext()) {
+            sqlBuilder.append(withBackQuote(iterator.next())).append(" = ?");
+            if (iterator.hasNext()) sqlBuilder.append(" , ");
+        }
+        List<Object> allParams = new ArrayList<>(this.columnData.values());
 
-		if (hasConditions()) {
-			sqlBuilder.append(" ").append(buildConditionSQL());
-			allParams.addAll(getConditionParams());
-		}
+        if (hasConditions()) {
+            sqlBuilder.append(" ").append(buildConditionSQL());
+            allParams.addAll(getConditionParams());
+        }
 
-		if (limit > 0) sqlBuilder.append(" ").append(buildLimitSQL());
+        if (limit > 0) sqlBuilder.append(" ").append(buildLimitSQL());
 
-		return new PreparedSQLUpdateActionImpl(getManager(), sqlBuilder.toString(), allParams);
-	}
+        return new PreparedSQLUpdateActionImpl(getManager(), sqlBuilder.toString(), allParams);
+    }
 
-	@Override
-	public String getTableName() {
-		return tableName;
-	}
+    @Override
+    public String getTableName() {
+        return tableName;
+    }
 
-	@Override
-	public UpdateBuilder setColumnValues(LinkedHashMap<String, Object> columnData) {
-		this.columnNames = new ArrayList<>();
-		this.columnValues = new ArrayList<>();
-		columnData.forEach((name, value) -> {
-			this.columnNames.add(name);
-			this.columnValues.add(value);
-		});
-		return this;
-	}
+    @Override
+    public UpdateBuilder addColumnValue(@NotNull String columnName, Object columnValue) {
+        this.columnData.put(columnName, columnValue);
+        return this;
+    }
 
-	@Override
-	public UpdateBuilder setColumnValues(String[] columnNames, Object[] columnValues) {
-		if (columnNames.length != columnValues.length) {
-			throw new RuntimeException("columnNames are not match with columnValues");
-		}
-		this.columnNames = Arrays.asList(columnNames);
-		this.columnValues = Arrays.asList(columnValues);
-		return this;
-	}
+    @Override
+    public UpdateBuilder setColumnValues(LinkedHashMap<String, Object> columnData) {
+        this.columnData = columnData;
+        return this;
+    }
+
+    @Override
+    public UpdateBuilder setColumnValues(@NotNull String[] columnNames, @Nullable Object[] columnValues) {
+        if (columnNames.length != columnValues.length) {
+            throw new RuntimeException("columnNames are not match with columnValues");
+        }
+        LinkedHashMap<String, Object> columnData = new LinkedHashMap<>();
+        for (int i = 0; i < columnNames.length; i++) {
+            columnData.put(columnNames[i], columnValues[i]);
+        }
+        return setColumnValues(columnData);
+    }
 
 
-	@Override
-	protected UpdateBuilder getThis() {
-		return this;
-	}
+    @Override
+    protected UpdateBuilder getThis() {
+        return this;
+    }
 }

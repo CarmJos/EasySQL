@@ -8,8 +8,10 @@ package cc.carm.lib.easysql.api.builder;
 @Deprecated
 public interface UpsertBuilder {
 
-	String getTableName();
+    String getTableName();
 
-	UpsertBuilder setColumnNames(String[] columnNames, String updateColumn);
+    default UpsertBuilder setColumnNames(String[] columnNames, String updateColumn) {
+        throw new UnsupportedOperationException("Please use REPLACE .");
+    }
 
 }

@@ -53,40 +53,40 @@ public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B,
 
 	@Override
 	public B addCondition(
-			@NotNull String queryName, @NotNull String operator, @Nullable Object queryValue
+			@NotNull String columnName, @NotNull String operator, @Nullable Object queryValue
 	) {
-		addCondition(withBackQuote(queryName) + " " + operator + " ?");
+		addCondition(withBackQuote(columnName) + " " + operator + " ?");
 		this.conditionParams.add(queryValue);
 		return getThis();
 	}
 
 	@Override
 	public B addCondition(
-			@NotNull String[] queryNames, @Nullable Object[] queryValues
+			@NotNull String[] columnNames, @Nullable Object[] queryValues
 	) {
-		if (queryValues == null || queryNames.length != queryValues.length) {
+		if (queryValues == null || columnNames.length != queryValues.length) {
 			throw new RuntimeException("queryNames are not match with queryValues");
 		}
-		for (int i = 0; i < queryNames.length; i++) {
-			addCondition(queryNames[i], queryValues[i]);
+		for (int i = 0; i < columnNames.length; i++) {
+			addCondition(columnNames[i], queryValues[i]);
 		}
 		return getThis();
 	}
 
 
 	@Override
-	public B addNotNullCondition(@NotNull String queryName) {
-		return addCondition(withBackQuote(queryName) + " IS NOT NULL");
+	public B addNotNullCondition(@NotNull String columnName) {
+		return addCondition(withBackQuote(columnName) + " IS NOT NULL");
 	}
 
 
 	@Override
 	public B addTimeCondition(
-			@NotNull String queryName, @Nullable Date startDate, @Nullable Date endDate
+			@NotNull String columnName, @Nullable Date startDate, @Nullable Date endDate
 	) {
 		if (startDate == null && endDate == null) return getThis(); // 都不限定时间，不用判断了
 		if (startDate != null) {
-			addCondition(withBackQuote(queryName) + " BETWEEN ? AND ?");
+			addCondition(withBackQuote(columnName) + " BETWEEN ? AND ?");
 			this.conditionParams.add(startDate);
 			if (endDate != null) {
 				this.conditionParams.add(endDate);
@@ -100,7 +100,7 @@ public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B,
 				}
 			}
 		} else {
-			addCondition(queryName, "<=", endDate);
+			addCondition(columnName, "<=", endDate);
 		}
 		return getThis();
 	}
