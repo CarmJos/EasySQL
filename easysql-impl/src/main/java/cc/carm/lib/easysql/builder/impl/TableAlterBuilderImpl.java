@@ -9,6 +9,8 @@ import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
 import static cc.carm.lib.easysql.api.SQLBuilder.withQuote;
 
@@ -27,6 +29,7 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
 
 	@Override
 	public SQLAction<Integer> renameTo(@NotNull String newTableName) {
+		Objects.requireNonNull(newTableName, "table name could not be null");
 		return new SQLUpdateActionImpl(getManager(),
 				"ALTER TABLE " + withBackQuote(getTableName()) + " RENAME TO " + withBackQuote(newTableName) + ""
 		);

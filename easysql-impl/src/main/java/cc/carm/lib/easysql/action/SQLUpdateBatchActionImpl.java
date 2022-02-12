@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SQLUpdateBatchActionImpl
@@ -30,6 +31,7 @@ public class SQLUpdateBatchActionImpl
 
 	@Override
 	public SQLUpdateBatchAction addBatch(@NotNull String sql) {
+		Objects.requireNonNull(sql, "sql could not be null");
 		this.sqlContents.add(sql);
 		return this;
 	}

@@ -29,7 +29,7 @@ public interface SQLUpdateAction extends SQLAction<Integer> {
 
     /**
      * 设定该操作是否返回自增键序列。
-     *
+
      * @param returnGeneratedKey 是否返回自增键序列
      * @return {@link SQLUpdateAction}
      */

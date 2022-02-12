@@ -7,6 +7,8 @@ import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
 
 public class TableQueryBuilderImpl
@@ -72,6 +74,7 @@ public class TableQueryBuilderImpl
 
 	@Override
 	public TableQueryBuilder orderBy(@NotNull String columnName, boolean asc) {
+		Objects.requireNonNull(columnName, "columnName could not be null");
 		this.orderBy = "ORDER BY " + withBackQuote(columnName) + " " + (asc ? "ASC" : "DESC");
 		return this;
 	}

@@ -8,10 +8,7 @@ import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
 
@@ -60,6 +57,7 @@ public class UpdateBuilderImpl
 
     @Override
     public UpdateBuilder addColumnValue(@NotNull String columnName, Object columnValue) {
+        Objects.requireNonNull(columnName, "columnName could not be null");
         this.columnData.put(columnName, columnValue);
         return this;
     }
@@ -72,6 +70,7 @@ public class UpdateBuilderImpl
 
     @Override
     public UpdateBuilder setColumnValues(@NotNull String[] columnNames, @Nullable Object[] columnValues) {
+        Objects.requireNonNull(columnNames, "columnName could not be null");
         if (columnNames.length != columnValues.length) {
             throw new RuntimeException("columnNames are not match with columnValues");
         }

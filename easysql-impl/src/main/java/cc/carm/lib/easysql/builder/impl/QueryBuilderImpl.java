@@ -10,6 +10,8 @@ import cc.carm.lib.easysql.builder.AbstractSQLBuilder;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class QueryBuilderImpl extends AbstractSQLBuilder implements QueryBuilder {
     public QueryBuilderImpl(@NotNull SQLManagerImpl manager) {
         super(manager);
@@ -18,16 +20,19 @@ public class QueryBuilderImpl extends AbstractSQLBuilder implements QueryBuilder
     @Override
     @Deprecated
     public QueryAction withSQL(@NotNull String sql) {
+        Objects.requireNonNull(sql, "sql could not be null");
         return new QueryActionImpl(getManager(), sql);
     }
 
     @Override
     public PreparedQueryAction withPreparedSQL(@NotNull String sql) {
+        Objects.requireNonNull(sql, "sql could not be null");
         return new PreparedQueryActionImpl(getManager(), sql);
     }
 
     @Override
     public TableQueryBuilder inTable(@NotNull String tableName) {
+        Objects.requireNonNull(tableName, "tableName could not be null");
         return new TableQueryBuilderImpl(getManager(), tableName);
     }
 

@@ -8,6 +8,8 @@ import cc.carm.lib.easysql.api.enums.NumberType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
 import static cc.carm.lib.easysql.api.SQLBuilder.withQuote;
 
@@ -67,6 +69,7 @@ public interface TableCreateBuilder extends SQLBuilder {
 	 * @return {@link TableCreateBuilder}
 	 */
 	default TableCreateBuilder addColumn(@NotNull String columnName, @NotNull String settings) {
+		Objects.requireNonNull(columnName, "columnName could not be null");
 		return addColumn(withBackQuote(columnName) + " " + settings);
 	}
 
