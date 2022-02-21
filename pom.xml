@@ -17,7 +17,7 @@
     <groupId>cc.carm.lib</groupId>
     <artifactId>easysql-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.3.7</version>
+    <version>0.3.8</version>
 
     <modules>
         <module>easysql-api</module>
@@ -25,9 +25,9 @@
 
         <module>with-pool/easysql-beecp</module>
         <module>with-pool/easysql-hikaricp</module>
+
         <module>example/easysql-demo</module>
         <module>example/easysql-tester</module>
-
     </modules>
 
     <name>EasySQL</name>
