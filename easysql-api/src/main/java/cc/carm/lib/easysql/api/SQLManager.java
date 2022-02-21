@@ -17,6 +17,11 @@ import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
+/**
+ * SQLManager 是EasySQL的核心类，用于管理数据库连接，提供数据库操作的方法。
+ *
+ * @author CarmJos
+ */
 public interface SQLManager {
 
     Logger getLogger();

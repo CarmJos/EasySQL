@@ -7,6 +7,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+/**
+ * SQLQuery 是一个查询中间接口，用于查询操作的封装。
+ *
+ * @author CarmJos
+ */
 public interface SQLQuery extends AutoCloseable {
 
     /**
