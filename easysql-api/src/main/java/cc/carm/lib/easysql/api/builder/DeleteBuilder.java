@@ -4,6 +4,6 @@ import cc.carm.lib.easysql.api.SQLAction;
 
 public interface DeleteBuilder extends ConditionalBuilder<DeleteBuilder, SQLAction<Integer>> {
 
-	String getTableName();
+    String getTableName();
 
 }

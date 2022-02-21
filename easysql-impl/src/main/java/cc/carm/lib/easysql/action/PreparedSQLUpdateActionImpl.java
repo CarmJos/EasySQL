@@ -14,64 +14,64 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PreparedSQLUpdateActionImpl
-		extends SQLUpdateActionImpl
-		implements PreparedSQLUpdateAction {
+        extends SQLUpdateActionImpl
+        implements PreparedSQLUpdateAction {
 
-	Object[] params;
+    Object[] params;
 
-	public PreparedSQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
-		this(manager, sql, (Object[]) null);
-	}
+    public PreparedSQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
+        this(manager, sql, (Object[]) null);
+    }
 
-	public PreparedSQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql,
-	                                   @Nullable List<Object> params) {
-		this(manager, sql, params == null ? null : params.toArray());
-	}
+    public PreparedSQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql,
+                                       @Nullable List<Object> params) {
+        this(manager, sql, params == null ? null : params.toArray());
+    }
 
-	public PreparedSQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql,
-	                                   @Nullable Object[] params) {
-		super(manager, sql);
-		this.params = params;
-	}
+    public PreparedSQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql,
+                                       @Nullable Object[] params) {
+        super(manager, sql);
+        this.params = params;
+    }
 
-	@Override
-	public PreparedSQLUpdateActionImpl setParams(Object... params) {
-		this.params = params;
-		return this;
-	}
+    @Override
+    public PreparedSQLUpdateActionImpl setParams(Object... params) {
+        this.params = params;
+        return this;
+    }
 
-	@Override
-	public PreparedSQLUpdateAction setParams(@Nullable Iterable<Object> params) {
-		if (params == null) {
-			return setParams((Object[]) null);
-		} else {
-			List<Object> paramsList = new ArrayList<>();
-			params.forEach(paramsList::add);
-			return setParams(paramsList.toArray());
-		}
-	}
+    @Override
+    public PreparedSQLUpdateAction setParams(@Nullable Iterable<Object> params) {
+        if (params == null) {
+            return setParams((Object[]) null);
+        } else {
+            List<Object> paramsList = new ArrayList<>();
+            params.forEach(paramsList::add);
+            return setParams(paramsList.toArray());
+        }
+    }
 
-	@Override
-	public @NotNull Integer execute() throws SQLException {
-		try (Connection connection = getManager().getConnection()) {
+    @Override
+    public @NotNull Integer execute() throws SQLException {
+        try (Connection connection = getManager().getConnection()) {
 
-			try (PreparedStatement statement = StatementUtil.createPrepareStatement(
-					connection, getSQLContent(), params, returnGeneratedKeys
-			)) {
+            try (PreparedStatement statement = StatementUtil.createPrepareStatement(
+                    connection, getSQLContent(), params, returnGeneratedKeys
+            )) {
 
-				outputDebugMessage();
+                outputDebugMessage();
 
-				int changes = statement.executeUpdate();
-				if (!returnGeneratedKeys) return changes;
-				else {
-					try (ResultSet resultSet = statement.getGeneratedKeys()) {
-						return resultSet.next() ? resultSet.getInt(1) : -1;
-					}
-				}
+                int changes = statement.executeUpdate();
+                if (!returnGeneratedKeys) return changes;
+                else {
+                    try (ResultSet resultSet = statement.getGeneratedKeys()) {
+                        return resultSet.next() ? resultSet.getInt(1) : -1;
+                    }
+                }
 
-			}
-		}
+            }
+        }
 
-	}
+    }
 
 }

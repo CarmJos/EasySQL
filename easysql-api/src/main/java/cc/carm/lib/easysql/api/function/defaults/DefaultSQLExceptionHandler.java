@@ -11,47 +11,46 @@ import java.util.logging.Logger;
 
 public class DefaultSQLExceptionHandler implements SQLExceptionHandler {
 
-	private static @Nullable SQLExceptionHandler customDefaultHandler = null;
+    private static @Nullable SQLExceptionHandler customDefaultHandler = null;
+    private final Logger logger;
 
-	public static void setCustomHandler(@Nullable SQLExceptionHandler handler) {
-		DefaultSQLExceptionHandler.customDefaultHandler = handler;
-	}
+    public DefaultSQLExceptionHandler(Logger logger) {
+        this.logger = logger;
+    }
 
-	public static @Nullable SQLExceptionHandler getCustomHandler() {
-		return customDefaultHandler;
-	}
+    public static @Nullable SQLExceptionHandler getCustomHandler() {
+        return customDefaultHandler;
+    }
 
-	public static @NotNull SQLExceptionHandler get(Logger logger) {
-		if (getCustomHandler() != null) return getCustomHandler();
-		else return new DefaultSQLExceptionHandler(logger);
-	}
+    public static void setCustomHandler(@Nullable SQLExceptionHandler handler) {
+        DefaultSQLExceptionHandler.customDefaultHandler = handler;
+    }
 
-	private final Logger logger;
+    public static @NotNull SQLExceptionHandler get(Logger logger) {
+        if (getCustomHandler() != null) return getCustomHandler();
+        else return new DefaultSQLExceptionHandler(logger);
+    }
 
-	public DefaultSQLExceptionHandler(Logger logger) {
-		this.logger = logger;
-	}
+    protected Logger getLogger() {
+        return logger;
+    }
 
-	protected Logger getLogger() {
-		return logger;
-	}
+    @Override
+    public void accept(SQLException exception, SQLAction<?> sqlAction) {
+        if (sqlAction instanceof SQLUpdateBatchAction) {
 
-	@Override
-	public void accept(SQLException exception, SQLAction<?> sqlAction) {
-		if (sqlAction instanceof SQLUpdateBatchAction) {
+            getLogger().severe("Error when execute SQLs : ");
+            int i = 1;
+            for (String content : ((SQLUpdateBatchAction) sqlAction).getSQLContents()) {
+                getLogger().severe(String.format("#%d {%s}", i, content));
+                i++;
+            }
 
-			getLogger().severe("Error when execute SQLs : ");
-			int i = 1;
-			for (String content : ((SQLUpdateBatchAction) sqlAction).getSQLContents()) {
-				getLogger().severe("#" + i + " {" + content + "}");
-				i++;
-			}
-
-		} else {
-			getLogger().severe("Error when execute { " + sqlAction.getSQLContent() + " }");
-		}
-		exception.printStackTrace();
-	}
+        } else {
+            getLogger().severe("Error when execute { " + sqlAction.getSQLContent() + " }");
+        }
+        exception.printStackTrace();
+    }
 
 
 }

@@ -14,12 +14,12 @@ import java.util.List;
  */
 public interface ReplaceBuilder<T extends SQLAction<?>> {
 
-	String getTableName();
+    String getTableName();
 
-	T setColumnNames(List<String> columnNames);
+    T setColumnNames(List<String> columnNames);
 
-	default T setColumnNames(String... columnNames) {
-		return setColumnNames(columnNames == null ? null : Arrays.asList(columnNames));
-	}
+    default T setColumnNames(String... columnNames) {
+        return setColumnNames(columnNames == null ? null : Arrays.asList(columnNames));
+    }
 
 }

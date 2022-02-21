@@ -11,85 +11,83 @@ import java.sql.Statement;
 
 public class SQLQueryImpl implements SQLQuery {
 
-	protected final long executeTime;
+    protected final long executeTime;
 
-	protected SQLManagerImpl sqlManager;
-	protected QueryActionImpl queryAction;
+    protected final SQLManagerImpl sqlManager;
+    final Connection connection;
+    final Statement statement;
+    final ResultSet resultSet;
+    protected QueryActionImpl queryAction;
 
-	Connection connection;
-	Statement statement;
+    public SQLQueryImpl(
+            SQLManagerImpl sqlManager, QueryActionImpl queryAction,
+            Connection connection, Statement statement, ResultSet resultSet
+    ) {
+        this(sqlManager, queryAction, connection, statement, resultSet, System.currentTimeMillis());
+    }
 
-	ResultSet resultSet;
+    public SQLQueryImpl(
+            SQLManagerImpl sqlManager, QueryActionImpl queryAction,
+            Connection connection, Statement statement, ResultSet resultSet,
+            long executeTime
+    ) {
+        this.executeTime = executeTime;
+        this.sqlManager = sqlManager;
+        this.queryAction = queryAction;
+        this.connection = connection;
+        this.statement = statement;
+        this.resultSet = resultSet;
+    }
 
-	public SQLQueryImpl(
-			SQLManagerImpl sqlManager, QueryActionImpl queryAction,
-			Connection connection, Statement statement, ResultSet resultSet
-	) {
-		this(sqlManager, queryAction, connection, statement, resultSet, System.currentTimeMillis());
-	}
+    @Override
+    public long getExecuteTime() {
+        return this.executeTime;
+    }
 
-	public SQLQueryImpl(
-			SQLManagerImpl sqlManager, QueryActionImpl queryAction,
-			Connection connection, Statement statement, ResultSet resultSet,
-			long executeTime
-	) {
-		this.executeTime = executeTime;
-		this.sqlManager = sqlManager;
-		this.queryAction = queryAction;
-		this.connection = connection;
-		this.statement = statement;
-		this.resultSet = resultSet;
-	}
+    @Override
+    public SQLManagerImpl getManager() {
+        return this.sqlManager;
+    }
 
-	@Override
-	public long getExecuteTime() {
-		return this.executeTime;
-	}
+    @Override
+    public QueryActionImpl getAction() {
+        return this.queryAction;
+    }
 
-	@Override
-	public SQLManagerImpl getManager() {
-		return this.sqlManager;
-	}
+    @Override
+    public ResultSet getResultSet() {
+        return this.resultSet;
+    }
 
-	@Override
-	public QueryActionImpl getAction() {
-		return this.queryAction;
-	}
+    @Override
+    public String getSQLContent() {
+        return getAction().getSQLContent();
+    }
 
-	@Override
-	public ResultSet getResultSet() {
-		return this.resultSet;
-	}
+    @Override
+    public void close() {
+        try {
+            if (getResultSet() != null && !getResultSet().isClosed()) getResultSet().close();
+            if (getStatement() != null && !getStatement().isClosed()) getStatement().close();
+            if (getConnection() != null && !getConnection().isClosed()) getConnection().close();
 
-	@Override
-	public String getSQLContent() {
-		return getAction().getSQLContent();
-	}
+            getManager().debug("#" + getAction().getShortID() +
+                    " -> finished after " + (System.currentTimeMillis() - getExecuteTime()) + " ms."
+            );
+            getManager().getActiveQuery().remove(getAction().getActionUUID());
+        } catch (SQLException e) {
+            getAction().handleException(getAction().defaultExceptionHandler(), e);
+        }
+        this.queryAction = null;
+    }
 
-	@Override
-	public void close() {
-		try {
-			if (getResultSet() != null) getResultSet().close();
-			if (getStatement() != null) getStatement().close();
-			if (getConnection() != null) getConnection().close();
+    @Override
+    public Statement getStatement() {
+        return this.statement;
+    }
 
-			getManager().debug("#" + getAction().getShortID() +
-					" -> finished after " + (System.currentTimeMillis() - getExecuteTime()) + " ms."
-			);
-			getManager().getActiveQuery().remove(getAction().getActionUUID());
-		} catch (SQLException e) {
-			getAction().handleException(getAction().defaultExceptionHandler(), e);
-		}
-		this.queryAction = null;
-	}
-
-	@Override
-	public Statement getStatement() {
-		return this.statement;
-	}
-
-	@Override
-	public Connection getConnection() {
-		return this.connection;
-	}
+    @Override
+    public Connection getConnection() {
+        return this.connection;
+    }
 }

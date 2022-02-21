@@ -12,81 +12,83 @@ import java.util.Objects;
 import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
 
 public class TableQueryBuilderImpl
-		extends AbstractConditionalBuilder<TableQueryBuilder, PreparedQueryAction>
-		implements TableQueryBuilder {
-
-	@NotNull String tableName;
-
-	String[] columns;
-
-	@Nullable String orderBy;
-
-	int[] pageLimit;
-
-	public TableQueryBuilderImpl(@NotNull SQLManagerImpl manager, @NotNull String tableName) {
-		super(manager);
-		this.tableName = tableName;
-	}
-
-	@Override
-	public PreparedQueryActionImpl build() {
-		StringBuilder sqlBuilder = new StringBuilder();
-		sqlBuilder.append("SELECT").append(" ");
-		if (columns == null || columns.length < 1) {
-			sqlBuilder.append("*");
-		} else {
-			for (int i = 0; i < columns.length; i++) {
-				String name = columns[i];
-				sqlBuilder.append(withBackQuote(name));
-				if (i != columns.length - 1) {
-					sqlBuilder.append(",");
-				}
-			}
-		}
-
-		sqlBuilder.append(" ").append("FROM").append(" ").append(withBackQuote(tableName));
-
-		if (hasConditions()) sqlBuilder.append(" ").append(buildConditionSQL());
-
-		if (orderBy != null) sqlBuilder.append(" ").append(orderBy);
-
-		if (pageLimit != null && pageLimit.length == 2) {
-			sqlBuilder.append(" LIMIT ").append(pageLimit[0]).append(",").append(pageLimit[1]);
-		} else if (limit > 0) {
-			sqlBuilder.append(" ").append(buildLimitSQL());
-		}
+        extends AbstractConditionalBuilder<TableQueryBuilder, PreparedQueryAction>
+        implements TableQueryBuilder {
 
 
-		return new PreparedQueryActionImpl(getManager(), sqlBuilder.toString())
-				.setParams(hasConditionParams() ? getConditionParams() : null);
-	}
+    protected final @NotNull String tableName;
 
-	@Override
-	public @NotNull String getTableName() {
-		return tableName;
-	}
+    String[] columns;
 
-	@Override
-	public TableQueryBuilderImpl selectColumns(@NotNull String... columnNames) {
-		this.columns = columnNames;
-		return this;
-	}
+    @Nullable String orderBy;
 
-	@Override
-	public TableQueryBuilder orderBy(@NotNull String columnName, boolean asc) {
-		Objects.requireNonNull(columnName, "columnName could not be null");
-		this.orderBy = "ORDER BY " + withBackQuote(columnName) + " " + (asc ? "ASC" : "DESC");
-		return this;
-	}
+    int[] pageLimit;
 
-	@Override
-	public TableQueryBuilder setPageLimit(int start, int end) {
-		this.pageLimit = new int[]{start, end};
-		return this;
-	}
+    public TableQueryBuilderImpl(@NotNull SQLManagerImpl manager, @NotNull String tableName) {
+        super(manager);
+        this.tableName = tableName;
+    }
 
-	@Override
-	protected TableQueryBuilderImpl getThis() {
-		return this;
-	}
+    @Override
+    public PreparedQueryActionImpl build() {
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("SELECT").append(" ");
+        if (columns == null || columns.length < 1) {
+            sqlBuilder.append("*");
+        } else {
+            for (int i = 0; i < columns.length; i++) {
+                String name = columns[i];
+                sqlBuilder.append(withBackQuote(name));
+                if (i != columns.length - 1) {
+                    sqlBuilder.append(",");
+                }
+            }
+        }
+
+        sqlBuilder.append(" ").append("FROM").append(" ").append(withBackQuote(tableName));
+
+        if (hasConditions()) sqlBuilder.append(" ").append(buildConditionSQL());
+
+        if (orderBy != null) sqlBuilder.append(" ").append(orderBy);
+
+        if (pageLimit != null && pageLimit.length == 2) {
+            sqlBuilder.append(" LIMIT ").append(pageLimit[0]).append(",").append(pageLimit[1]);
+        } else if (limit > 0) {
+            sqlBuilder.append(" ").append(buildLimitSQL());
+        }
+
+
+        return new PreparedQueryActionImpl(getManager(), sqlBuilder.toString())
+                .setParams(hasConditionParams() ? getConditionParams() : null);
+    }
+
+    @Override
+    public @NotNull String getTableName() {
+        return tableName;
+    }
+
+    @Override
+    public TableQueryBuilderImpl selectColumns(@NotNull String... columnNames) {
+        Objects.requireNonNull(columnNames, "columnNames could not be null");
+        this.columns = columnNames;
+        return this;
+    }
+
+    @Override
+    public TableQueryBuilder orderBy(@NotNull String columnName, boolean asc) {
+        Objects.requireNonNull(columnName, "columnName could not be null");
+        this.orderBy = "ORDER BY " + withBackQuote(columnName) + " " + (asc ? "ASC" : "DESC");
+        return this;
+    }
+
+    @Override
+    public TableQueryBuilder setPageLimit(int start, int end) {
+        this.pageLimit = new int[]{start, end};
+        return this;
+    }
+
+    @Override
+    protected TableQueryBuilderImpl getThis() {
+        return this;
+    }
 }

@@ -8,7 +8,7 @@ import java.sql.SQLException;
 @FunctionalInterface
 public interface SQLFunction<T, R> {
 
-	@Nullable
-	R apply(@NotNull T t) throws SQLException;
+    @Nullable
+    R apply(@NotNull T t) throws SQLException;
 
 }

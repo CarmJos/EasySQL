@@ -53,6 +53,7 @@ public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B,
             @NotNull String columnName, @NotNull String operator, @Nullable Object queryValue
     ) {
         Objects.requireNonNull(columnName, "columnName could not be null");
+        Objects.requireNonNull(operator, "operator could not be null (e.g. > or = or <) ");
         addCondition(withBackQuote(columnName) + " " + operator + " ?");
         this.conditionParams.add(queryValue);
         return getThis();
@@ -62,6 +63,7 @@ public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B,
     public B addCondition(
             @NotNull String[] columnNames, @Nullable Object[] queryValues
     ) {
+        Objects.requireNonNull(columnNames, "columnName could not be null");
         if (queryValues == null || columnNames.length != queryValues.length) {
             throw new RuntimeException("queryNames are not match with queryValues");
         }

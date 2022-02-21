@@ -115,7 +115,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>cc.carm.lib.easysql.testrunner.Main</mainClass>
+                            <mainClass>cc.carm.lib.easysql.tester.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

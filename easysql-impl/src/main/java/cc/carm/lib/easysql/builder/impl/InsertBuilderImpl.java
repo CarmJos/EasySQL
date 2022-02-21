@@ -8,44 +8,50 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
 
 public abstract class InsertBuilderImpl<T extends SQLAction<?>>
-		extends AbstractSQLBuilder implements InsertBuilder<T> {
+        extends AbstractSQLBuilder implements InsertBuilder<T> {
 
-	String tableName;
+    protected final String tableName;
 
-	public InsertBuilderImpl(@NotNull SQLManagerImpl manager, String tableName) {
-		super(manager);
-		this.tableName = tableName;
-	}
+    public InsertBuilderImpl(@NotNull SQLManagerImpl manager, String tableName) {
+        super(manager);
+        Objects.requireNonNull(tableName);
+        this.tableName = tableName;
+    }
 
-	protected static String buildSQL(String tableName, List<String> columnNames) {
-		int valueLength = columnNames.size();
-		StringBuilder sqlBuilder = new StringBuilder();
+    protected static String buildSQL(String tableName, List<String> columnNames) {
+        return buildSQL("INSERT IGNORE INTO", tableName, columnNames);
+    }
 
-		sqlBuilder.append("INSERT IGNORE INTO ").append(withBackQuote(tableName)).append("(");
-		Iterator<String> iterator = columnNames.iterator();
-		while (iterator.hasNext()) {
-			sqlBuilder.append(withBackQuote(iterator.next()));
-			if (iterator.hasNext()) sqlBuilder.append(", ");
-		}
+    protected static String buildSQL(String sqlPrefix, String tableName, List<String> columnNames) {
+        int valueLength = columnNames.size();
+        StringBuilder sqlBuilder = new StringBuilder();
 
-		sqlBuilder.append(") VALUES (");
+        sqlBuilder.append(sqlPrefix).append(" ").append(withBackQuote(tableName)).append("(");
+        Iterator<String> iterator = columnNames.iterator();
+        while (iterator.hasNext()) {
+            sqlBuilder.append(withBackQuote(iterator.next()));
+            if (iterator.hasNext()) sqlBuilder.append(", ");
+        }
 
-		for (int i = 0; i < valueLength; i++) {
-			sqlBuilder.append("?");
-			if (i != valueLength - 1) {
-				sqlBuilder.append(", ");
-			}
-		}
-		sqlBuilder.append(")");
-		return sqlBuilder.toString();
-	}
+        sqlBuilder.append(") VALUES (");
 
-	@Override
-	public String getTableName() {
-		return tableName;
-	}
+        for (int i = 0; i < valueLength; i++) {
+            sqlBuilder.append("?");
+            if (i != valueLength - 1) {
+                sqlBuilder.append(", ");
+            }
+        }
+        sqlBuilder.append(")");
+        return sqlBuilder.toString();
+    }
+
+    @Override
+    public String getTableName() {
+        return tableName;
+    }
 }

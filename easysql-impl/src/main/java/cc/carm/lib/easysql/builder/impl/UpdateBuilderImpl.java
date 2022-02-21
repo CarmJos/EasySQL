@@ -16,7 +16,7 @@ public class UpdateBuilderImpl
         extends AbstractConditionalBuilder<UpdateBuilder, SQLAction<Integer>>
         implements UpdateBuilder {
 
-    String tableName;
+    protected final @NotNull String tableName;
 
     @NotNull LinkedHashMap<String, Object> columnData;
 
@@ -51,7 +51,7 @@ public class UpdateBuilderImpl
     }
 
     @Override
-    public String getTableName() {
+    public @NotNull String getTableName() {
         return tableName;
     }
 

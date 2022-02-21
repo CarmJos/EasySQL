@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TimeDateUtils {
-    public static DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static final DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public TimeDateUtils() {
     }

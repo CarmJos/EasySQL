@@ -14,53 +14,53 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SQLUpdateBatchActionImpl
-		extends AbstractSQLAction<List<Integer>>
-		implements SQLUpdateBatchAction {
+        extends AbstractSQLAction<List<Integer>>
+        implements SQLUpdateBatchAction {
 
-	List<String> sqlContents = new ArrayList<>();
+    protected final List<String> sqlContents = new ArrayList<>();
 
-	public SQLUpdateBatchActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
-		super(manager, sql);
-		this.sqlContents.add(sql);
-	}
+    public SQLUpdateBatchActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
+        super(manager, sql);
+        this.sqlContents.add(sql);
+    }
 
-	@Override
-	public @NotNull List<String> getSQLContents() {
-		return this.sqlContents;
-	}
+    @Override
+    public @NotNull List<String> getSQLContents() {
+        return this.sqlContents;
+    }
 
-	@Override
-	public SQLUpdateBatchAction addBatch(@NotNull String sql) {
-		Objects.requireNonNull(sql, "sql could not be null");
-		this.sqlContents.add(sql);
-		return this;
-	}
+    @Override
+    public SQLUpdateBatchAction addBatch(@NotNull String sql) {
+        Objects.requireNonNull(sql, "sql could not be null");
+        this.sqlContents.add(sql);
+        return this;
+    }
 
-	@Override
-	public @NotNull List<Integer> execute() throws SQLException {
-		try (Connection connection = getManager().getConnection()) {
+    @Override
+    public @NotNull List<Integer> execute() throws SQLException {
+        try (Connection connection = getManager().getConnection()) {
 
-			try (Statement statement = connection.createStatement()) {
-				outputDebugMessage();
+            try (Statement statement = connection.createStatement()) {
+                outputDebugMessage();
 
-				for (String content : this.sqlContents) {
-					statement.addBatch(content);
-				}
+                for (String content : this.sqlContents) {
+                    statement.addBatch(content);
+                }
 
-				int[] executed = statement.executeBatch();
+                int[] executed = statement.executeBatch();
 
-				return Arrays.stream(executed).boxed().collect(Collectors.toList());
-			}
+                return Arrays.stream(executed).boxed().collect(Collectors.toList());
+            }
 
-		}
-	}
+        }
+    }
 
-	@Override
-	protected void outputDebugMessage() {
-		getManager().debug("# " + getShortID() + " -> [");
-		for (String content : getSQLContents()) getManager().debug(" { " + content + " }");
-		getManager().debug("]");
+    @Override
+    protected void outputDebugMessage() {
+        getManager().debug("# " + getShortID() + " -> [");
+        for (String content : getSQLContents()) getManager().debug(String.format(" { %s }", content));
+        getManager().debug("]");
 
-	}
+    }
 
 }

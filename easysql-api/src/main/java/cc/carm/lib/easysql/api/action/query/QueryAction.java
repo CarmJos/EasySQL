@@ -32,16 +32,16 @@ import java.sql.SQLException;
  */
 public interface QueryAction extends SQLAction<SQLQuery> {
 
-	@Override
-	@Contract("_,!null -> !null")
-	default <R> @Nullable R executeFunction(@NotNull SQLFunction<@NotNull SQLQuery, R> function,
-	                                        @Nullable R defaultResult) throws SQLException {
-		try (SQLQuery value = execute()) {
-			R result = function.apply(value);
-			return result == null ? defaultResult : result;
-		} catch (SQLException exception) {
-			throw new SQLException(exception);
-		}
-	}
+    @Override
+    @Contract("_,!null -> !null")
+    default <R> @Nullable R executeFunction(@NotNull SQLFunction<@NotNull SQLQuery, R> function,
+                                            @Nullable R defaultResult) throws SQLException {
+        try (SQLQuery value = execute()) {
+            R result = function.apply(value);
+            return result == null ? defaultResult : result;
+        } catch (SQLException exception) {
+            throw new SQLException(exception);
+        }
+    }
 
 }

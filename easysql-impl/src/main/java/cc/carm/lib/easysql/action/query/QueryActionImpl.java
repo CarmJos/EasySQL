@@ -15,49 +15,49 @@ import java.sql.Statement;
 
 public class QueryActionImpl extends AbstractSQLAction<SQLQuery> implements QueryAction {
 
-	public QueryActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
-		super(manager, sql);
-	}
+    public QueryActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
+        super(manager, sql);
+    }
 
-	@Override
-	public @NotNull SQLQueryImpl execute() throws SQLException {
+    @Override
+    public @NotNull SQLQueryImpl execute() throws SQLException {
 
-		Connection connection = getManager().getConnection();
-		Statement statement;
+        Connection connection = getManager().getConnection();
+        Statement statement;
 
-		try {
-			statement = connection.createStatement();
-		} catch (SQLException ex) {
-			connection.close();
-			throw ex;
-		}
-		
-		outputDebugMessage();
-		try {
-			long executeTime = System.currentTimeMillis();
-			SQLQueryImpl query = new SQLQueryImpl(
-					getManager(), this,
-					connection, statement,
-					statement.executeQuery(getSQLContent()),
-					executeTime
-			);
-			getManager().getActiveQuery().put(getActionUUID(), query);
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException ex) {
+            connection.close();
+            throw ex;
+        }
 
-			return query;
-		} catch (SQLException exception) {
-			statement.close();
-			connection.close();
-			throw exception;
-		}
-	}
+        outputDebugMessage();
+        try {
+            long executeTime = System.currentTimeMillis();
+            SQLQueryImpl query = new SQLQueryImpl(
+                    getManager(), this,
+                    connection, statement,
+                    statement.executeQuery(getSQLContent()),
+                    executeTime
+            );
+            getManager().getActiveQuery().put(getActionUUID(), query);
+
+            return query;
+        } catch (SQLException exception) {
+            statement.close();
+            connection.close();
+            throw exception;
+        }
+    }
 
 
-	@Override
-	public void executeAsync(SQLHandler<SQLQuery> success, SQLExceptionHandler failure) {
-		try (SQLQueryImpl query = execute()) {
-			if (success != null) success.accept(query);
-		} catch (SQLException exception) {
-			handleException(failure, exception);
-		}
-	}
+    @Override
+    public void executeAsync(SQLHandler<SQLQuery> success, SQLExceptionHandler failure) {
+        try (SQLQueryImpl query = execute()) {
+            if (success != null) success.accept(query);
+        } catch (SQLException exception) {
+            handleException(failure, exception);
+        }
+    }
 }
