@@ -26,7 +26,7 @@
         <module>with-pool/easysql-beecp</module>
         <module>with-pool/easysql-hikaricp</module>
         <module>example/easysql-demo</module>
-        <module>example/easysql-test</module>
+        <module>example/easysql-tester</module>
 
     </modules>
 
