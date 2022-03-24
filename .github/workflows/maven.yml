@@ -6,14 +6,8 @@ name: Project Build & Tests
 on:
   # 支持手动触发构建
   workflow_dispatch:
-  push:
-    paths-ignore:
-      - .documentation
-      - README.md
   pull_request:
-    paths-ignore:
-      - .documentation
-      - README.md
+  push:
 
 jobs:
   build:
