@@ -20,14 +20,14 @@
     <version>0.3.8</version>
 
     <modules>
-        <module>easysql-api</module>
-        <module>easysql-impl</module>
+        <module>api</module>
+        <module>impl</module>
 
-        <module>with-pool/easysql-beecp</module>
-        <module>with-pool/easysql-hikaricp</module>
+        <module>with-pool/beecp</module>
+        <module>with-pool/hikaricp</module>
 
-        <module>example/easysql-demo</module>
-        <module>example/easysql-tester</module>
+        <module>example/demo</module>
+        <module>example/tester</module>
     </modules>
 
     <name>EasySQL</name>

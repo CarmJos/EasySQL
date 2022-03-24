@@ -40,7 +40,7 @@ jobs:
         run: |
           rm -rf docs
           mkdir -vp docs
-          cp -vrf easysql-api/target/apidocs/* docs/
+          cp -vrf api/target/apidocs/* docs/
           cp -vrf .documentation/JAVADOC-README.md docs/README.md
 
       - name: "Generate the Javadoc sitemap"
