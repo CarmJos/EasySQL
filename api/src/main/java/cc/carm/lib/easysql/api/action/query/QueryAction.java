@@ -39,8 +39,6 @@ public interface QueryAction extends SQLAction<SQLQuery> {
         try (SQLQuery value = execute()) {
             R result = function.apply(value);
             return result == null ? defaultResult : result;
-        } catch (SQLException exception) {
-            throw new SQLException(exception);
         }
     }
 
