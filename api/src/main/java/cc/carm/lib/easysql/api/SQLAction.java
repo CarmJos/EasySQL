@@ -3,7 +3,6 @@ package cc.carm.lib.easysql.api;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.api.function.SQLHandler;
-import cc.carm.lib.easysql.api.function.defaults.DefaultSQLExceptionHandler;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -189,13 +188,14 @@ public interface SQLAction<T> {
     }
 
     /**
-     * 默认的异常处理器
+     * 获取管理器提供的默认异常处理器。
+     * 若未使用过 {@link #setExceptionHandler(SQLExceptionHandler)} 方法，
+     * 则默认返回 {@link SQLExceptionHandler#detailed(Logger)} 。
      *
-     * @return {@link DefaultSQLExceptionHandler#get(Logger)}
-     * @see DefaultSQLExceptionHandler
+     * @return {@link SQLExceptionHandler}
      */
     default SQLExceptionHandler defaultExceptionHandler() {
-        return DefaultSQLExceptionHandler.get(getManager().getLogger());
+        return getManager().getExceptionHandler();
     }
 
     /**
@@ -206,7 +206,7 @@ public interface SQLAction<T> {
      * @param handler 异常处理器
      */
     default void setExceptionHandler(@Nullable SQLExceptionHandler handler) {
-        DefaultSQLExceptionHandler.setCustomHandler(handler);
+        getManager().setExceptionHandler(handler);
     }
 
 }

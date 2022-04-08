@@ -1,11 +1,11 @@
-package cc.carm.lib.easysql.tester.tests;
+package cc.carm.lib.easysql.tests;
 
 import cc.carm.lib.easysql.api.SQLManager;
-import cc.carm.lib.easysql.tester.EasySQLTest;
+import cc.carm.lib.easysql.TestHandler;
 
 import java.sql.SQLException;
 
-public class DeleteTest extends EasySQLTest {
+public class DeleteTest extends TestHandler {
 
 
     @Override

@@ -1,7 +1,7 @@
-package cc.carm.lib.easysql.tester.tests;
+package cc.carm.lib.easysql.tests;
 
 import cc.carm.lib.easysql.api.SQLManager;
-import cc.carm.lib.easysql.tester.EasySQLTest;
+import cc.carm.lib.easysql.TestHandler;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class SQLUpdateBatchTests extends EasySQLTest {
+public class SQLUpdateBatchTests extends TestHandler {
 
 
     protected static List<Object[]> generateParams() {

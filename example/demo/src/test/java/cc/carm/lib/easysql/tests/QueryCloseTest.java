@@ -1,13 +1,13 @@
-package cc.carm.lib.easysql.tester.tests;
+package cc.carm.lib.easysql.tests;
 
 import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.SQLQuery;
-import cc.carm.lib.easysql.tester.EasySQLTest;
+import cc.carm.lib.easysql.TestHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class QueryCloseTest extends EasySQLTest {
+public class QueryCloseTest extends TestHandler {
 
 
     @Override

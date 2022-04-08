@@ -5,6 +5,7 @@ import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.action.SQLUpdateAction;
 import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.builder.*;
+import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,6 +56,24 @@ public interface SQLManager {
      * @return 查询列表
      */
     @NotNull Map<UUID, SQLQuery> getActiveQuery();
+
+    /**
+     * 获取改管理器提供的默认异常处理器。
+     * 若未使用过 {@link #setExceptionHandler(SQLExceptionHandler)} 方法，
+     * 则默认返回 {@link SQLExceptionHandler#detailed(Logger)} 。
+     *
+     * @return {@link SQLExceptionHandler}
+     */
+    @NotNull SQLExceptionHandler getExceptionHandler();
+
+    /**
+     * 设定通用的异常处理器。
+     * <br> 在使用 {@link SQLAction#execute(SQLExceptionHandler)} 等相关方法时，若传入的处理器为null，则会采用此处理器。
+     * <br> 若该方法传入参数为 null，则会使用 {@link SQLExceptionHandler#detailed(Logger)} 。
+     *
+     * @param handler 异常处理器
+     */
+    void setExceptionHandler(@Nullable SQLExceptionHandler handler);
 
     /**
      * 执行一条不需要返回结果的SQL语句(多用于UPDATE、REPLACE、DELETE方法)

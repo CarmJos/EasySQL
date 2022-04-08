@@ -1,13 +1,13 @@
-package cc.carm.lib.easysql.tester.tests;
+package cc.carm.lib.easysql.tests;
 
 import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.enums.ForeignKeyRule;
 import cc.carm.lib.easysql.api.enums.IndexType;
-import cc.carm.lib.easysql.tester.EasySQLTest;
+import cc.carm.lib.easysql.TestHandler;
 
 import java.sql.SQLException;
 
-public class TableCreateTest extends EasySQLTest {
+public class TableCreateTest extends TestHandler {
 
     @Override
     public void onTest(SQLManager sqlManager) throws SQLException {
@@ -30,7 +30,6 @@ public class TableCreateTest extends EasySQLTest {
                         "test_user_table", "id",
                         ForeignKeyRule.CASCADE, ForeignKeyRule.CASCADE
                 )
-                .setIndex(IndexType.FULLTEXT_INDEX, "sign", "info")
                 .build().execute();
 
     }

@@ -1,4 +1,4 @@
-package cc.carm.lib.easysql.tester;
+package cc.carm.lib.easysql;
 
 import cc.carm.lib.easysql.api.SQLManager;
 import org.jetbrains.annotations.ApiStatus;
@@ -6,10 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 
-public abstract class EasySQLTest {
+public abstract class TestHandler {
 
     protected static void print(@NotNull String format, Object... params) {
-        Main.print(format, params);
+        EasySQLTest.print(format, params);
     }
 
     @ApiStatus.OverrideOnly

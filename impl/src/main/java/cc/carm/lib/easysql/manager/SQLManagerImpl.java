@@ -10,6 +10,7 @@ import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.builder.*;
+import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.builder.impl.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,6 +33,8 @@ public class SQLManagerImpl implements SQLManager {
     protected ExecutorService executorPool;
     @NotNull Supplier<Boolean> debugMode = () -> Boolean.FALSE;
 
+    @NotNull SQLExceptionHandler exceptionHandler;
+
     public SQLManagerImpl(@NotNull DataSource dataSource) {
         this(dataSource, null);
     }
@@ -45,6 +48,8 @@ public class SQLManagerImpl implements SQLManager {
             thread.setDaemon(true);
             return thread;
         });
+
+        this.exceptionHandler = SQLExceptionHandler.detailed(getLogger());
     }
 
     @Override
@@ -83,6 +88,17 @@ public class SQLManagerImpl implements SQLManager {
     @Override
     public @NotNull Map<UUID, SQLQuery> getActiveQuery() {
         return this.activeQuery;
+    }
+
+    @Override
+    public @NotNull SQLExceptionHandler getExceptionHandler() {
+        return this.exceptionHandler;
+    }
+
+    @Override
+    public void setExceptionHandler(@Nullable SQLExceptionHandler handler) {
+        if (handler == null) this.exceptionHandler = SQLExceptionHandler.detailed(getLogger());
+        else this.exceptionHandler = handler;
     }
 
     @Override

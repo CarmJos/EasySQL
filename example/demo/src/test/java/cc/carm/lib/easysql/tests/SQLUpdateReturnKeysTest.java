@@ -1,4 +1,4 @@
-package cc.carm.lib.easysql.tester.tests;
+package cc.carm.lib.easysql.tests;
 
 import cc.carm.lib.easysql.api.SQLManager;
 
