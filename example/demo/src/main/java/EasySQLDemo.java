@@ -1,5 +1,6 @@
 import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.SQLQuery;
+import cc.carm.lib.easysql.api.SQLTable;
 import cc.carm.lib.easysql.api.enums.ForeignKeyRule;
 import cc.carm.lib.easysql.api.enums.IndexType;
 import cc.carm.lib.easysql.api.enums.NumberType;
@@ -41,6 +42,33 @@ public class EasySQLDemo {
                         ForeignKeyRule.CASCADE, ForeignKeyRule.CASCADE
                 )
                 .build().execute(null /* 不处理错误 */);
+    }
+
+    public void useSQLTable(SQLManager sqlManager) {
+        SQLTable tags = SQLTable.of("servers", table -> {
+            table.addAutoIncrementColumn("id", true);
+            table.addColumn("user", "INT UNSIGNED NOT NULL");
+            table.addColumn("content", "TEXT NOT NULL");
+            table.addColumn("time", "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP");
+
+            table.addForeignKey(
+                    "user", "fk_user_tags",
+                    "users", "id",
+                    ForeignKeyRule.CASCADE, ForeignKeyRule.CASCADE
+            );
+            
+        });
+
+        try {
+            tags.create(sqlManager);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        tags.createQuery().addCondition("id", 5).build()
+                .executeAsync(success -> {
+                    System.out.println("success!");
+                });
     }
 
     public void alertTable(SQLManager sqlManager) {
