@@ -5,6 +5,7 @@ import cc.carm.lib.easysql.api.SQLQuery;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.Arrays;
@@ -24,7 +25,7 @@ public interface SQLDebugHandler {
      * @param params 执行传入的参数列表。
      *               实际上，仅有 {@link PreparedSQLUpdateAction} 和 {@link PreparedSQLUpdateBatchAction} 才会有传入参数。
      */
-    void beforeExecute(@NotNull SQLAction<?> action, @NotNull List<Object[]> params);
+    void beforeExecute(@NotNull SQLAction<?> action, @NotNull List<@Nullable Object[]> params);
 
     /**
      * 该方法将在 {@link SQLQuery#close()} 执行后调用。
@@ -39,7 +40,7 @@ public interface SQLDebugHandler {
     static SQLDebugHandler defaultHandler(Logger logger) {
         return new SQLDebugHandler() {
             @Override
-            public void beforeExecute(@NotNull SQLAction<?> action, @NotNull List<Object[]> params) {
+            public void beforeExecute(@NotNull SQLAction<?> action, @NotNull List<@Nullable Object[]> params) {
                 logger.info("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
                 logger.info("┣# ActionUUID: {}", action.getActionUUID());
                 logger.info("┣# ActionType: {}", action.getClass().getName());
@@ -54,12 +55,18 @@ public interface SQLDebugHandler {
                 }
                 if (params.size() == 1) {
                     Object[] param = params.get(0);
-                    logger.info("┣# SQLParams({}): {}", param.length, Arrays.stream(param).map(Object::toString).reduce((a, b) -> a + ", " + b).orElse(""));
+                    if (param != null) {
+                        logger.info("┣# SQLParams({}): {}", param.length, Arrays.stream(param).map(Object::toString).reduce((a, b) -> a + ", " + b).orElse(""));
+                    }
                 } else if (params.size() > 1) {
                     logger.info("┣# SQLParams: ");
                     int i = 0;
                     for (Object[] param : params) {
-                        logger.info("┃ [{}] {}", ++i, Arrays.stream(param).map(Object::toString).reduce((a, b) -> a + ", " + b).orElse(""));
+                        if (param != null) {
+                            logger.info("┃ [{}] {}", ++i, Arrays.stream(param).map(Object::toString).reduce((a, b) -> a + ", " + b).orElse(""));
+                        } else {
+                            logger.info("┃ [{}] {}", ++i, "<#NULL>");
+                        }
                     }
                 }
                 logger.info("┣# createTime: {}", action.getCreateTime());
@@ -71,7 +78,7 @@ public interface SQLDebugHandler {
                 logger.info("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
                 logger.info("┣# ActionUUID: {}", query.getAction().getActionUUID());
                 logger.info("┣# SQLContent: {}", query.getSQLContent());
-                logger.info("┣# executeCote: {} ms", (closeTime - executeTime));
+                logger.info("┣# executeCost: {} ms", (closeTime - executeTime));
                 logger.info("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             }
         };

@@ -19,7 +19,7 @@ public class PreparedSQLBatchUpdateActionImpl
         implements PreparedSQLUpdateBatchAction {
 
     boolean returnKeys = false;
-    List<Object[]> allParams;
+    @NotNull List<Object[]> allParams;
 
     public PreparedSQLBatchUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
         super(manager, sql);

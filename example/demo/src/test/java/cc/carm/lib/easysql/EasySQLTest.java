@@ -22,6 +22,7 @@ public class EasySQLTest {
         config.setJdbcUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=MYSQL;");
 
         SQLManager sqlManager = new SQLManagerImpl(new HikariDataSource(config), "test");
+        sqlManager.setDebugMode(true);
 
         print("加载测试类...");
         Set<TestHandler> tests = new LinkedHashSet<>();
