@@ -56,7 +56,7 @@ public class EasySQLDemo {
                     "users", "id",
                     ForeignKeyRule.CASCADE, ForeignKeyRule.CASCADE
             );
-            
+
         });
 
         try {
@@ -134,7 +134,7 @@ public class EasySQLDemo {
 
     public void sqlInsert(SQLManager sqlManager) {
         // 同步SQL插入 （不使用try-catch的情况下，返回的数值可能为空。）
-        Integer id = sqlManager.createInsert("users")
+        Long id = sqlManager.createInsert("users")
                 .setColumnNames("username", "phone", "email", "registerTime")
                 .setParams("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
                 .setReturnGeneratedKey(true)// 设定在后续返回自增主键
@@ -145,11 +145,10 @@ public class EasySQLDemo {
                 });
 
         try {
-            Integer userID = sqlManager.createInsert("users")
+            Long userID = sqlManager.createInsert("users")
                     .setColumnNames("username", "phone", "email", "registerTime")
                     .setParams("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
-                    .setReturnGeneratedKey(true)
-                    .execute();
+                    .returnGeneratedKey().execute();
 
             System.out.println("新用户的ID为 " + userID);
 
