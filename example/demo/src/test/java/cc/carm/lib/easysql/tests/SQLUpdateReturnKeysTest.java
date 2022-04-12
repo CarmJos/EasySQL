@@ -11,7 +11,7 @@ public class SQLUpdateReturnKeysTest extends SQLUpdateBatchTests {
 
     @Override
     public void onTest(SQLManager sqlManager) throws SQLException {
-        List<Integer> generatedKeys = sqlManager.createInsertBatch("test_user_table")
+        List<Long> generatedKeys = sqlManager.createInsertBatch("test_user_table")
                 .setColumnNames("uuid", "username", "age")
                 .setAllParams(generateParams())
                 .returnGeneratedKeys()
