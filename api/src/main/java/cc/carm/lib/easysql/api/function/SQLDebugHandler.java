@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +36,18 @@ public interface SQLDebugHandler {
      */
     void afterQuery(@NotNull SQLQuery query, long executeTime, long closeTime);
 
+    default String parseParams(@Nullable Object[] params) {
+        if (params == null) return "<#NULL>";
+        else if (params.length == 0) return "<#EMPTY>";
+
+        List<String> paramsString = new ArrayList<>();
+        for (Object param : params) {
+            if (param == null) paramsString.add("NULL");
+            else paramsString.add(param.toString());
+        }
+        return String.join(", ", paramsString);
+    }
+
     @SuppressWarnings("DuplicatedCode")
     static SQLDebugHandler defaultHandler(Logger logger) {
         return new SQLDebugHandler() {
@@ -55,18 +67,12 @@ public interface SQLDebugHandler {
                 }
                 if (params.size() == 1) {
                     Object[] param = params.get(0);
-                    if (param != null) {
-                        logger.info("┣# SQLParams({}): {}", param.length, Arrays.stream(param).map(Object::toString).reduce((a, b) -> a + ", " + b).orElse(""));
-                    }
+                    logger.info("┣# SQLParams({}): {}", param.length, parseParams(param));
                 } else if (params.size() > 1) {
                     logger.info("┣# SQLParams: ");
                     int i = 0;
                     for (Object[] param : params) {
-                        if (param != null) {
-                            logger.info("┃ [{}] {}", ++i, Arrays.stream(param).map(Object::toString).reduce((a, b) -> a + ", " + b).orElse(""));
-                        } else {
-                            logger.info("┃ [{}] {}", ++i, "<#NULL>");
-                        }
+                        logger.info("┃ [{}] {}", ++i, parseParams(param));
                     }
                 }
                 logger.info("┣# createTime: {}", action.getCreateTime());

@@ -72,7 +72,11 @@ public class SQLQueryImpl implements SQLQuery {
             if (getConnection() != null && !getConnection().isClosed()) getConnection().close();
 
             if (getManager().isDebugMode()) {
-                getManager().getDebugHandler().afterQuery(this, getExecuteTime(), System.currentTimeMillis());
+                try {
+                    getManager().getDebugHandler().afterQuery(this, getExecuteTime(), System.currentTimeMillis());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
             getManager().getActiveQuery().remove(getAction().getActionUUID());
         } catch (SQLException e) {

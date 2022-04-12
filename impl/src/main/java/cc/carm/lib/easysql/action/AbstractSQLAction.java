@@ -69,7 +69,11 @@ public abstract class AbstractSQLAction<T> implements SQLAction<T> {
 
     protected void debugMessage(List<Object[]> params) {
         if (getManager().isDebugMode()) {
-            getManager().getDebugHandler().beforeExecute(this, params);
+            try {
+                getManager().getDebugHandler().beforeExecute(this, params);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
     }
 
