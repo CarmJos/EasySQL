@@ -102,17 +102,17 @@ public class SQLManagerImpl implements SQLManager {
     }
 
     @Override
-    public Integer executeSQL(String sql) {
+    public Long executeSQL(String sql) {
         return new SQLUpdateActionImpl(this, sql).execute(null);
     }
 
     @Override
-    public Integer executeSQL(String sql, Object[] params) {
+    public Long executeSQL(String sql, Object[] params) {
         return new PreparedSQLUpdateActionImpl(this, sql, params).execute(null);
     }
 
     @Override
-    public List<Integer> executeSQLBatch(String sql, Iterable<Object[]> paramsBatch) {
+    public List<Long> executeSQLBatch(String sql, Iterable<Object[]> paramsBatch) {
         return new PreparedSQLBatchUpdateActionImpl(this, sql)
                 .setAllParams(paramsBatch)
                 .execute(null);

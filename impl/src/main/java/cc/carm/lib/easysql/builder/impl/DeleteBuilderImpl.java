@@ -12,7 +12,7 @@ import java.util.Objects;
 import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
 
 public class DeleteBuilderImpl
-        extends AbstractConditionalBuilder<DeleteBuilder, SQLAction<Integer>>
+        extends AbstractConditionalBuilder<DeleteBuilder, SQLAction<Long>>
         implements DeleteBuilder {
 
     protected final String tableName;

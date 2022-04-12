@@ -28,7 +28,7 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
     }
 
     @Override
-    public SQLAction<Integer> renameTo(@NotNull String newTableName) {
+    public SQLAction<Long> renameTo(@NotNull String newTableName) {
         Objects.requireNonNull(newTableName, "table name could not be null");
         return new SQLUpdateActionImpl(getManager(),
                 "ALTER TABLE " + withBackQuote(tableName) + " RENAME TO " + withBackQuote(newTableName)
@@ -36,7 +36,7 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
     }
 
     @Override
-    public SQLAction<Integer> changeComment(@NotNull String newTableComment) {
+    public SQLAction<Long> changeComment(@NotNull String newTableComment) {
         Objects.requireNonNull(newTableComment, "table comment could not be null");
         return new SQLUpdateActionImpl(getManager(),
                 "ALTER TABLE " + withBackQuote(getTableName()) + " COMMENT " + withQuote(newTableComment)
@@ -44,15 +44,15 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
     }
 
     @Override
-    public SQLAction<Integer> setAutoIncrementIndex(int index) {
+    public SQLAction<Long> setAutoIncrementIndex(int index) {
         return new SQLUpdateActionImpl(getManager(),
                 "ALTER TABLE " + withBackQuote(getTableName()) + " AUTO_INCREMENT=" + index
         );
     }
 
     @Override
-    public SQLAction<Integer> addIndex(@NotNull IndexType indexType, @Nullable String indexName,
-                                       @NotNull String columnName, @NotNull String... moreColumns) {
+    public SQLAction<Long> addIndex(@NotNull IndexType indexType, @Nullable String indexName,
+                                    @NotNull String columnName, @NotNull String... moreColumns) {
         Objects.requireNonNull(indexType, "indexType could not be null");
         Objects.requireNonNull(columnName, "column names could not be null");
         Objects.requireNonNull(moreColumns, "column names could not be null");
@@ -63,7 +63,7 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
     }
 
     @Override
-    public SQLAction<Integer> dropIndex(@NotNull String indexName) {
+    public SQLAction<Long> dropIndex(@NotNull String indexName) {
         Objects.requireNonNull(indexName, "indexName could not be null");
         return createAction(
                 "ALTER TABLE " + withBackQuote(getTableName()) + " DROP INDEX " + withBackQuote(indexName)
@@ -71,7 +71,7 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
     }
 
     @Override
-    public SQLAction<Integer> dropForeignKey(@NotNull String keySymbol) {
+    public SQLAction<Long> dropForeignKey(@NotNull String keySymbol) {
         Objects.requireNonNull(keySymbol, "keySymbol could not be null");
         return createAction(
                 "ALTER TABLE " + withBackQuote(getTableName()) + " DROP FOREIGN KEY " + withBackQuote(keySymbol)
@@ -79,14 +79,14 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
     }
 
     @Override
-    public SQLAction<Integer> dropPrimaryKey() {
+    public SQLAction<Long> dropPrimaryKey() {
         return createAction(
                 "ALTER TABLE " + withBackQuote(getTableName()) + " DROP PRIMARY KEY"
         );
     }
 
     @Override
-    public SQLAction<Integer> addColumn(@NotNull String columnName, @NotNull String settings, @Nullable String afterColumn) {
+    public SQLAction<Long> addColumn(@NotNull String columnName, @NotNull String settings, @Nullable String afterColumn) {
         Objects.requireNonNull(columnName, "columnName could not be null");
         Objects.requireNonNull(settings, "settings could not be null");
         String orderSettings = null;
@@ -105,7 +105,7 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
     }
 
     @Override
-    public SQLAction<Integer> renameColumn(@NotNull String columnName, @NotNull String newName) {
+    public SQLAction<Long> renameColumn(@NotNull String columnName, @NotNull String newName) {
         Objects.requireNonNull(columnName, "columnName could not be null");
         Objects.requireNonNull(newName, "please specify new column name");
         return createAction(
@@ -114,7 +114,7 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
     }
 
     @Override
-    public SQLAction<Integer> modifyColumn(@NotNull String columnName, @NotNull String settings) {
+    public SQLAction<Long> modifyColumn(@NotNull String columnName, @NotNull String settings) {
         Objects.requireNonNull(columnName, "columnName could not be null");
         Objects.requireNonNull(settings, "please specify new column settings");
         return createAction(
@@ -123,7 +123,7 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
     }
 
     @Override
-    public SQLAction<Integer> removeColumn(@NotNull String columnName) {
+    public SQLAction<Long> removeColumn(@NotNull String columnName) {
         Objects.requireNonNull(columnName, "columnName could not be null");
         return createAction(
                 "ALTER TABLE " + withBackQuote(getTableName()) + " DROP " + withBackQuote(columnName)
@@ -131,7 +131,7 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
     }
 
     @Override
-    public SQLAction<Integer> setColumnDefault(@NotNull String columnName, @NotNull String defaultValue) {
+    public SQLAction<Long> setColumnDefault(@NotNull String columnName, @NotNull String defaultValue) {
         Objects.requireNonNull(columnName, "columnName could not be null");
         Objects.requireNonNull(defaultValue, "defaultValue could not be null, if you need to remove the default value, please use #removeColumnDefault().");
         return createAction(
@@ -140,7 +140,7 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
     }
 
     @Override
-    public SQLAction<Integer> removeColumnDefault(@NotNull String columnName) {
+    public SQLAction<Long> removeColumnDefault(@NotNull String columnName) {
         Objects.requireNonNull(columnName, "columnName could not be null");
         return createAction(
                 "ALTER TABLE " + withBackQuote(getTableName()) + " ALTER " + withBackQuote(columnName) + " DROP DEFAULT"

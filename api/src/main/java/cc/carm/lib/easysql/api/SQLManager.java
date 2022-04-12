@@ -83,7 +83,7 @@ public interface SQLManager {
      * @return 更新的行数
      * @see SQLUpdateAction
      */
-    @Nullable Integer executeSQL(String sql);
+    @Nullable Long executeSQL(String sql);
 
     /**
      * 执行一条不需要返回结果的预处理SQL更改(UPDATE、REPLACE、DELETE)
@@ -93,7 +93,7 @@ public interface SQLManager {
      * @return 更新的行数
      * @see PreparedSQLUpdateAction
      */
-    @Nullable Integer executeSQL(String sql, Object[] params);
+    @Nullable Long executeSQL(String sql, Object[] params);
 
     /**
      * 执行多条不需要返回结果的SQL更改(UPDATE、REPLACE、DELETE)
@@ -103,7 +103,7 @@ public interface SQLManager {
      * @return 对应参数返回的行数
      * @see PreparedSQLUpdateBatchAction
      */
-    @Nullable List<Integer> executeSQLBatch(String sql, Iterable<Object[]> paramsBatch);
+    @Nullable List<Long> executeSQLBatch(String sql, Iterable<Object[]> paramsBatch);
 
 
     /**

@@ -10,13 +10,13 @@ import org.jetbrains.annotations.Nullable;
 
 public interface TableAlterBuilder extends SQLBuilder {
 
-    SQLAction<Integer> renameTo(@NotNull String newTableName);
+    SQLAction<Long> renameTo(@NotNull String newTableName);
 
-    SQLAction<Integer> changeComment(@NotNull String newTableComment);
+    SQLAction<Long> changeComment(@NotNull String newTableComment);
 
-    SQLAction<Integer> setAutoIncrementIndex(int index);
+    SQLAction<Long> setAutoIncrementIndex(int index);
 
-    SQLAction<Integer> addIndex(@NotNull IndexType indexType, @Nullable String indexName,
+    SQLAction<Long> addIndex(@NotNull IndexType indexType, @Nullable String indexName,
                                 @NotNull String columnName, @NotNull String... moreColumns);
 
     /**
@@ -25,7 +25,7 @@ public interface TableAlterBuilder extends SQLBuilder {
      * @param indexName 索引名
      * @return {@link SQLUpdateAction}
      */
-    SQLAction<Integer> dropIndex(@NotNull String indexName);
+    SQLAction<Long> dropIndex(@NotNull String indexName);
 
     /**
      * 为该表移除一个外键
@@ -33,14 +33,14 @@ public interface TableAlterBuilder extends SQLBuilder {
      * @param keySymbol 外键名
      * @return {@link SQLUpdateAction}
      */
-    SQLAction<Integer> dropForeignKey(@NotNull String keySymbol);
+    SQLAction<Long> dropForeignKey(@NotNull String keySymbol);
 
     /**
      * 为该表移除主键(须添加新主键)
      *
      * @return {@link SQLUpdateAction}
      */
-    SQLAction<Integer> dropPrimaryKey();
+    SQLAction<Long> dropPrimaryKey();
 
     /**
      * 为表添加一列
@@ -49,7 +49,7 @@ public interface TableAlterBuilder extends SQLBuilder {
      * @param settings   列的相关设定
      * @return {@link SQLUpdateAction}
      */
-    default SQLAction<Integer> addColumn(@NotNull String columnName, @NotNull String settings) {
+    default SQLAction<Long> addColumn(@NotNull String columnName, @NotNull String settings) {
         return addColumn(columnName, settings, null);
     }
 
@@ -63,21 +63,21 @@ public interface TableAlterBuilder extends SQLBuilder {
      *                    <p> 若为 "" 则置于首行。
      * @return {@link SQLUpdateAction}
      */
-    SQLAction<Integer> addColumn(@NotNull String columnName, @NotNull String settings, @Nullable String afterColumn);
+    SQLAction<Long> addColumn(@NotNull String columnName, @NotNull String settings, @Nullable String afterColumn);
 
-    SQLAction<Integer> renameColumn(@NotNull String columnName, @NotNull String newName);
+    SQLAction<Long> renameColumn(@NotNull String columnName, @NotNull String newName);
 
-    SQLAction<Integer> modifyColumn(@NotNull String columnName, @NotNull String settings);
+    SQLAction<Long> modifyColumn(@NotNull String columnName, @NotNull String settings);
 
-    default SQLAction<Integer> modifyColumn(@NotNull String columnName, @NotNull String columnSettings, @NotNull String afterColumn) {
+    default SQLAction<Long> modifyColumn(@NotNull String columnName, @NotNull String columnSettings, @NotNull String afterColumn) {
         return modifyColumn(columnName, columnSettings + " AFTER `" + afterColumn + "`");
     }
 
-    SQLAction<Integer> removeColumn(@NotNull String columnName);
+    SQLAction<Long> removeColumn(@NotNull String columnName);
 
-    SQLAction<Integer> setColumnDefault(@NotNull String columnName, @NotNull String defaultValue);
+    SQLAction<Long> setColumnDefault(@NotNull String columnName, @NotNull String defaultValue);
 
-    SQLAction<Integer> removeColumnDefault(@NotNull String columnName);
+    SQLAction<Long> removeColumnDefault(@NotNull String columnName);
 
     /**
      * 为该表添加一个自增列
@@ -90,7 +90,7 @@ public interface TableAlterBuilder extends SQLBuilder {
      * @param unsigned   是否采用 UNSIGNED (即无负数，可以增加自增键的最高数，建议为true)
      * @return {@link TableCreateBuilder}
      */
-    default SQLAction<Integer> addAutoIncrementColumn(@NotNull String columnName, @Nullable NumberType numberType,
+    default SQLAction<Long> addAutoIncrementColumn(@NotNull String columnName, @Nullable NumberType numberType,
                                                       boolean primary, boolean unsigned) {
         return addColumn(columnName,
                 (numberType == null ? NumberType.INT : numberType).name()
@@ -109,7 +109,7 @@ public interface TableAlterBuilder extends SQLBuilder {
      * @param numberType 数字类型，若省缺则为 {@link NumberType#INT}
      * @return {@link TableAlterBuilder}
      */
-    default SQLAction<Integer> addAutoIncrementColumn(@NotNull String columnName, @NotNull NumberType numberType) {
+    default SQLAction<Long> addAutoIncrementColumn(@NotNull String columnName, @NotNull NumberType numberType) {
         return addAutoIncrementColumn(columnName, numberType, false, true);
     }
 
@@ -122,7 +122,7 @@ public interface TableAlterBuilder extends SQLBuilder {
      * @param columnName 列名
      * @return {@link TableAlterBuilder}
      */
-    default SQLAction<Integer> addAutoIncrementColumn(@NotNull String columnName) {
+    default SQLAction<Long> addAutoIncrementColumn(@NotNull String columnName) {
         return addAutoIncrementColumn(columnName, NumberType.INT);
     }
 

@@ -13,7 +13,7 @@ import java.util.*;
 import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
 
 public class UpdateBuilderImpl
-        extends AbstractConditionalBuilder<UpdateBuilder, SQLAction<Integer>>
+        extends AbstractConditionalBuilder<UpdateBuilder, SQLAction<Long>>
         implements UpdateBuilder {
 
     protected final @NotNull String tableName;
