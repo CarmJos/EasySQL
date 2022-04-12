@@ -25,11 +25,11 @@ public abstract class SQLTable {
     public static @NotNull SQLTable of(@NotNull String tableName, @Nullable SQLHandler<TableCreateBuilder> table) {
         return new SQLTable(tableName) {
             @Override
-            public int create(SQLManager sqlManager) throws SQLException {
+            public boolean create(SQLManager sqlManager) throws SQLException {
                 if (this.manager == null) this.manager = sqlManager;
                 TableCreateBuilder tableBuilder = sqlManager.createTable(getTableName());
                 if (table != null) table.accept(tableBuilder);
-                return tableBuilder.build().execute();
+                return tableBuilder.build().executeFunction(l -> l > 0, false);
             }
         };
     }
@@ -63,7 +63,14 @@ public abstract class SQLTable {
         return tableName;
     }
 
-    public abstract int create(SQLManager sqlManager) throws SQLException;
+    /**
+     * 使用指定 SQLManager 进行本示例的初始化。
+     *
+     * @param sqlManager {@link SQLManager}
+     * @return 本表是否为首次创建
+     * @throws SQLException 出现任何错误时抛出
+     */
+    public abstract boolean create(SQLManager sqlManager) throws SQLException;
 
     public @NotNull TableQueryBuilder createQuery(@NotNull SQLManager sqlManager) {
         return sqlManager.createQuery().inTable(getTableName());
