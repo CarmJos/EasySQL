@@ -5,7 +5,7 @@
     <parent>
         <groupId>cc.carm.lib</groupId>
         <artifactId>easysql-parent</artifactId>
-        <version>0.3.11</version>
+        <version>0.3.12</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -51,6 +51,14 @@
         <system>GitHub Actions</system>
         <url>https://github.com/CarmJos/EasySQL/actions/workflows/maven.yml</url>
     </ciManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.36</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>

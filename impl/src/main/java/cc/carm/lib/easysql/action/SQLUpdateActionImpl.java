@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class SQLUpdateActionImpl
         extends AbstractSQLAction<Long>
@@ -21,9 +22,10 @@ public class SQLUpdateActionImpl
 
     @Override
     public @NotNull Long execute() throws SQLException {
+        debugMessage(new ArrayList<>());
+
         try (Connection connection = getManager().getConnection()) {
             try (Statement statement = connection.createStatement()) {
-                outputDebugMessage();
 
                 if (!returnGeneratedKeys) {
                     return (long) statement.executeUpdate(getSQLContent());

@@ -38,10 +38,11 @@ public class SQLUpdateBatchActionImpl
 
     @Override
     public @NotNull List<Integer> execute() throws SQLException {
+        debugMessage(new ArrayList<>());
+
         try (Connection connection = getManager().getConnection()) {
 
             try (Statement statement = connection.createStatement()) {
-                outputDebugMessage();
 
                 for (String content : this.sqlContents) {
                     statement.addBatch(content);
@@ -53,14 +54,6 @@ public class SQLUpdateBatchActionImpl
             }
 
         }
-    }
-
-    @Override
-    protected void outputDebugMessage() {
-        getManager().debug("# " + getShortID() + " -> [");
-        for (String content : getSQLContents()) getManager().debug(String.format(" { %s }", content));
-        getManager().debug("]");
-
     }
 
 }

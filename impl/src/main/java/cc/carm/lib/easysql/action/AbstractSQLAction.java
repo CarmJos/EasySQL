@@ -7,6 +7,7 @@ import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -66,8 +67,10 @@ public abstract class AbstractSQLAction<T> implements SQLAction<T> {
         return this.sqlManager;
     }
 
-    protected void outputDebugMessage() {
-        getManager().debug("# " + getShortID() + " -> { " + getSQLContent() + " }");
+    protected void debugMessage(List<Object[]> params) {
+        if (getManager().isDebugMode()) {
+            getManager().getDebugHandler().beforeExecute(this, params);
+        }
     }
 
     @Override

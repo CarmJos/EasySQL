@@ -5,9 +5,11 @@ import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.action.SQLUpdateAction;
 import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.builder.*;
+import cc.carm.lib.easysql.api.function.SQLDebugHandler;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -16,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 
 /**
  * SQLManager 是EasySQL的核心类，用于管理数据库连接，提供数据库操作的方法。
@@ -29,11 +30,37 @@ public interface SQLManager {
 
     boolean isDebugMode();
 
+    /**
+     * 设定是否启用调试模式。
+     * 启用调试模式后，会在每次执行SQL语句时，调用 {@link #getDebugHandler()} 来输出调试信息。
+     *
+     * @param debugMode 是否启用调试模式
+     */
     void setDebugMode(@NotNull Supplier<@NotNull Boolean> debugMode);
 
+    /**
+     * 设定是否启用调试模式。
+     * 启用调试模式后，会在每次执行SQL语句时，调用 {@link #getDebugHandler()} 来输出调试信息。
+     *
+     * @param enable 是否启用调试模式
+     */
     default void setDebugMode(boolean enable) {
         setDebugMode(() -> enable);
     }
+
+    /**
+     * 获取调试处理器，用于处理调试信息。
+     *
+     * @return {@link SQLDebugHandler}
+     */
+    @NotNull SQLDebugHandler getDebugHandler();
+
+    /**
+     * 设定调试处理器，默认为 {@link SQLDebugHandler#defaultHandler(Logger)} 。
+     *
+     * @param debugHandler {@link SQLDebugHandler}
+     */
+    void setDebugHandler(@NotNull SQLDebugHandler debugHandler);
 
     /**
      * 得到连接池源

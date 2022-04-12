@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PreparedSQLUpdateActionImpl
@@ -53,13 +54,13 @@ public class PreparedSQLUpdateActionImpl
 
     @Override
     public @NotNull Long execute() throws SQLException {
+        debugMessage(Collections.singletonList(params));
+
         try (Connection connection = getManager().getConnection()) {
 
             try (PreparedStatement statement = StatementUtil.createPrepareStatement(
                     connection, getSQLContent(), params, returnGeneratedKeys
             )) {
-
-                outputDebugMessage();
 
                 int changes = statement.executeUpdate();
                 if (!returnGeneratedKeys) return (long) changes;

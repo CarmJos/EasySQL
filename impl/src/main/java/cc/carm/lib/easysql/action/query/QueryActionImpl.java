@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class QueryActionImpl extends AbstractSQLAction<SQLQuery> implements QueryAction {
 
@@ -21,6 +22,7 @@ public class QueryActionImpl extends AbstractSQLAction<SQLQuery> implements Quer
 
     @Override
     public @NotNull SQLQueryImpl execute() throws SQLException {
+        debugMessage(new ArrayList<>());
 
         Connection connection = getManager().getConnection();
         Statement statement;
@@ -32,7 +34,6 @@ public class QueryActionImpl extends AbstractSQLAction<SQLQuery> implements Quer
             throw ex;
         }
 
-        outputDebugMessage();
         try {
             long executeTime = System.currentTimeMillis();
             SQLQueryImpl query = new SQLQueryImpl(

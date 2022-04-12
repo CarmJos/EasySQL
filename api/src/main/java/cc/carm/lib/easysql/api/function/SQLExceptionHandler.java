@@ -1,11 +1,10 @@
 package cc.carm.lib.easysql.api.function;
 
 import cc.carm.lib.easysql.api.SQLAction;
-import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
+import org.slf4j.Logger;
 
 import java.sql.SQLException;
 import java.util.function.BiConsumer;
-import java.util.logging.Logger;
 
 /**
  * 异常处理器。
@@ -23,15 +22,11 @@ public interface SQLExceptionHandler extends BiConsumer<SQLException, SQLAction<
      */
     static SQLExceptionHandler detailed(Logger logger) {
         return (exception, sqlAction) -> {
-            if (sqlAction instanceof SQLUpdateBatchAction) {
-                logger.severe("Error when execute SQLs : ");
-                int i = 1;
-                for (String content : ((SQLUpdateBatchAction) sqlAction).getSQLContents()) {
-                    logger.severe(String.format("#%d {%s}", i, content));
-                    i++;
-                }
-            } else {
-                logger.severe("Error when execute { " + sqlAction.getSQLContent() + " }");
+            logger.error("Error occurred while executing SQL: ");
+            int i = 1;
+            for (String content : sqlAction.getSQLContents()) {
+                logger.error(String.format("#%d {%s}", i, content));
+                i++;
             }
             exception.printStackTrace();
         };

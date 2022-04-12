@@ -10,10 +10,13 @@ import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.builder.*;
+import cc.carm.lib.easysql.api.function.SQLDebugHandler;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.builder.impl.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -23,7 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 
 public class SQLManagerImpl implements SQLManager {
 
@@ -34,14 +36,19 @@ public class SQLManagerImpl implements SQLManager {
     @NotNull Supplier<Boolean> debugMode = () -> Boolean.FALSE;
 
     @NotNull SQLExceptionHandler exceptionHandler;
+    @NotNull SQLDebugHandler debugHandler;
 
     public SQLManagerImpl(@NotNull DataSource dataSource) {
         this(dataSource, null);
     }
 
     public SQLManagerImpl(@NotNull DataSource dataSource, @Nullable String name) {
+        this(dataSource, LoggerFactory.getLogger(SQLManagerImpl.class), name);
+    }
+
+    public SQLManagerImpl(@NotNull DataSource dataSource, @NotNull Logger logger, @Nullable String name) {
         String managerName = "SQLManager" + (name != null ? "#" + name : "");
-        this.LOGGER = Logger.getLogger(managerName);
+        this.LOGGER = logger;
         this.dataSource = dataSource;
         this.executorPool = Executors.newFixedThreadPool(3, r -> {
             Thread thread = new Thread(r, managerName);
@@ -50,6 +57,7 @@ public class SQLManagerImpl implements SQLManager {
         });
 
         this.exceptionHandler = SQLExceptionHandler.detailed(getLogger());
+        this.debugHandler = SQLDebugHandler.defaultHandler(getLogger());
     }
 
     @Override
@@ -60,6 +68,16 @@ public class SQLManagerImpl implements SQLManager {
     @Override
     public void setDebugMode(@NotNull Supplier<@NotNull Boolean> debugMode) {
         this.debugMode = debugMode;
+    }
+
+    @Override
+    public @NotNull SQLDebugHandler getDebugHandler() {
+        return this.debugHandler;
+    }
+
+    @Override
+    public void setDebugHandler(@NotNull SQLDebugHandler debugHandler) {
+        this.debugHandler = debugHandler;
     }
 
     public void debug(String msg) {

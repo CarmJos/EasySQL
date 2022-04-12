@@ -6,10 +6,12 @@ import cc.carm.lib.easysql.api.function.SQLHandler;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 /**
  * SQLAction 是用于承载SQL语句并进行处理、返回的基本类。
@@ -59,6 +61,15 @@ public interface SQLAction<T> {
      * @return 源SQL语句
      */
     @NotNull String getSQLContent();
+
+    /**
+     * 得到该Action所要执行的源SQL语句列表。
+     *
+     * @return 源SQL语句列表
+     */
+    default @NotNull List<String> getSQLContents() {
+        return Collections.singletonList(getSQLContent());
+    }
 
     /**
      * 得到承载该Action的对应{@link SQLManager}

@@ -48,12 +48,13 @@ public class PreparedSQLBatchUpdateActionImpl
 
     @Override
     public @NotNull List<Long> execute() throws SQLException {
+        debugMessage(allParams);
+
         try (Connection connection = getManager().getConnection()) {
             try (PreparedStatement statement = StatementUtil.createPrepareStatementBatch(
                     connection, getSQLContent(), allParams, returnKeys
             )) {
 
-                outputDebugMessage();
                 int[] executed = statement.executeBatch();
 
                 if (!returnKeys) {

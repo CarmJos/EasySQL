@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -49,8 +50,8 @@ public class PreparedQueryActionImpl extends QueryActionImpl implements Prepared
 
     @Override
     public @NotNull SQLQueryImpl execute() throws SQLException {
-        outputDebugMessage();
-
+        debugMessage(Collections.singletonList(params));
+        
         Connection connection = getManager().getConnection();
         PreparedStatement preparedStatement;
         try {
@@ -74,7 +75,6 @@ public class PreparedQueryActionImpl extends QueryActionImpl implements Prepared
                     executeTime
             );
             getManager().getActiveQuery().put(getActionUUID(), query);
-
             return query;
         } catch (SQLException exception) {
             preparedStatement.close();
