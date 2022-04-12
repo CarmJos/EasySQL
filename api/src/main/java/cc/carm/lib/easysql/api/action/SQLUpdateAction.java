@@ -2,7 +2,7 @@ package cc.carm.lib.easysql.api.action;
 
 import cc.carm.lib.easysql.api.SQLAction;
 
-public interface SQLUpdateAction extends SQLAction<Integer> {
+public interface SQLUpdateAction extends SQLAction<Long> {
 
     /**
      * 设定自增主键的序列

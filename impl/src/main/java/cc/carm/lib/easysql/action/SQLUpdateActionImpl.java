@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class SQLUpdateActionImpl
-        extends AbstractSQLAction<Integer>
+        extends AbstractSQLAction<Long>
         implements SQLUpdateAction {
 
     boolean returnGeneratedKeys = false;
@@ -20,18 +20,18 @@ public class SQLUpdateActionImpl
     }
 
     @Override
-    public @NotNull Integer execute() throws SQLException {
+    public @NotNull Long execute() throws SQLException {
         try (Connection connection = getManager().getConnection()) {
             try (Statement statement = connection.createStatement()) {
                 outputDebugMessage();
 
                 if (!returnGeneratedKeys) {
-                    return statement.executeUpdate(getSQLContent());
+                    return (long) statement.executeUpdate(getSQLContent());
                 } else {
                     statement.executeUpdate(getSQLContent(), Statement.RETURN_GENERATED_KEYS);
 
                     try (ResultSet resultSet = statement.getGeneratedKeys()) {
-                        return resultSet.next() ? resultSet.getInt(1) : -1;
+                        return resultSet.next() ? resultSet.getLong(1) : -1;
                     }
                 }
             }

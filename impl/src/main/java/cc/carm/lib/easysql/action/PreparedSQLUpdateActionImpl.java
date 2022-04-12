@@ -52,7 +52,7 @@ public class PreparedSQLUpdateActionImpl
     }
 
     @Override
-    public @NotNull Integer execute() throws SQLException {
+    public @NotNull Long execute() throws SQLException {
         try (Connection connection = getManager().getConnection()) {
 
             try (PreparedStatement statement = StatementUtil.createPrepareStatement(
@@ -62,10 +62,10 @@ public class PreparedSQLUpdateActionImpl
                 outputDebugMessage();
 
                 int changes = statement.executeUpdate();
-                if (!returnGeneratedKeys) return changes;
+                if (!returnGeneratedKeys) return (long) changes;
                 else {
                     try (ResultSet resultSet = statement.getGeneratedKeys()) {
-                        return resultSet.next() ? resultSet.getInt(1) : -1;
+                        return resultSet.next() ? resultSet.getLong(1) : -1;
                     }
                 }
 

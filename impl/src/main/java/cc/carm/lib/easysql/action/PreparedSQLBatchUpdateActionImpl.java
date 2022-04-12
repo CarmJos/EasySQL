@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PreparedSQLBatchUpdateActionImpl
-        extends AbstractSQLAction<List<Integer>>
+        extends AbstractSQLAction<List<Long>>
         implements PreparedSQLUpdateBatchAction {
 
     boolean returnKeys = false;
@@ -47,7 +47,7 @@ public class PreparedSQLBatchUpdateActionImpl
     }
 
     @Override
-    public @NotNull List<Integer> execute() throws SQLException {
+    public @NotNull List<Long> execute() throws SQLException {
         try (Connection connection = getManager().getConnection()) {
             try (PreparedStatement statement = StatementUtil.createPrepareStatementBatch(
                     connection, getSQLContent(), allParams, returnKeys
@@ -56,12 +56,13 @@ public class PreparedSQLBatchUpdateActionImpl
                 outputDebugMessage();
                 int[] executed = statement.executeBatch();
 
-                if (!returnKeys) return Arrays.stream(executed).boxed().collect(Collectors.toList());
-                else {
+                if (!returnKeys) {
+                    return Arrays.stream(executed).mapToLong(Long::valueOf).boxed().collect(Collectors.toList());
+                } else {
                     try (ResultSet resultSet = statement.getGeneratedKeys()) {
-                        List<Integer> generatedKeys = new ArrayList<>();
+                        List<Long> generatedKeys = new ArrayList<>();
                         while (resultSet.next()) {
-                            generatedKeys.add(resultSet.getInt(1));
+                            generatedKeys.add(resultSet.getLong(1));
                         }
                         return generatedKeys;
                     }

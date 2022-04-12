@@ -4,7 +4,7 @@ import cc.carm.lib.easysql.api.SQLAction;
 
 import java.util.List;
 
-public interface PreparedSQLUpdateBatchAction extends SQLAction<List<Integer>> {
+public interface PreparedSQLUpdateBatchAction extends SQLAction<List<Long>> {
 
     /**
      * 设定多组SQL语句中所有 ? 对应的参数
