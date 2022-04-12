@@ -34,11 +34,11 @@ public class EasySQL {
 
     public static void shutdownManager(SQLManager manager, boolean forceClose, boolean outputActiveQuery) {
         if (!manager.getActiveQuery().isEmpty()) {
-            manager.getLogger().severe("There are " + manager.getActiveQuery().size() + " connections still running");
+            manager.getLogger().warn("There are " + manager.getActiveQuery().size() + " connections still running");
             for (SQLQuery value : manager.getActiveQuery().values()) {
                 if (outputActiveQuery) {
-                    manager.getLogger().severe(String.format("#%s -> %s", value.getAction().getShortID(), value.getSQLContent()));
-                    manager.getLogger().severe(String.format("- execute at %s", TimeDateUtils.getTimeString(value.getExecuteTime())));
+                    manager.getLogger().warn(String.format("#%s -> %s", value.getAction().getShortID(), value.getSQLContent()));
+                    manager.getLogger().warn(String.format("- execute at %s", TimeDateUtils.getTimeString(value.getExecuteTime())));
                 }
                 if (forceClose) value.close();
             }
