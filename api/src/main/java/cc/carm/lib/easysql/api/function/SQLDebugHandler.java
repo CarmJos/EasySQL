@@ -67,7 +67,7 @@ public interface SQLDebugHandler {
                 }
                 if (params.size() == 1) {
                     Object[] param = params.get(0);
-                    logger.info("┣# SQLParams({}): {}", param.length, parseParams(param));
+                    logger.info("┣# SQLParams: {}", parseParams(param));
                 } else if (params.size() > 1) {
                     logger.info("┣# SQLParams: ");
                     int i = 0;
