@@ -49,6 +49,16 @@ public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B,
     }
 
     @Override
+    public B addCondition(@NotNull String columnName, @Nullable Object queryValue) {
+        Objects.requireNonNull(columnName, "columnName could not be null");
+        if (queryValue == null) {
+            return addCondition(withBackQuote(columnName) + " IS NULL");
+        } else {
+            return addCondition(columnName, "=", queryValue);
+        }
+    }
+
+    @Override
     public B addCondition(
             @NotNull String columnName, @NotNull String operator, @Nullable Object queryValue
     ) {

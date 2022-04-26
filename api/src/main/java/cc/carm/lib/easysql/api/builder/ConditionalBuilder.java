@@ -47,9 +47,7 @@ public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T extend
 
     B addCondition(@NotNull String columnName, @NotNull String operator, @Nullable Object queryValue);
 
-    default B addCondition(@NotNull String columnName, @Nullable Object queryValue) {
-        return addCondition(columnName, "=", queryValue);
-    }
+    B addCondition(@NotNull String columnName, @Nullable Object queryValue);
 
     B addCondition(@NotNull String[] columnNames, @Nullable Object[] queryValues);
 
