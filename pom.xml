@@ -94,14 +94,12 @@
     </repositories>
 
     <distributionManagement>
-
         <downloadUrl>https://github.com/CarmJos/EasySQL/releases</downloadUrl>
         <site>
             <id>easysql-javadoc</id>
             <name>EasySQL JavaDoc (on Github Pages)</name>
             <url>https://CarmJos.github.io/EasySQL</url>
         </site>
-
     </distributionManagement>
 
     <dependencies>
@@ -298,6 +296,20 @@
                     <id>github</id>
                     <name>GitHub Packages</name>
                     <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>local</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>localRepository</id>
+                    <url>file:${user.home}/local-deploy/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>localRepository</id>
+                    <url>file:${user.home}/local-deploy/</url>
                 </repository>
             </distributionManagement>
         </profile>
