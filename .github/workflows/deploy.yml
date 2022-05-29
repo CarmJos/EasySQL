@@ -14,7 +14,6 @@ jobs:
   gh-deploy:
     name: "Publish Project (GitHub)"
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: "Set up JDK"
@@ -47,7 +46,7 @@ jobs:
         id: sitemap
         uses: cicirello/generate-sitemap@v1
         with:
-          base-url-path: https://carmjos.github.io/EasySQL
+          base-url-path: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
           path-to-root: docs
 
       - name: "Output stats"
@@ -65,14 +64,14 @@ jobs:
           echo "$DEPLOY_PRI" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-          git config --global user.name 'CarmJos'
-          git config --global user.email 'carm@carm.cc'
+          git config --global user.name '${{ github.repository_owner }}'
+          git config --global user.email '${{ github.repository_owner }}@users.noreply.github.com'
 
       - name: "Commit documentations"
         run: |
           cd docs
           git init
-          git remote add origin git@github.com:CarmJos/EasySQL.git
+          git remote add origin git@github.com:${{ github.repository_owner }}/${{ github.event.repository.name }}.git
           git checkout -b gh-pages
           git add -A
           git commit -m "API Document generated."
@@ -85,7 +84,6 @@ jobs:
   central-deploy:
     name: "Deploy Project (Central Repository)"
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: "Set up JDK"
@@ -106,3 +104,49 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USER }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASS }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+  local-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Set up JDK"
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          cache: maven
+
+      - name: "Maven Deploy"
+        run: mvn -B -Plocal deploy --file pom.xml -DskipTests
+
+      - name: "Copy artifacts"
+        run: |
+          rm -rf deploy
+          mkdir -vp deploy
+          cp -vrf $HOME/local-deploy/* deploy/
+
+      - name: "Configure Git"
+        env:
+          DEPLOY_PRI: ${{secrets.DEPLOY_PRI}}
+        run: |
+          sudo timedatectl set-timezone "Asia/Shanghai"
+          mkdir -p ~/.ssh/
+          echo "$DEPLOY_PRI" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config --global user.name '${{ github.repository_owner }}'
+          git config --global user.email '${{ github.repository_owner }}@users.noreply.github.com'
+
+      - name: "Commit files"
+        run: |
+          cd deploy
+          git init
+          git remote add origin git@github.com:${{ github.repository_owner }}/${{ github.event.repository.name }}.git
+          git checkout -b repo
+          git add -A
+          git commit -m "Maven project deployment."
+
+      - name: "Push files"
+        run: |
+          cd deploy
+          git push origin HEAD:repo --force
