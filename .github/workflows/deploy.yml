@@ -12,7 +12,7 @@ on:
 
 jobs:
   gh-deploy:
-    name: "Publish Project (GitHub)"
+    name: "Publish Project (GitHub Packages)"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -106,6 +106,7 @@ jobs:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
   local-deploy:
+    name: "Deploy Project (GitHub Repository)"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -115,9 +116,13 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
           cache: maven
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
 
       - name: "Maven Deploy"
         run: mvn -B -Plocal deploy --file pom.xml -DskipTests
+        env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
       - name: "Copy artifacts"
         run: |
