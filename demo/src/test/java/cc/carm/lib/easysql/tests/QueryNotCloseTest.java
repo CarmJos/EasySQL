@@ -7,6 +7,7 @@ import cc.carm.lib.easysql.TestHandler;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@SuppressWarnings("resource")
 public class QueryNotCloseTest extends TestHandler {
 
     @Override
