@@ -10,7 +10,7 @@
 # EasySQL
 
 [![version](https://img.shields.io/github/v/release/CarmJos/EasySQL)](https://github.com/CarmJos/EasySQL/releases)
-[![License](https://img.shields.io/github/license/CarmJos/EasySQL)](https://opensource.org/licenses/GPL-3.0)
+[![License](https://img.shields.io/github/license/CarmJos/EasySQL)](https://opensource.org/licenses/MIT)
 [![workflow](https://github.com/CarmJos/EasySQL/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/CarmJos/EasySQL/actions/workflows/maven.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/carmjos/easysql/badge)](https://www.codefactor.io/repository/github/carmjos/easysql)
 ![CodeSize](https://img.shields.io/github/languages/code-size/CarmJos/EasySQL)
@@ -18,7 +18,7 @@
 
 简单便捷的数据库操作工具，可自定义连接池来源。
 
-随项目分别提供 [BeeCP](https://github.com/Chris2018998/BeeCP) 与 [Hikari](https://github.com/brettwooldridge/HikariCP~~~~)
+随项目分别提供 [BeeCP](https://github.com/Chris2018998/BeeCP) 与 [Hikari](https://github.com/brettwooldridge/HikariCP)
 两个连接池的版本。
 
 ## 优势
@@ -35,7 +35,7 @@
 
 ### 示例代码
 
-您可以 [点击这里](example/easysql-demo/src/main/java/EasySQLDemo.java) 查看部分代码演示，更多演示详见 [开发介绍](.documentation/README.md) 。
+您可以 [点击这里](demo/src/main/java/EasySQLDemo.java) 查看部分代码演示，更多演示详见 [开发介绍](.documentation/README.md) 。
 
 ### 依赖方式
 
@@ -55,9 +55,16 @@
             <name>Maven Central</name>
             <url>https://repo1.maven.org/maven2</url>
         </repository>
-        
+
         <repository>
-            <!--采用github依赖库，实时更新，但需要配置 (推荐) -->
+            <!--采用github的repo分支依赖，实时更新。 (推荐)-->
+            <id>EasySQL</id>
+            <name>GitHub Branch Repository</name>
+            <url>https://github.com/CarmJos/EasySQL/blob/repo/</url>
+        </repository>
+
+        <repository>
+            <!--采用github packages依赖库，安全稳定，但需要配置 -->
             <id>EasySQL</id>
             <name>GitHub Packages</name>
             <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
@@ -141,8 +148,11 @@ repositories {
 
     // 采用Maven中心库，安全稳定，但版本更新需要等待同步 
     mavenCentral()
-    
-    // 采用github依赖库，实时更新，但需要配置 (推荐)
+
+    // 采用github的repo分支依赖，实时更新。 (推荐)
+    maven { url 'https://github.com/CarmJos/EasySQL/blob/repo/' }
+
+    // 采用github依赖库，安全稳定，但需要配置
     maven { url 'https://maven.pkg.github.com/CarmJos/EasySQL' }
 
     // 采用我的私人依赖库，简单方便，但可能因为变故而无法使用
@@ -193,8 +203,6 @@ dependencies {
 若您觉得本插件做的不错，您可以通过捐赠支持我！
 
 感谢您对开源项目的支持！
-
-<img height=25% width=25% src="https://raw.githubusercontent.com/CarmJos/CarmJos/main/img/donate-code.jpg"  alt=""/>
 
 ## 开源协议
 
