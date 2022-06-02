@@ -11,7 +11,7 @@ on:
     types: [ published ]
 
 jobs:
-  gh-deploy:
+  packages-deploy:
     name: "Publish Project (GitHub Packages)"
     runs-on: ubuntu-latest
     steps:
@@ -28,14 +28,63 @@ jobs:
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
           gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
 
-      - name: "Maven Deploy With Javadoc"
+      - name: "Packages Deploy"
         run: mvn -B -Pgithub deploy --file pom.xml -DskipTests
         env:
           MAVEN_USERNAME: ${{ github.repository_owner }}
           MAVEN_TOKEN: ${{secrets.GITHUB_TOKEN}}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
-      - name: "Copy Javadoc to Location"
+  central-deploy:
+    name: "Deploy Project (Central Repository)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Set up JDK"
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          cache: maven
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
+
+      - name: "Central Deploy"
+        run: mvn -B -Possrh deploy --file pom.xml -DskipTests
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USER }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASS }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+  github-deploy:
+    name: "Deploy Project (GitHub Repository)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Set up JDK"
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          cache: maven
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
+
+      - name: "Maven Deploy"
+        run: mvn -B -Plocal deploy --file pom.xml -DskipTests
+        env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+      - name: "Copy artifacts"
+        run: |
+          rm -rf deploy
+          mkdir -vp deploy
+          cp -vrf $HOME/local-deploy/* deploy/
+
+      - name: "Copy Javadoc"
         run: |
           rm -rf docs
           mkdir -vp docs
@@ -67,82 +116,7 @@ jobs:
           git config --global user.name '${{ github.repository_owner }}'
           git config --global user.email '${{ github.repository_owner }}@users.noreply.github.com'
 
-      - name: "Commit documentations"
-        run: |
-          cd docs
-          git init
-          git remote add origin git@github.com:${{ github.repository_owner }}/${{ github.event.repository.name }}.git
-          git checkout -b gh-pages
-          git add -A
-          git commit -m "API Document generated."
-
-      - name: "Push javadocs"
-        run: |
-          cd docs
-          git push origin HEAD:gh-pages --force
-
-  central-deploy:
-    name: "Deploy Project (Central Repository)"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: "Set up JDK"
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-          cache: maven
-          server-id: ossrh
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
-          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
-
-      - name: "Central Deploy"
-        run: mvn -B -Possrh deploy --file pom.xml -DskipTests
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USER }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASS }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-
-  local-deploy:
-    name: "Deploy Project (GitHub Repository)"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: "Set up JDK"
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-          cache: maven
-          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
-
-      - name: "Maven Deploy"
-        run: mvn -B -Plocal deploy --file pom.xml -DskipTests
-        env:
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-
-      - name: "Copy artifacts"
-        run: |
-          rm -rf deploy
-          mkdir -vp deploy
-          cp -vrf $HOME/local-deploy/* deploy/
-
-      - name: "Configure Git"
-        env:
-          DEPLOY_PRI: ${{secrets.DEPLOY_PRI}}
-        run: |
-          sudo timedatectl set-timezone "Asia/Shanghai"
-          mkdir -p ~/.ssh/
-          echo "$DEPLOY_PRI" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          git config --global user.name '${{ github.repository_owner }}'
-          git config --global user.email '${{ github.repository_owner }}@users.noreply.github.com'
-
-      - name: "Commit files"
+      - name: "Commit&Push repository files"
         run: |
           cd deploy
           git init
@@ -150,8 +124,14 @@ jobs:
           git checkout -b repo
           git add -A
           git commit -m "Maven project deployment."
-
-      - name: "Push files"
-        run: |
-          cd deploy
           git push origin HEAD:repo --force
+
+      - name: "Commit&Push documentations"
+        run: |
+          cd docs
+          git init
+          git remote add origin git@github.com:${{ github.repository_owner }}/${{ github.event.repository.name }}.git
+          git checkout -b gh-pages
+          git add -A
+          git commit -m "API documentation deployment."
+          git push origin HEAD:gh-pages --force
