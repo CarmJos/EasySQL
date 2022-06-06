@@ -16,6 +16,11 @@ public class QueryFunctionTest extends TestHandler {
                 .orderBy("id", false)
                 .setLimit(1)
                 .build().executeFunction(query -> {
+                    try {
+                        Thread.sleep(1000L);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     if (!query.getResultSet().next()) return -1;
                     else return query.getResultSet().getInt("id");
                 });

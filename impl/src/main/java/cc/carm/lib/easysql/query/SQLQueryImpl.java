@@ -8,22 +8,23 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.concurrent.TimeUnit;
 
 public class SQLQueryImpl implements SQLQuery {
 
     protected final long executeTime;
 
     protected final SQLManagerImpl sqlManager;
-    final Connection connection;
-    final Statement statement;
-    final ResultSet resultSet;
+    protected final Connection connection;
+    protected final Statement statement;
+    protected final ResultSet resultSet;
     protected QueryActionImpl queryAction;
 
     public SQLQueryImpl(
             SQLManagerImpl sqlManager, QueryActionImpl queryAction,
             Connection connection, Statement statement, ResultSet resultSet
     ) {
-        this(sqlManager, queryAction, connection, statement, resultSet, System.currentTimeMillis());
+        this(sqlManager, queryAction, connection, statement, resultSet, System.nanoTime());
     }
 
     public SQLQueryImpl(
@@ -40,8 +41,8 @@ public class SQLQueryImpl implements SQLQuery {
     }
 
     @Override
-    public long getExecuteTime() {
-        return this.executeTime;
+    public long getExecuteTime(TimeUnit timeUnit) {
+        return timeUnit.convert(this.executeTime, TimeUnit.NANOSECONDS);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class SQLQueryImpl implements SQLQuery {
 
             if (getManager().isDebugMode()) {
                 try {
-                    getManager().getDebugHandler().afterQuery(this, getExecuteTime(), System.currentTimeMillis());
+                    getManager().getDebugHandler().afterQuery(this, getExecuteTime(TimeUnit.NANOSECONDS), System.nanoTime());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

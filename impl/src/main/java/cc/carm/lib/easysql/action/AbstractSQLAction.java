@@ -10,35 +10,36 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractSQLAction<T> implements SQLAction<T> {
 
     protected final @NotNull String sqlContent;
     private final @NotNull SQLManagerImpl sqlManager;
     private final @NotNull UUID uuid;
-    private final long createTime;
+    private final long createNanoTime;
 
     public AbstractSQLAction(@NotNull SQLManagerImpl manager, @NotNull String sql) {
-        this(manager, sql, System.currentTimeMillis());
+        this(manager, sql, System.nanoTime());
     }
 
     public AbstractSQLAction(@NotNull SQLManagerImpl manager, @NotNull String sql, @NotNull UUID uuid) {
-        this(manager, sql, uuid, System.currentTimeMillis());
+        this(manager, sql, uuid, System.nanoTime());
     }
 
-    public AbstractSQLAction(@NotNull SQLManagerImpl manager, @NotNull String sql, long createTime) {
-        this(manager, sql, UUID.randomUUID(), createTime);
+    public AbstractSQLAction(@NotNull SQLManagerImpl manager, @NotNull String sql, long createNanoTime) {
+        this(manager, sql, UUID.randomUUID(), createNanoTime);
     }
 
     public AbstractSQLAction(@NotNull SQLManagerImpl manager, @NotNull String sql,
-                             @NotNull UUID uuid, long createTime) {
+                             @NotNull UUID uuid, long createNanoTime) {
         Objects.requireNonNull(manager);
         Objects.requireNonNull(sql);
         Objects.requireNonNull(uuid);
         this.sqlManager = manager;
         this.sqlContent = sql;
         this.uuid = uuid;
-        this.createTime = createTime;
+        this.createNanoTime = createNanoTime;
     }
 
 
@@ -53,8 +54,8 @@ public abstract class AbstractSQLAction<T> implements SQLAction<T> {
     }
 
     @Override
-    public long getCreateTime() {
-        return this.createTime;
+    public long getCreateTime(TimeUnit unit) {
+        return unit.convert(createNanoTime, TimeUnit.NANOSECONDS);
     }
 
     @Override

@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * SQLAction 是用于承载SQL语句并进行处理、返回的基本类。
@@ -49,11 +50,23 @@ public interface SQLAction<T> {
     @NotNull String getShortID();
 
     /**
-     * 得到该Action的创建时间
+     * 得到该Action的创建时间。
+     * <br>注意，此处获得的时间非时间戳毫秒数，仅用于计算耗时。
      *
+     * @return 创建时间 (毫秒)
+     */
+    default long getCreateTime() {
+        return getCreateTime(TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * 得到该Action的创建时间
+     * <br>注意，此处获得的时间非时间戳毫秒数，仅用于计算耗时。
+     *
+     * @param unit 时间单位
      * @return 创建时间
      */
-    long getCreateTime();
+    long getCreateTime(TimeUnit unit);
 
     /**
      * 得到该Action所要执行的源SQL语句

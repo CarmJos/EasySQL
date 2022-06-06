@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 异常处理器。
@@ -30,11 +31,11 @@ public interface SQLDebugHandler {
     /**
      * 该方法将在 {@link SQLQuery#close()} 执行后调用。
      *
-     * @param query       {@link SQLQuery} 对象
-     * @param executeTime 该次查询开始执行的时间
-     * @param closeTime   该次查询彻底关闭的时间
+     * @param query           {@link SQLQuery} 对象
+     * @param executeNanoTime 该次查询开始执行的时间 (单位：纳秒)
+     * @param closeNanoTime   该次查询彻底关闭的时间 (单位：纳秒)
      */
-    void afterQuery(@NotNull SQLQuery query, long executeTime, long closeTime);
+    void afterQuery(@NotNull SQLQuery query, long executeNanoTime, long closeNanoTime);
 
     default String parseParams(@Nullable Object[] params) {
         if (params == null) return "<#NULL>";
@@ -51,40 +52,46 @@ public interface SQLDebugHandler {
     @SuppressWarnings("DuplicatedCode")
     static SQLDebugHandler defaultHandler(Logger logger) {
         return new SQLDebugHandler() {
+
             @Override
             public void beforeExecute(@NotNull SQLAction<?> action, @NotNull List<@Nullable Object[]> params) {
                 logger.info("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
                 logger.info("┣# ActionUUID: {}", action.getActionUUID());
-                logger.info("┣# ActionType: {}", action.getClass().getName());
+                logger.info("┣# ActionType: {}", action.getClass().getSimpleName());
                 if (action.getSQLContents().size() == 1) {
                     logger.info("┣# SQLContent: {}", action.getSQLContents().get(0));
                 } else {
                     logger.info("┣# SQLContents: ");
                     int i = 0;
                     for (String sqlContent : action.getSQLContents()) {
-                        logger.info("┃ [{}] {}", ++i, sqlContent);
+                        logger.info("┃ - [{}] {}", ++i, sqlContent);
                     }
                 }
                 if (params.size() == 1) {
                     Object[] param = params.get(0);
-                    logger.info("┣# SQLParams: {}", parseParams(param));
+                    if (param != null) {
+                        logger.info("┣# SQLParam: {}", parseParams(param));
+                    }
                 } else if (params.size() > 1) {
                     logger.info("┣# SQLParams: ");
                     int i = 0;
                     for (Object[] param : params) {
-                        logger.info("┃ [{}] {}", ++i, parseParams(param));
+                        logger.info("┃ - [{}] {}", ++i, parseParams(param));
                     }
                 }
-                logger.info("┣# createTime: {}", action.getCreateTime());
+                logger.info("┣# CreateTime: {}", action.getCreateTime(TimeUnit.MILLISECONDS));
                 logger.info("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             }
 
             @Override
-            public void afterQuery(@NotNull SQLQuery query, long executeTime, long closeTime) {
+            public void afterQuery(@NotNull SQLQuery query, long executeNanoTime, long closeNanoTime) {
                 logger.info("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
                 logger.info("┣# ActionUUID: {}", query.getAction().getActionUUID());
                 logger.info("┣# SQLContent: {}", query.getSQLContent());
-                logger.info("┣# executeCost: {} ms", (closeTime - executeTime));
+                logger.info("┣# CloseTime: {}  (cost {} ms)",
+                        TimeUnit.NANOSECONDS.toMillis(closeNanoTime),
+                        ((double) (closeNanoTime - executeNanoTime) / 1000000)
+                );
                 logger.info("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             }
         };

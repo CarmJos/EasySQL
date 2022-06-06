@@ -34,7 +34,7 @@ public class EasySQLTest {
         tests.add(new SQLUpdateBatchTests());
         tests.add(new SQLUpdateReturnKeysTest());
         tests.add(new QueryFunctionTest());
-        tests.add(new DeleteTest());
+//        tests.add(new DeleteTest());
 
         print("准备进行测试...");
 

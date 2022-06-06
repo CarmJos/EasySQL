@@ -35,12 +35,10 @@ public class QueryActionImpl extends AbstractSQLAction<SQLQuery> implements Quer
         }
 
         try {
-            long executeTime = System.currentTimeMillis();
             SQLQueryImpl query = new SQLQueryImpl(
                     getManager(), this,
                     connection, statement,
-                    statement.executeQuery(getSQLContent()),
-                    executeTime
+                    statement.executeQuery(getSQLContent())
             );
             getManager().getActiveQuery().put(getActionUUID(), query);
 

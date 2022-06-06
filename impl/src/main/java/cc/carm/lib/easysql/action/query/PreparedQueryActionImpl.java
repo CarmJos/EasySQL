@@ -51,7 +51,7 @@ public class PreparedQueryActionImpl extends QueryActionImpl implements Prepared
     @Override
     public @NotNull SQLQueryImpl execute() throws SQLException {
         debugMessage(Collections.singletonList(params));
-        
+
         Connection connection = getManager().getConnection();
         PreparedStatement preparedStatement;
         try {
@@ -67,12 +67,10 @@ public class PreparedQueryActionImpl extends QueryActionImpl implements Prepared
         }
 
         try {
-            long executeTime = System.currentTimeMillis();
             SQLQueryImpl query = new SQLQueryImpl(
                     getManager(), this,
                     connection, preparedStatement,
-                    preparedStatement.executeQuery(),
-                    executeTime
+                    preparedStatement.executeQuery()
             );
             getManager().getActiveQuery().put(getActionUUID(), query);
             return query;
