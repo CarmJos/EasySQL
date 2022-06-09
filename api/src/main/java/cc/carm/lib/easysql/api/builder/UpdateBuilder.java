@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 
-public interface UpdateBuilder extends ConditionalBuilder<UpdateBuilder, SQLAction<Long>> {
+public interface UpdateBuilder extends ConditionalBuilder<UpdateBuilder, SQLAction<Integer>> {
 
     String getTableName();
 

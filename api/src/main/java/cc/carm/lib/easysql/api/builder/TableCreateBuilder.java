@@ -21,7 +21,7 @@ public interface TableCreateBuilder extends SQLBuilder {
      *
      * @return {@link SQLUpdateAction}
      */
-    SQLUpdateAction build();
+    SQLUpdateAction<Integer> build();
 
     @NotNull String getTableName();
 

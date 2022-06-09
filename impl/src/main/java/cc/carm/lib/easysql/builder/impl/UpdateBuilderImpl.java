@@ -13,7 +13,7 @@ import java.util.*;
 import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
 
 public class UpdateBuilderImpl
-        extends AbstractConditionalBuilder<UpdateBuilder, SQLAction<Long>>
+        extends AbstractConditionalBuilder<UpdateBuilder, SQLAction<Integer>>
         implements UpdateBuilder {
 
     protected final @NotNull String tableName;
@@ -27,7 +27,7 @@ public class UpdateBuilderImpl
     }
 
     @Override
-    public PreparedSQLUpdateAction build() {
+    public PreparedSQLUpdateAction<Integer> build() {
 
         StringBuilder sqlBuilder = new StringBuilder();
 
@@ -47,7 +47,7 @@ public class UpdateBuilderImpl
 
         if (limit > 0) sqlBuilder.append(" ").append(buildLimitSQL());
 
-        return new PreparedSQLUpdateActionImpl(getManager(), sqlBuilder.toString(), allParams);
+        return new PreparedSQLUpdateActionImpl<>(getManager(), Integer.class, sqlBuilder.toString(), allParams);
     }
 
     @Override

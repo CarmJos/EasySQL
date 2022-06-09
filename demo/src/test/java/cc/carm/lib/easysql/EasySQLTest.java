@@ -8,6 +8,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
+import java.math.BigInteger;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -16,7 +17,6 @@ public class EasySQLTest {
 
     @Test
     public void onTest() {
-
         HikariConfig config = new HikariConfig();
         config.setDriverClassName("org.h2.Driver");
         config.setJdbcUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=MYSQL;");
@@ -30,9 +30,10 @@ public class EasySQLTest {
 //		tests.add(new TableAlterTest());
 //		tests.add(new TableRenameTest());
 //		tests.add(new QueryNotCloseTest());
-        tests.add(new QueryCloseTest());
+
         tests.add(new SQLUpdateBatchTests());
         tests.add(new SQLUpdateReturnKeysTest());
+        tests.add(new QueryCloseTest());
         tests.add(new QueryFunctionTest());
 //        tests.add(new DeleteTest());
 

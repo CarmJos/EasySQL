@@ -28,6 +28,7 @@ public class SQLUpdateBatchTests extends TestHandler {
         List<Long> updates = sqlManager.createInsertBatch("test_user_table")
                 .setColumnNames("uuid", "username", "age")
                 .setAllParams(generateParams())
+                .returnGeneratedKeys(Long.class)
                 .execute();
 
         System.out.println("changes " + Arrays.toString(updates.toArray()));

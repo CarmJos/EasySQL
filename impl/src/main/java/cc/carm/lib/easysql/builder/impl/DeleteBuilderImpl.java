@@ -12,7 +12,7 @@ import java.util.Objects;
 import static cc.carm.lib.easysql.api.SQLBuilder.withBackQuote;
 
 public class DeleteBuilderImpl
-        extends AbstractConditionalBuilder<DeleteBuilder, SQLAction<Long>>
+        extends AbstractConditionalBuilder<DeleteBuilder, SQLAction<Integer>>
         implements DeleteBuilder {
 
     protected final String tableName;
@@ -24,7 +24,7 @@ public class DeleteBuilderImpl
     }
 
     @Override
-    public PreparedSQLUpdateAction build() {
+    public PreparedSQLUpdateAction<Integer> build() {
 
         StringBuilder sqlBuilder = new StringBuilder();
 
@@ -33,9 +33,9 @@ public class DeleteBuilderImpl
         if (hasConditions()) sqlBuilder.append(" ").append(buildConditionSQL());
         if (limit > 0) sqlBuilder.append(" ").append(buildLimitSQL());
 
-        return new PreparedSQLUpdateActionImpl(
-                getManager(), sqlBuilder.toString(),
-                hasConditionParams() ? getConditionParams() : null
+        return new PreparedSQLUpdateActionImpl<>(
+                getManager(), Integer.class, sqlBuilder.toString(),
+                (hasConditionParams() ? getConditionParams() : null)
         );
     }
 

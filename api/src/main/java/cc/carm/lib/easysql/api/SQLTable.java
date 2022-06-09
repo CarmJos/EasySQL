@@ -25,8 +25,10 @@ public abstract class SQLTable {
     public static @NotNull SQLTable of(@NotNull String tableName, @Nullable SQLHandler<TableCreateBuilder> table) {
         return new SQLTable(tableName) {
             @Override
-            public boolean create(SQLManager sqlManager) throws SQLException {
+            public boolean create(@NotNull SQLManager sqlManager, String tablePrefix) throws SQLException {
                 if (this.manager == null) this.manager = sqlManager;
+                this.tablePrefix = tablePrefix;
+
                 TableCreateBuilder tableBuilder = sqlManager.createTable(getTableName());
                 if (table != null) table.accept(tableBuilder);
                 return tableBuilder.build().executeFunction(l -> l > 0, false);
@@ -48,6 +50,7 @@ public abstract class SQLTable {
 
     private final @NotNull String tableName;
 
+    protected String tablePrefix;
     protected SQLManager manager;
 
     /**
@@ -60,17 +63,22 @@ public abstract class SQLTable {
     }
 
     public @NotNull String getTableName() {
-        return tableName;
+        return (tablePrefix != null ? tablePrefix : "") + tableName;
     }
 
     /**
      * 使用指定 SQLManager 进行本示例的初始化。
      *
-     * @param sqlManager {@link SQLManager}
+     * @param sqlManager  {@link SQLManager}
+     * @param tablePrefix 表名前缀
      * @return 本表是否为首次创建
      * @throws SQLException 出现任何错误时抛出
      */
-    public abstract boolean create(SQLManager sqlManager) throws SQLException;
+    public abstract boolean create(@NotNull SQLManager sqlManager, @Nullable String tablePrefix) throws SQLException;
+
+    public boolean create(@NotNull SQLManager sqlManager) throws SQLException {
+        return create(manager, null);
+    }
 
     public @NotNull TableQueryBuilder createQuery(@NotNull SQLManager sqlManager) {
         return sqlManager.createQuery().inTable(getTableName());
@@ -97,38 +105,38 @@ public abstract class SQLTable {
     }
 
 
-    public @NotNull InsertBuilder<PreparedSQLUpdateAction> createInsert() {
+    public @NotNull InsertBuilder<PreparedSQLUpdateAction<Integer>> createInsert() {
         return createInsert(this.manager);
     }
 
-    public @NotNull InsertBuilder<PreparedSQLUpdateAction> createInsert(@NotNull SQLManager sqlManager) {
+    public @NotNull InsertBuilder<PreparedSQLUpdateAction<Integer>> createInsert(@NotNull SQLManager sqlManager) {
         return sqlManager.createInsert(getTableName());
     }
 
 
-    public @NotNull InsertBuilder<PreparedSQLUpdateBatchAction> createInsertBatch() {
+    public @NotNull InsertBuilder<PreparedSQLUpdateBatchAction<Integer>> createInsertBatch() {
         return createInsertBatch(this.manager);
     }
 
-    public @NotNull InsertBuilder<PreparedSQLUpdateBatchAction> createInsertBatch(@NotNull SQLManager sqlManager) {
+    public @NotNull InsertBuilder<PreparedSQLUpdateBatchAction<Integer>> createInsertBatch(@NotNull SQLManager sqlManager) {
         return sqlManager.createInsertBatch(getTableName());
     }
 
 
-    public @NotNull ReplaceBuilder<PreparedSQLUpdateAction> createReplace() {
+    public @NotNull ReplaceBuilder<PreparedSQLUpdateAction<Integer>> createReplace() {
         return createReplace(this.manager);
     }
 
-    public @NotNull ReplaceBuilder<PreparedSQLUpdateAction> createReplace(@NotNull SQLManager sqlManager) {
+    public @NotNull ReplaceBuilder<PreparedSQLUpdateAction<Integer>> createReplace(@NotNull SQLManager sqlManager) {
         return sqlManager.createReplace(getTableName());
     }
 
 
-    public @NotNull ReplaceBuilder<PreparedSQLUpdateBatchAction> createReplaceBatch() {
+    public @NotNull ReplaceBuilder<PreparedSQLUpdateBatchAction<Integer>> createReplaceBatch() {
         return createReplaceBatch(this.manager);
     }
 
-    public @NotNull ReplaceBuilder<PreparedSQLUpdateBatchAction> createReplaceBatch(@NotNull SQLManager sqlManager) {
+    public @NotNull ReplaceBuilder<PreparedSQLUpdateBatchAction<Integer>> createReplaceBatch(@NotNull SQLManager sqlManager) {
         return sqlManager.createReplaceBatch(getTableName());
     }
 

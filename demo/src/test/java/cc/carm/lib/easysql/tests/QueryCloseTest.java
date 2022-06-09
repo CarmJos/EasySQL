@@ -4,6 +4,7 @@ import cc.carm.lib.easysql.TestHandler;
 import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.SQLQuery;
 
+import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -24,16 +25,10 @@ public class QueryCloseTest extends TestHandler {
 
                 System.out.printf(
                         "id: %d username: %s%n",
-                        resultSet.getInt("id"),
+                        resultSet.getObject("id", BigInteger.class),
                         resultSet.getString("username")
                 );
 
-            }
-
-            try {
-                Thread.sleep(500L);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
             }
         }
 

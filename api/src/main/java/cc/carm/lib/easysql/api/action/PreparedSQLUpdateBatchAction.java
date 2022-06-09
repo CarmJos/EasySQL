@@ -4,7 +4,7 @@ import cc.carm.lib.easysql.api.SQLAction;
 
 import java.util.List;
 
-public interface PreparedSQLUpdateBatchAction extends SQLAction<List<Long>> {
+public interface PreparedSQLUpdateBatchAction<T extends Number> extends SQLAction<List<T>> {
 
     /**
      * 设定多组SQL语句中所有 ? 对应的参数
@@ -12,7 +12,7 @@ public interface PreparedSQLUpdateBatchAction extends SQLAction<List<Long>> {
      * @param allParams 所有参数内容
      * @return {@link PreparedSQLUpdateBatchAction}
      */
-    PreparedSQLUpdateBatchAction setAllParams(Iterable<Object[]> allParams);
+    PreparedSQLUpdateBatchAction<T> setAllParams(Iterable<Object[]> allParams);
 
     /**
      * 添加一组SQL语句中所有 ? 对应的参数
@@ -20,37 +20,22 @@ public interface PreparedSQLUpdateBatchAction extends SQLAction<List<Long>> {
      * @param params 参数内容
      * @return {@link PreparedSQLUpdateBatchAction}
      */
-    PreparedSQLUpdateBatchAction addParamsBatch(Object... params);
-
-    /**
-     * 设定自增主键的序列
-     *
-     * @param keyColumnIndex 自增主键的序列
-     *                       <br>若该值 ＞ 0，则 {@link #execute()} 返回自增主键数值
-     *                       <br>若该值 ≤ 0，则 {@link #execute()} 返回变更的行数
-     * @return {@link PreparedSQLUpdateBatchAction}
-     * @see #setReturnGeneratedKeys(boolean)
-     */
-    @Deprecated
-    default PreparedSQLUpdateBatchAction setKeyIndex(int keyColumnIndex) {
-        return setReturnGeneratedKeys(keyColumnIndex > 0);
-    }
+    PreparedSQLUpdateBatchAction<T> addParamsBatch(Object... params);
 
     /**
      * 设定该操作返回自增键序列。
      *
-     * @return {@link PreparedSQLUpdateBatchAction}
+     * @return {@link SQLUpdateAction}
      */
-    default PreparedSQLUpdateBatchAction returnGeneratedKeys() {
-        return setReturnGeneratedKeys(true);
-    }
+    PreparedSQLUpdateBatchAction<T> returnGeneratedKeys();
 
     /**
-     * 设定该操作是否返回自增键序列。
+     * 设定该操作返回自增键序列。
      *
-     * @param returnGeneratedKey 是否返回自增键序列
-     * @return {@link PreparedSQLUpdateBatchAction}
+     * @param keyTypeClass 自增序列的数字类型
+     * @param <N>          自增键序列类型 {@link Number}
+     * @return {@link SQLUpdateAction}
      */
-    PreparedSQLUpdateBatchAction setReturnGeneratedKeys(boolean returnGeneratedKey);
+    <N extends Number> PreparedSQLUpdateBatchAction<N> returnGeneratedKeys(Class<N> keyTypeClass);
 
 }

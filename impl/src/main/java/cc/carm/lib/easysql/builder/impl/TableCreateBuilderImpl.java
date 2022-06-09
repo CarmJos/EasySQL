@@ -75,7 +75,7 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
     }
 
     @Override
-    public SQLUpdateAction build() {
+    public SQLUpdateAction<Integer> build() {
         StringBuilder createSQL = new StringBuilder();
         createSQL.append("CREATE TABLE IF NOT EXISTS ").append(withBackQuote(tableName));
         createSQL.append("(");
@@ -94,7 +94,7 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
             createSQL.append(" COMMENT ").append(withQuote(tableComment));
         }
 
-        return new SQLUpdateActionImpl(getManager(), createSQL.toString());
+        return new SQLUpdateActionImpl<>(getManager(), Integer.class, createSQL.toString());
     }
 
     @Override

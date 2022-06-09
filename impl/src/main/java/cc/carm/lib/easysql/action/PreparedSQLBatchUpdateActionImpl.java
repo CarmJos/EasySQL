@@ -12,22 +12,33 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class PreparedSQLBatchUpdateActionImpl
-        extends AbstractSQLAction<List<Long>>
-        implements PreparedSQLUpdateBatchAction {
+public class PreparedSQLBatchUpdateActionImpl<T extends Number>
+        extends AbstractSQLAction<List<T>>
+        implements PreparedSQLUpdateBatchAction<T> {
 
     boolean returnKeys = false;
-    @NotNull List<Object[]> allParams;
+    @NotNull List<Object[]> allParams = new ArrayList<>();
 
-    public PreparedSQLBatchUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
+    protected final @NotNull Class<T> numberClass;
+
+    public PreparedSQLBatchUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
+                                            @NotNull String sql) {
         super(manager, sql);
+        this.numberClass = numberClass;
         this.allParams = new ArrayList<>();
     }
 
+    public PreparedSQLBatchUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
+                                            @NotNull UUID uuid, @NotNull String sql) {
+        super(manager, sql, uuid);
+        this.numberClass = numberClass;
+    }
+
     @Override
-    public PreparedSQLUpdateBatchAction setAllParams(Iterable<Object[]> allParams) {
+    public PreparedSQLBatchUpdateActionImpl<T> setAllParams(Iterable<Object[]> allParams) {
         List<Object[]> paramsList = new ArrayList<>();
         allParams.forEach(paramsList::add);
         this.allParams = paramsList;
@@ -35,35 +46,40 @@ public class PreparedSQLBatchUpdateActionImpl
     }
 
     @Override
-    public PreparedSQLUpdateBatchAction addParamsBatch(Object... params) {
+    public PreparedSQLBatchUpdateActionImpl<T> addParamsBatch(Object... params) {
         this.allParams.add(params);
         return this;
     }
 
     @Override
-    public PreparedSQLUpdateBatchAction setReturnGeneratedKeys(boolean returnGeneratedKey) {
-        this.returnKeys = returnGeneratedKey;
+    public PreparedSQLBatchUpdateActionImpl<T> returnGeneratedKeys() {
+        this.returnKeys = true;
         return this;
     }
 
     @Override
-    public @NotNull List<Long> execute() throws SQLException {
+    public <N extends Number> PreparedSQLBatchUpdateActionImpl<N> returnGeneratedKeys(Class<N> keyTypeClass) {
+        return new PreparedSQLBatchUpdateActionImpl<>(getManager(), keyTypeClass, getActionUUID(), getSQLContent())
+                .setAllParams(allParams).returnGeneratedKeys();
+    }
+
+    @Override
+    public @NotNull List<T> execute() throws SQLException {
         debugMessage(allParams);
 
         try (Connection connection = getManager().getConnection()) {
             try (PreparedStatement statement = StatementUtil.createPrepareStatementBatch(
                     connection, getSQLContent(), allParams, returnKeys
             )) {
-
                 int[] executed = statement.executeBatch();
 
                 if (!returnKeys) {
-                    return Arrays.stream(executed).mapToLong(Long::valueOf).boxed().collect(Collectors.toList());
+                    return Arrays.stream(executed).mapToObj(numberClass::cast).collect(Collectors.toList());
                 } else {
                     try (ResultSet resultSet = statement.getGeneratedKeys()) {
-                        List<Long> generatedKeys = new ArrayList<>();
+                        List<T> generatedKeys = new ArrayList<>();
                         while (resultSet.next()) {
-                            generatedKeys.add(resultSet.getLong(1));
+                            generatedKeys.add(resultSet.getObject(1, numberClass));
                         }
                         return generatedKeys;
                     }

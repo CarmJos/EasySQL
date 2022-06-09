@@ -110,7 +110,7 @@ public interface SQLManager {
      * @return 更新的行数
      * @see SQLUpdateAction
      */
-    @Nullable Long executeSQL(String sql);
+    @Nullable Integer executeSQL(String sql);
 
     /**
      * 执行一条不需要返回结果的预处理SQL更改(UPDATE、REPLACE、DELETE)
@@ -120,7 +120,7 @@ public interface SQLManager {
      * @return 更新的行数
      * @see PreparedSQLUpdateAction
      */
-    @Nullable Long executeSQL(String sql, Object[] params);
+    @Nullable Integer executeSQL(String sql, Object[] params);
 
     /**
      * 执行多条不需要返回结果的SQL更改(UPDATE、REPLACE、DELETE)
@@ -130,7 +130,7 @@ public interface SQLManager {
      * @return 对应参数返回的行数
      * @see PreparedSQLUpdateBatchAction
      */
-    @Nullable List<Long> executeSQLBatch(String sql, Iterable<Object[]> paramsBatch);
+    @Nullable List<Integer> executeSQLBatch(String sql, Iterable<Object[]> paramsBatch);
 
 
     /**
@@ -181,7 +181,7 @@ public interface SQLManager {
      * @param tableName 目标表名
      * @return {@link InsertBuilder}
      */
-    InsertBuilder<PreparedSQLUpdateAction> createInsert(@NotNull String tableName);
+    InsertBuilder<PreparedSQLUpdateAction<Integer>> createInsert(@NotNull String tableName);
 
     /**
      * 创建支持多组数据的插入操作
@@ -189,7 +189,7 @@ public interface SQLManager {
      * @param tableName 目标表名
      * @return {@link InsertBuilder}
      */
-    InsertBuilder<PreparedSQLUpdateBatchAction> createInsertBatch(@NotNull String tableName);
+    InsertBuilder<PreparedSQLUpdateBatchAction<Integer>> createInsertBatch(@NotNull String tableName);
 
     /**
      * 创建一条替换操作
@@ -197,7 +197,7 @@ public interface SQLManager {
      * @param tableName 目标表名
      * @return {@link ReplaceBuilder}
      */
-    ReplaceBuilder<PreparedSQLUpdateAction> createReplace(@NotNull String tableName);
+    ReplaceBuilder<PreparedSQLUpdateAction<Integer>> createReplace(@NotNull String tableName);
 
     /**
      * 创建支持多组数据的替换操作
@@ -205,7 +205,7 @@ public interface SQLManager {
      * @param tableName 目标表名
      * @return {@link ReplaceBuilder}
      */
-    ReplaceBuilder<PreparedSQLUpdateBatchAction> createReplaceBatch(@NotNull String tableName);
+    ReplaceBuilder<PreparedSQLUpdateBatchAction<Integer>> createReplaceBatch(@NotNull String tableName);
 
     /**
      * 创建更新操作
