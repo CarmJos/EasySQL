@@ -17,6 +17,7 @@ public interface PreparedSQLUpdateAction<T extends Number> extends SQLUpdateActi
      *
      * @param params 参数内容
      * @return {@link PreparedSQLUpdateAction}
+     * @since 0.4.0
      */
     PreparedSQLUpdateAction<T> setParams(@Nullable Iterable<Object> params);
 

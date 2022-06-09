@@ -18,6 +18,7 @@ public interface SQLUpdateAction<T extends Number> extends SQLAction<T> {
      * @param keyTypeClass 自增序列的数字类型
      * @param <N>          自增键序列类型 {@link Number}
      * @return {@link SQLUpdateAction}
+     * @since 0.4.0
      */
     <N extends Number> SQLUpdateAction<N> returnGeneratedKey(Class<N> keyTypeClass);
 

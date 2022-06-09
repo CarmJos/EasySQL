@@ -35,6 +35,7 @@ public interface PreparedSQLUpdateBatchAction<T extends Number> extends SQLActio
      * @param keyTypeClass 自增序列的数字类型
      * @param <N>          自增键序列类型 {@link Number}
      * @return {@link SQLUpdateAction}
+     * @since 0.4.0
      */
     <N extends Number> PreparedSQLUpdateBatchAction<N> returnGeneratedKeys(Class<N> keyTypeClass);
 

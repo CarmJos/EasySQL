@@ -6,23 +6,38 @@ import cc.carm.lib.easysql.tests.*;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jetbrains.annotations.NotNull;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.math.BigInteger;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class EasySQLTest {
 
+    protected SQLManager sqlManager;
 
-    @Test
-    public void onTest() {
+    @Before
+    public void initDatabase() {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName("org.h2.Driver");
         config.setJdbcUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=MYSQL;");
 
-        SQLManager sqlManager = new SQLManagerImpl(new HikariDataSource(config), "test");
-        sqlManager.setDebugMode(true);
+        this.sqlManager = new SQLManagerImpl(new HikariDataSource(config), "test");
+        this.sqlManager.setDebugMode(true);
+    }
+
+    @After
+    public void shutdownDatabase() {
+        if (sqlManager.getDataSource() instanceof HikariDataSource) {
+            //Close bee connection pool
+            ((HikariDataSource) sqlManager.getDataSource()).close();
+        }
+    }
+
+
+    @Test
+    public void onTest() {
 
         print("加载测试类...");
         Set<TestHandler> tests = new LinkedHashSet<>();
@@ -62,10 +77,6 @@ public class EasySQLTest {
                 success, (tests.size() - success)
         );
 
-        if (sqlManager.getDataSource() instanceof HikariDataSource) {
-            //Close bee connection pool
-            ((HikariDataSource) sqlManager.getDataSource()).close();
-        }
 
     }
 
