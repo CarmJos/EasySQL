@@ -17,6 +17,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Supplier;
 
 /**
@@ -29,6 +31,23 @@ public interface SQLManager {
     Logger getLogger();
 
     boolean isDebugMode();
+
+
+    /**
+     * 获取用于执行 {@link SQLAction#executeAsync()} 的线程池。
+     * <br> 默认线程池为 {@link ThreadPoolExecutor} ,大小为 3。
+     *
+     * @return {@link ExecutorService}
+     */
+    @NotNull ExecutorService getExecutorPool();
+
+    /**
+     * 设定用于执行 {@link SQLAction#executeAsync()} 的线程池。
+     *
+     * @param executorPool {@link ExecutorService}
+     */
+    void setExecutorPool(@NotNull ExecutorService executorPool);
+
 
     /**
      * 设定是否启用调试模式。

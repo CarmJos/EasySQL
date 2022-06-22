@@ -18,7 +18,7 @@ public class EasySQLTest {
     protected SQLManager sqlManager;
 
     @Before
-    public void initDatabase() {
+    public void initialize() {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName("org.h2.Driver");
         config.setJdbcUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=MYSQL;");
@@ -28,7 +28,7 @@ public class EasySQLTest {
     }
 
     @After
-    public void shutdownDatabase() {
+    public void shutdown() {
         if (sqlManager.getDataSource() instanceof HikariDataSource) {
             //Close bee connection pool
             ((HikariDataSource) sqlManager.getDataSource()).close();
@@ -50,6 +50,7 @@ public class EasySQLTest {
         tests.add(new SQLUpdateReturnKeysTest());
         tests.add(new QueryCloseTest());
         tests.add(new QueryFunctionTest());
+        tests.add(new QueryAsyncTest());
 //        tests.add(new DeleteTest());
 
         print("准备进行测试...");
