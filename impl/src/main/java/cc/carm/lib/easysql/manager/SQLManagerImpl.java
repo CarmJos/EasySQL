@@ -89,8 +89,12 @@ public class SQLManagerImpl implements SQLManager {
         return LOGGER;
     }
 
-    public ExecutorService getExecutorPool() {
+    public @NotNull ExecutorService getExecutorPool() {
         return executorPool;
+    }
+
+    public void setExecutorPool(@NotNull ExecutorService executorPool) {
+        this.executorPool = executorPool;
     }
 
     @Override

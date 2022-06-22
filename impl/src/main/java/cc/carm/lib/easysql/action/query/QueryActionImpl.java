@@ -53,10 +53,12 @@ public class QueryActionImpl extends AbstractSQLAction<SQLQuery> implements Quer
 
     @Override
     public void executeAsync(SQLHandler<SQLQuery> success, SQLExceptionHandler failure) {
-        try (SQLQueryImpl query = execute()) {
-            if (success != null) success.accept(query);
-        } catch (SQLException exception) {
-            handleException(failure, exception);
-        }
+        getManager().getExecutorPool().submit(() -> {
+            try (SQLQueryImpl query = execute()) {
+                if (success != null) success.accept(query);
+            } catch (SQLException exception) {
+                handleException(failure, exception);
+            }
+        });
     }
 }
