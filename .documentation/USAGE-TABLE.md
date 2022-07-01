@@ -10,6 +10,8 @@
 在 EasySQL 中，我们提供了一个简单快捷的数据库表创建工具 `TableCreateBuilder` 。
 基于该工具，又在后续版本中提供了 `SQLTable` 类用于快速针对指定表创建不同的数据库操作。
 
+_SQLTable同时提供了有SQLManager参数与无参的操作方法，其中无参方法将自动调用初始化时使用的SQLManager进行操作。_
+
 以下内容是我在许多项目中的使用方法，由于其 `便捷`、`易于管理` 且 `支持引用查询` ，我十分推荐您参考我的方案，并应用到自己的项目中。
 
 ### 实例项目: 
@@ -78,11 +80,9 @@ public enum DataTables {
 
 初始化后，我们便可以通过 `DataTables#get()` 方法获取对应表的 `NamedSQLTable` 实例，以进行 `createQuery()` 等操作。
 
-注意，NamedSQLTable同时提供了有SQLManager参数与无参的操作方法，其中无参方法将自动调用初始化时使用的SQLManager进行操作。
-
 ## 利用枚举类实现 SQLTable 进行操作
 
-这种方法相较于前者代码量稍多些，但无需在每次使用时调用 `DataTables#get()` 方法获取 NamedSQLTable 实例，代码上更为简介。
+这种方法相较于前者代码量稍多些，但无需在每次调用先通过 `DataTables#get()` 方法获取 NamedSQLTable 实例，代码上更为简洁。
 
 且可以通过重写 `getTableName()` 方法来自行规定表前缀。
 
