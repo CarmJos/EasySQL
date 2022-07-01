@@ -15,7 +15,7 @@ _SQLTable同时提供了有SQLManager参数与无参的操作方法，其中无�
 以下内容是我在许多项目中的使用方法，由于其 `便捷`、`易于管理` 且 `支持引用查询` ，我十分推荐您参考我的方案，并应用到自己的项目中。
 
 ### 实例项目: 
-- [QuickShop-Hikari (DataTables)](https://github.com/Ghost-chu/QuickShop-Hikari/blob/hikari/quickshop-bukkit/src/main/java/com/ghostchu/quickshop/database/DataTables1.java)
+- [QuickShop-Hikari (DataTables)](https://github.com/Ghost-chu/QuickShop-Hikari/blob/hikari/quickshop-bukkit/src/main/java/com/ghostchu/quickshop/database/DataTables.java)
 
 ## 利用 NamedSQLTable 快速创建枚举类以管理
 
@@ -148,7 +148,7 @@ public enum DataTables implements SQLTable {
     }
 
     public static void initialize(@NotNull SQLManager manager, @Nullable String tablePrefix) {
-        for (DataTables1 value : values()) {
+        for (DataTables value : values()) {
             try {
                 value.create(manager, tablePrefix);
             } catch (SQLException e) {
