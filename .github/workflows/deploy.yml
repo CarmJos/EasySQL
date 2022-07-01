@@ -83,14 +83,14 @@ jobs:
           rm -rf deploy
           mkdir -vp deploy
           cp -vrf $HOME/local-deploy/* deploy/
-          cp -vrf .documentation/REPOSITORY-README.md deploy/README.md
+          cp -vrf .documentation/repository/README.md deploy/README.md
 
       - name: "Copy Javadoc"
         run: |
           rm -rf docs
           mkdir -vp docs
           cp -vrf api/target/apidocs/* docs/
-          cp -vrf .documentation/JAVADOC-README.md docs/README.md
+          cp -vrf .documentation/javadoc/README.md docs/README.md
 
       - name: "Generate the Javadoc sitemap"
         id: sitemap

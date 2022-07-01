@@ -1,6 +1,6 @@
 > 本文档由 GitHub 用户 @Ghost-chu 创建。  
-> 本文撰写于 2022/02/09，适配 EasySQL 版本 `v0.3.6`。  
-> 本文基于 `EasySQL-HikariPool` 版本编写。
+> 本文撰写于 2022/02/09，适配 EasySQL 版本 `v0.3.6` **(部分接口已变更)**。  
+> 本文基于 `EasySQL-Hikari` 版本编写。
 
 # EasySQL - HikariPool 使用指南
 

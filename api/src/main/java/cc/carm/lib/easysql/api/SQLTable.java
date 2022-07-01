@@ -4,26 +4,28 @@ import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.builder.*;
 import cc.carm.lib.easysql.api.function.SQLHandler;
+import cc.carm.lib.easysql.api.table.NamedSQLTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 /**
  * SQLTable 基于 {@link TableCreateBuilder} 构建表，用于快速创建与该表相关的操作。
  * <ul>
- *  <li>1. 调用 {@link SQLTable#of(String, String[])} 方法创建一个 SQLTable 对象;</li>
- *  <li>2. 在应用初始化阶段调用 {@link SQLTable#create(SQLManager)} 方法初始化 SQLTable 对象;</li>
- *  <li>3. 获取已创建的{@link SQLTable} 实例，直接调用对应方法进行关于表的相关操作。</li>
+ *  <li>1. 调用 {@link NamedSQLTable#of(String, String[])} 方法创建一个 SQLTable 对象;</li>
+ *  <li>2. 在应用初始化阶段调用 {@link NamedSQLTable#create(SQLManager)} 方法初始化 SQLTable 对象;</li>
+ *  <li>3. 获取已创建的{@link NamedSQLTable} 实例，直接调用对应方法进行关于表的相关操作。</li>
  * </ul>
  *
  * @author CarmJos
  * @since 0.3.10
  */
-public abstract class SQLTable {
+public interface SQLTable {
 
-    public static @NotNull SQLTable of(@NotNull String tableName, @Nullable SQLHandler<TableCreateBuilder> table) {
-        return new SQLTable(tableName) {
+    static @NotNull NamedSQLTable of(@NotNull String tableName, @Nullable SQLHandler<TableCreateBuilder> table) {
+        return new NamedSQLTable(tableName) {
             @Override
             public boolean create(@NotNull SQLManager sqlManager, String tablePrefix) throws SQLException {
                 if (this.manager == null) this.manager = sqlManager;
@@ -36,108 +38,113 @@ public abstract class SQLTable {
         };
     }
 
-    public static @NotNull SQLTable of(@NotNull String tableName, @NotNull String[] columns) {
+    static @NotNull NamedSQLTable of(@NotNull String tableName, @NotNull String[] columns) {
         return of(tableName, columns, null);
     }
 
-    public static @NotNull SQLTable of(@NotNull String tableName,
-                                       @NotNull String[] columns, @Nullable String tableSettings) {
+    static @NotNull NamedSQLTable of(@NotNull String tableName,
+                                     @NotNull String[] columns, @Nullable String tableSettings) {
         return of(tableName, builder -> {
             builder.setColumns(columns);
             if (tableSettings != null) builder.setTableSettings(tableSettings);
         });
     }
 
-    private final @NotNull String tableName;
-
-    protected String tablePrefix;
-    protected SQLManager manager;
+    /**
+     * 以指定的 {@link SQLManager} 实例初始化并创建该表
+     *
+     * @param sqlManager {@link SQLManager} 实例
+     * @return 是否新创建了本表 (若已创建或创建失败则返回false)
+     * @throws SQLException 当数据库返回异常时抛出
+     */
+    boolean create(SQLManager sqlManager) throws SQLException;
 
     /**
-     * 请调用 {@link SQLTable} 下的静态方法进行对象的初始化。
+     * 得到 {@link #create(SQLManager)} 用于初始化本实例的 {@link SQLManager} 实例
      *
-     * @param tableName 该表的名称
+     * @return {@link SQLManager} 实例
      */
-    private SQLTable(@NotNull String tableName) {
-        this.tableName = tableName;
-    }
-
-    public @NotNull String getTableName() {
-        return (tablePrefix != null ? tablePrefix : "") + tableName;
-    }
+    @Nullable SQLManager getSQLManager();
 
     /**
-     * 使用指定 SQLManager 进行本示例的初始化。
+     * 得到本表表名，不得为空。
      *
-     * @param sqlManager  {@link SQLManager}
-     * @param tablePrefix 表名前缀
-     * @return 本表是否为首次创建
-     * @throws SQLException 出现任何错误时抛出
+     * @return 本表表名
      */
-    public abstract boolean create(@NotNull SQLManager sqlManager, @Nullable String tablePrefix) throws SQLException;
+    @NotNull String getTableName();
 
-    public boolean create(@NotNull SQLManager sqlManager) throws SQLException {
-        return create(manager, null);
+    default @NotNull TableQueryBuilder createQuery() {
+        return Optional.ofNullable(getSQLManager()).map(this::createQuery)
+                .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
     }
 
-    public @NotNull TableQueryBuilder createQuery(@NotNull SQLManager sqlManager) {
+    default @NotNull TableQueryBuilder createQuery(@NotNull SQLManager sqlManager) {
         return sqlManager.createQuery().inTable(getTableName());
     }
 
-    public @NotNull TableQueryBuilder createQuery() {
-        return createQuery(this.manager);
+    default @NotNull DeleteBuilder createDelete() {
+        return Optional.ofNullable(getSQLManager()).map(this::createDelete)
+                .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
     }
 
-    public @NotNull DeleteBuilder createDelete() {
-        return createDelete(this.manager);
-    }
-
-    public @NotNull DeleteBuilder createDelete(@NotNull SQLManager sqlManager) {
+    default @NotNull DeleteBuilder createDelete(@NotNull SQLManager sqlManager) {
         return sqlManager.createDelete(getTableName());
     }
 
-    public @NotNull UpdateBuilder createUpdate() {
-        return createUpdate(this.manager);
+    default @NotNull UpdateBuilder createUpdate() {
+        return Optional.ofNullable(getSQLManager()).map(this::createUpdate)
+                .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
     }
 
-    public @NotNull UpdateBuilder createUpdate(@NotNull SQLManager sqlManager) {
+    default @NotNull UpdateBuilder createUpdate(@NotNull SQLManager sqlManager) {
         return sqlManager.createUpdate(getTableName());
     }
 
-
-    public @NotNull InsertBuilder<PreparedSQLUpdateAction<Integer>> createInsert() {
-        return createInsert(this.manager);
+    default @NotNull InsertBuilder<PreparedSQLUpdateAction<Integer>> createInsert() {
+        return Optional.ofNullable(getSQLManager()).map(this::createInsert)
+                .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
     }
 
-    public @NotNull InsertBuilder<PreparedSQLUpdateAction<Integer>> createInsert(@NotNull SQLManager sqlManager) {
+    default @NotNull InsertBuilder<PreparedSQLUpdateAction<Integer>> createInsert(@NotNull SQLManager sqlManager) {
         return sqlManager.createInsert(getTableName());
     }
 
-
-    public @NotNull InsertBuilder<PreparedSQLUpdateBatchAction<Integer>> createInsertBatch() {
-        return createInsertBatch(this.manager);
+    default @NotNull InsertBuilder<PreparedSQLUpdateBatchAction<Integer>> createInsertBatch() {
+        return Optional.ofNullable(getSQLManager()).map(this::createInsertBatch)
+                .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
     }
 
-    public @NotNull InsertBuilder<PreparedSQLUpdateBatchAction<Integer>> createInsertBatch(@NotNull SQLManager sqlManager) {
+    default @NotNull InsertBuilder<PreparedSQLUpdateBatchAction<Integer>> createInsertBatch(@NotNull SQLManager sqlManager) {
         return sqlManager.createInsertBatch(getTableName());
     }
 
+    default @NotNull ReplaceBuilder<PreparedSQLUpdateAction<Integer>> createReplace() {
+        return Optional.ofNullable(getSQLManager()).map(this::createReplace)
+                .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
 
-    public @NotNull ReplaceBuilder<PreparedSQLUpdateAction<Integer>> createReplace() {
-        return createReplace(this.manager);
     }
 
-    public @NotNull ReplaceBuilder<PreparedSQLUpdateAction<Integer>> createReplace(@NotNull SQLManager sqlManager) {
-        return sqlManager.createReplace(getTableName());
+    default @NotNull ReplaceBuilder<PreparedSQLUpdateAction<Integer>> createReplace(@NotNull SQLManager sqlManager) {
+        return Optional.ofNullable(getSQLManager()).map(this::createReplace)
+                .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
     }
 
-
-    public @NotNull ReplaceBuilder<PreparedSQLUpdateBatchAction<Integer>> createReplaceBatch() {
-        return createReplaceBatch(this.manager);
+    default @NotNull ReplaceBuilder<PreparedSQLUpdateBatchAction<Integer>> createReplaceBatch() {
+        return Optional.ofNullable(getSQLManager()).map(this::createReplaceBatch)
+                .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
     }
 
-    public @NotNull ReplaceBuilder<PreparedSQLUpdateBatchAction<Integer>> createReplaceBatch(@NotNull SQLManager sqlManager) {
+    default @NotNull ReplaceBuilder<PreparedSQLUpdateBatchAction<Integer>> createReplaceBatch(@NotNull SQLManager sqlManager) {
         return sqlManager.createReplaceBatch(getTableName());
+    }
+
+    default @NotNull TableAlterBuilder alter() {
+        return Optional.ofNullable(getSQLManager()).map(this::alter)
+                .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
+    }
+
+    default @NotNull TableAlterBuilder alter(@NotNull SQLManager sqlManager) {
+        return sqlManager.alterTable(getTableName());
     }
 
 }
