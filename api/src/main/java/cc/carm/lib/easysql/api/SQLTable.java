@@ -125,8 +125,7 @@ public interface SQLTable {
     }
 
     default @NotNull ReplaceBuilder<PreparedSQLUpdateAction<Integer>> createReplace(@NotNull SQLManager sqlManager) {
-        return Optional.ofNullable(getSQLManager()).map(this::createReplace)
-                .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
+        return sqlManager.createReplace(getTableName());
     }
 
     default @NotNull ReplaceBuilder<PreparedSQLUpdateBatchAction<Integer>> createReplaceBatch() {
