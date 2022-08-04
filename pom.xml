@@ -96,12 +96,14 @@
     </repositories>
 
     <distributionManagement>
-        <downloadUrl>https://github.com/CarmJos/EasySQL/releases</downloadUrl>
-        <site>
-            <id>easysql-javadoc</id>
-            <name>EasySQL JavaDoc (on Github Pages)</name>
-            <url>https://CarmJos.github.io/EasySQL</url>
-        </site>
+        <repository>
+            <id>codemc-releases</id>
+            <url>https://repo.codemc.io/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>codemc-snapshots</id>
+            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <dependencies>
@@ -253,6 +255,4 @@
         </resources>
 
     </build>
-
-
 </project>
