@@ -81,11 +81,14 @@ public abstract class AbstractSQLAction<T> implements SQLAction<T> {
     @Override
     @SuppressWarnings("FutureReturnValueIgnored")
     public void executeAsync(SQLHandler<T> success, SQLExceptionHandler failure) {
+        getManager().getPendingQuery().put(getActionUUID(),this);
         getManager().getExecutorPool().submit(() -> {
             try {
                 T returnedValue = execute();
+                getManager().getPendingQuery().remove(getActionUUID());
                 if (success != null) success.accept(returnedValue);
             } catch (SQLException e) {
+                getManager().getPendingQuery().remove(getActionUUID());
                 handleException(failure, e);
             }
         });

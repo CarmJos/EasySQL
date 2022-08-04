@@ -4,6 +4,7 @@ import cc.carm.lib.easysql.action.PreparedSQLBatchUpdateActionImpl;
 import cc.carm.lib.easysql.action.PreparedSQLUpdateActionImpl;
 import cc.carm.lib.easysql.action.SQLUpdateActionImpl;
 import cc.carm.lib.easysql.action.SQLUpdateBatchActionImpl;
+import cc.carm.lib.easysql.api.SQLAction;
 import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.SQLQuery;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
@@ -32,6 +33,7 @@ public class SQLManagerImpl implements SQLManager {
     private final Logger LOGGER;
     private final DataSource dataSource;
     private final ConcurrentHashMap<UUID, SQLQuery> activeQuery = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, SQLAction<?>> pendingQuery = new ConcurrentHashMap<>();
     protected ExecutorService executorPool;
     @NotNull Supplier<Boolean> debugMode = () -> Boolean.FALSE;
 
@@ -110,6 +112,11 @@ public class SQLManagerImpl implements SQLManager {
     @Override
     public @NotNull Map<UUID, SQLQuery> getActiveQuery() {
         return this.activeQuery;
+    }
+
+    @Override
+    public @NotNull Map<UUID, SQLAction<?>> getPendingQuery() {
+        return this.pendingQuery;
     }
 
     @Override

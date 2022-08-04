@@ -104,6 +104,13 @@ public interface SQLManager {
     @NotNull Map<UUID, SQLQuery> getActiveQuery();
 
     /**
+     * 得到计划的查询。
+     *
+     * @return 已计划的查询
+     */
+    @NotNull Map<UUID, SQLAction<?>> getPendingQuery();
+
+    /**
      * 获取改管理器提供的默认异常处理器。
      * 若未使用过 {@link #setExceptionHandler(SQLExceptionHandler)} 方法，
      * 则默认返回 {@link SQLExceptionHandler#detailed(Logger)} 。
