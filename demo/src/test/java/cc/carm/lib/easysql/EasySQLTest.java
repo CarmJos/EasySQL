@@ -50,6 +50,7 @@ public class EasySQLTest {
         tests.add(new SQLUpdateReturnKeysTest());
         tests.add(new QueryCloseTest());
         tests.add(new QueryFunctionTest());
+        tests.add(new QueryFutureTest());
         tests.add(new QueryAsyncTest());
 //        tests.add(new DeleteTest());
 

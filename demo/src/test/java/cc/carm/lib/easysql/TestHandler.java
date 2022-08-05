@@ -5,6 +5,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
+import java.util.concurrent.ExecutionException;
 
 public abstract class TestHandler {
 
@@ -13,7 +14,7 @@ public abstract class TestHandler {
     }
 
     @ApiStatus.OverrideOnly
-    public abstract void onTest(SQLManager sqlManager) throws SQLException;
+    public abstract void onTest(SQLManager sqlManager) throws SQLException, ExecutionException, InterruptedException;
 
     public boolean executeTest(int index, SQLManager sqlManager) {
         String testName = getClass().getSimpleName();
