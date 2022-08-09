@@ -2,6 +2,7 @@ package cc.carm.lib.easysql.action;
 
 import cc.carm.lib.easysql.api.SQLAction;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
+import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.api.function.SQLHandler;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +11,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractSQLAction<T> implements SQLAction<T> {
@@ -94,4 +97,10 @@ public abstract class AbstractSQLAction<T> implements SQLAction<T> {
         });
     }
 
+    @Override
+    public @NotNull <R> Future<R> executeFuture(@NotNull SQLFunction<T, R> handler) {
+        CompletableFuture<R> future = new CompletableFuture<>();
+        executeAsync((t -> future.complete(handler.apply(t))), (e, q) -> future.completeExceptionally(e));
+        return future;
+    }
 }

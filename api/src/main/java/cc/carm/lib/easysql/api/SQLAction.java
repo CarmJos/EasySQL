@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -205,6 +206,8 @@ public interface SQLAction<T> {
      */
     void executeAsync(@Nullable SQLHandler<T> success,
                       @Nullable SQLExceptionHandler failure);
+
+    <R> @NotNull Future<R> executeFuture(@NotNull SQLFunction<T, R> handler);
 
     default void handleException(@Nullable SQLExceptionHandler handler, SQLException exception) {
         if (handler == null) handler = defaultExceptionHandler();

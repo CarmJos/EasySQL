@@ -5,7 +5,7 @@
     <parent>
         <artifactId>easysql-parent</artifactId>
         <groupId>com.ghostchu.fork.cc.carm.lib</groupId>
-        <version>0.4.3</version>
+        <version>0.4.4</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -79,7 +79,7 @@
             <!--项目地址 https://github.com/Chris2018998/BeeCP  -->
             <groupId>com.github.chris2018998</groupId>
             <artifactId>beecp</artifactId>
-            <version>3.3.7</version>
+            <version>3.3.8</version>
             <optional>true</optional>
             <scope>compile</scope>
         </dependency>
