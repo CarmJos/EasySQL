@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -207,7 +208,21 @@ public interface SQLAction<T> {
     void executeAsync(@Nullable SQLHandler<T> success,
                       @Nullable SQLExceptionHandler failure);
 
-    <R> @NotNull Future<R> executeFuture(@NotNull SQLFunction<T, R> handler);
+    /**
+     * 以异步Future方式执行SQL语句。
+     *
+     * @return 异步执行的Future实例，可通过 {@link Future#get()} 阻塞并等待结果。
+     */
+    default @NotNull CompletableFuture<Void> executeFuture() {
+        return executeFuture((t -> null));
+    }
+
+    /**
+     * 以异步Future方式执行SQL语句。
+     *
+     * @return 异步执行的Future实例，可通过 {@link Future#get()} 阻塞并等待结果。
+     */
+    <R> @NotNull CompletableFuture<R> executeFuture(@NotNull SQLFunction<T, R> handler);
 
     default void handleException(@Nullable SQLExceptionHandler handler, SQLException exception) {
         if (handler == null) handler = defaultExceptionHandler();
