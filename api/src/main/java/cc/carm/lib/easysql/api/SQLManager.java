@@ -7,18 +7,22 @@ import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.builder.*;
 import cc.carm.lib.easysql.api.function.SQLDebugHandler;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
+import cc.carm.lib.easysql.api.function.SQLFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
 /**
@@ -35,18 +39,27 @@ public interface SQLManager {
 
     /**
      * 获取用于执行 {@link SQLAction#executeAsync()} 的线程池。
-     * <br> 默认线程池为 {@link ThreadPoolExecutor} ,大小为 3。
+     * <br> 默认线程池为 {@link #defaultExecutorPool(String)} 。
      *
      * @return {@link ExecutorService}
      */
     @NotNull ExecutorService getExecutorPool();
 
     /**
-     * 设定用于执行 {@link SQLAction#executeAsync()} 的线程池。
+     * 设定用于执行 {@link SQLAction#executeAsync()} 的线程池.
+     * <br> 默认线程池为 {@link #defaultExecutorPool(String)} 。
      *
      * @param executorPool {@link ExecutorService}
      */
     void setExecutorPool(@NotNull ExecutorService executorPool);
+
+    static ExecutorService defaultExecutorPool(String threadName) {
+        return Executors.newFixedThreadPool(4, r -> {
+            Thread thread = new Thread(r, threadName);
+            thread.setDaemon(true);
+            return thread;
+        });
+    }
 
 
     /**
@@ -172,7 +185,29 @@ public interface SQLManager {
     @Nullable List<Integer> executeSQLBatch(@NotNull Iterable<String> sqlBatch);
 
     /**
-     * 在库中创建一个表
+     * 获取并操作 {@link  DatabaseMetaData} 以得到需要的数据库消息。
+     *
+     * @param metadata 操作与返回的方法
+     * @param <R>      最终结果的返回类型
+     * @return 最终结果，通过 {@link CompletableFuture#get()} 可阻塞并等待结果返回。
+     */
+    <R> CompletableFuture<R> fetchMetadata(@NotNull SQLFunction<DatabaseMetaData, R> metadata);
+
+    /**
+     * 获取并操作 {@link DatabaseMetaData} 提供的指定 {@link ResultSet} 以得到需要的数据库消息。
+     * <br> 该方法会自动关闭 {@link ResultSet} 。
+     *
+     * @param supplier 操作 {@link DatabaseMetaData} 以提供信息所在的 {@link ResultSet}
+     * @param reader   读取 {@link ResultSet} 中指定信息的方法
+     * @param <R>      最终结果的返回类型
+     * @return 最终结果，通过 {@link CompletableFuture#get()} 可阻塞并等待结果返回。
+     * @throws NullPointerException 当 supplier 提供的 {@link ResultSet} 为NULL时抛出
+     */
+    <R> CompletableFuture<R> fetchMetadata(@NotNull SQLFunction<DatabaseMetaData, ResultSet> supplier,
+                                           @NotNull SQLFunction<@NotNull ResultSet, R> reader);
+
+    /**
+     * 在库中创建一个表。
      *
      * @param tableName 表名
      * @return {@link TableCreateBuilder}
@@ -180,7 +215,7 @@ public interface SQLManager {
     TableCreateBuilder createTable(@NotNull String tableName);
 
     /**
-     * 对库中的某个表执行更改
+     * 对库中的某个表执行更改。
      *
      * @param tableName 表名
      * @return {@link TableAlterBuilder}
@@ -188,14 +223,23 @@ public interface SQLManager {
     TableAlterBuilder alterTable(@NotNull String tableName);
 
     /**
-     * 新建一个查询
+     * 快速获取表的部分元数据。
+     * <br> 当需要获取其他元数据时，请使用 {@link #fetchMetadata(SQLFunction, SQLFunction)} 方法。
+     *
+     * @param tablePattern 表名通配符
+     * @return {@link TableMetadataBuilder}
+     */
+    TableMetadataBuilder fetchTableMetadata(@NotNull String tablePattern);
+
+    /**
+     * 新建一个查询。
      *
      * @return {@link QueryBuilder}
      */
     QueryBuilder createQuery();
 
     /**
-     * 创建一条插入操作
+     * 创建一条插入操作。
      *
      * @param tableName 目标表名
      * @return {@link InsertBuilder}
@@ -203,7 +247,7 @@ public interface SQLManager {
     InsertBuilder<PreparedSQLUpdateAction<Integer>> createInsert(@NotNull String tableName);
 
     /**
-     * 创建支持多组数据的插入操作
+     * 创建支持多组数据的插入操作。
      *
      * @param tableName 目标表名
      * @return {@link InsertBuilder}
@@ -211,7 +255,7 @@ public interface SQLManager {
     InsertBuilder<PreparedSQLUpdateBatchAction<Integer>> createInsertBatch(@NotNull String tableName);
 
     /**
-     * 创建一条替换操作
+     * 创建一条替换操作。
      *
      * @param tableName 目标表名
      * @return {@link ReplaceBuilder}
@@ -219,7 +263,7 @@ public interface SQLManager {
     ReplaceBuilder<PreparedSQLUpdateAction<Integer>> createReplace(@NotNull String tableName);
 
     /**
-     * 创建支持多组数据的替换操作
+     * 创建支持多组数据的替换操作。
      *
      * @param tableName 目标表名
      * @return {@link ReplaceBuilder}
@@ -227,7 +271,7 @@ public interface SQLManager {
     ReplaceBuilder<PreparedSQLUpdateBatchAction<Integer>> createReplaceBatch(@NotNull String tableName);
 
     /**
-     * 创建更新操作
+     * 创建更新操作。
      *
      * @param tableName 目标表名
      * @return {@link UpdateBuilder}
@@ -235,7 +279,7 @@ public interface SQLManager {
     UpdateBuilder createUpdate(@NotNull String tableName);
 
     /**
-     * 创建删除操作
+     * 创建删除操作。
      *
      * @param tableName 目标表名
      * @return {@link DeleteBuilder}

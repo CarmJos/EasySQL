@@ -12,6 +12,7 @@ import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.builder.*;
 import cc.carm.lib.easysql.api.function.SQLDebugHandler;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
+import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.builder.impl.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,11 +21,13 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
 public class SQLManagerImpl implements SQLManager {
@@ -50,12 +53,7 @@ public class SQLManagerImpl implements SQLManager {
         String managerName = "SQLManager" + (name != null ? "#" + name : "");
         this.LOGGER = logger;
         this.dataSource = dataSource;
-        this.executorPool = Executors.newFixedThreadPool(3, r -> {
-            Thread thread = new Thread(r, managerName);
-            thread.setDaemon(true);
-            return thread;
-        });
-
+        this.executorPool = SQLManager.defaultExecutorPool(managerName);
         this.exceptionHandler = SQLExceptionHandler.detailed(getLogger());
         this.debugHandler = SQLDebugHandler.defaultHandler(getLogger());
     }
@@ -78,10 +76,6 @@ public class SQLManagerImpl implements SQLManager {
     @Override
     public void setDebugHandler(@NotNull SQLDebugHandler debugHandler) {
         this.debugHandler = debugHandler;
-    }
-
-    public void debug(String msg) {
-        if (isDebugMode()) getLogger().info("[DEBUG] " + msg);
     }
 
     @Override
@@ -161,6 +155,33 @@ public class SQLManagerImpl implements SQLManager {
     }
 
     @Override
+    public <R> CompletableFuture<R> fetchMetadata(@NotNull SQLFunction<DatabaseMetaData, R> metadata) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection conn = getConnection()) {
+                return metadata.apply(conn.getMetaData());
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        }, this.executorPool);
+    }
+
+    @Override
+    public <R> CompletableFuture<R> fetchMetadata(@NotNull SQLFunction<DatabaseMetaData, ResultSet> supplier,
+                                                  @NotNull SQLFunction<@NotNull ResultSet, R> reader) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (
+                    Connection conn = getConnection();
+                    ResultSet rs = supplier.apply(conn.getMetaData())
+            ) {
+                if (rs == null) throw new NullPointerException("Metadata返回的ResultSet为null。");
+                else return reader.apply(rs);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        }, this.executorPool);
+    }
+
+    @Override
     public TableCreateBuilder createTable(@NotNull String tableName) {
         return new TableCreateBuilderImpl(this, tableName);
     }
@@ -168,6 +189,11 @@ public class SQLManagerImpl implements SQLManager {
     @Override
     public TableAlterBuilder alterTable(@NotNull String tableName) {
         return new TableAlterBuilderImpl(this, tableName);
+    }
+
+    @Override
+    public TableMetadataBuilder fetchTableMetadata(@NotNull String tablePattern) {
+        return new TableMetadataBuilderImpl(this, tablePattern);
     }
 
     @Override
