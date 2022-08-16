@@ -52,6 +52,8 @@ public class EasySQLTest {
         tests.add(new QueryFunctionTest());
         tests.add(new QueryFutureTest());
         tests.add(new QueryAsyncTest());
+
+        tests.add(new TableMetadataTest());
 //        tests.add(new DeleteTest());
 
         print("准备进行测试...");
