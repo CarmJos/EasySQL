@@ -10,6 +10,7 @@ import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.builder.*;
+import cc.carm.lib.easysql.api.function.SQLBiFunction;
 import cc.carm.lib.easysql.api.function.SQLDebugHandler;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLFunction;
@@ -155,10 +156,10 @@ public class SQLManagerImpl implements SQLManager {
     }
 
     @Override
-    public <R> CompletableFuture<R> fetchMetadata(@NotNull SQLFunction<DatabaseMetaData, R> metadata) {
+    public <R> CompletableFuture<R> fetchMetadata(@NotNull SQLBiFunction<DatabaseMetaData, Connection, R> reader) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection conn = getConnection()) {
-                return metadata.apply(conn.getMetaData());
+                return reader.apply(conn.getMetaData(), conn);
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -166,19 +167,16 @@ public class SQLManagerImpl implements SQLManager {
     }
 
     @Override
-    public <R> CompletableFuture<R> fetchMetadata(@NotNull SQLFunction<DatabaseMetaData, ResultSet> supplier,
+    public <R> CompletableFuture<R> fetchMetadata(@NotNull SQLBiFunction<DatabaseMetaData, Connection, ResultSet> supplier,
                                                   @NotNull SQLFunction<@NotNull ResultSet, R> reader) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (
-                    Connection conn = getConnection();
-                    ResultSet rs = supplier.apply(conn.getMetaData())
-            ) {
+        return fetchMetadata((meta, conn) -> {
+            try (ResultSet rs = supplier.apply(conn.getMetaData(), conn)) {
                 if (rs == null) throw new NullPointerException("Metadata返回的ResultSet为null。");
                 else return reader.apply(rs);
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
-        }, this.executorPool);
+        });
     }
 
     @Override

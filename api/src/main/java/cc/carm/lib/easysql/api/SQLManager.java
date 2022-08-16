@@ -5,6 +5,7 @@ import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.action.SQLUpdateAction;
 import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.builder.*;
+import cc.carm.lib.easysql.api.function.SQLBiFunction;
 import cc.carm.lib.easysql.api.function.SQLDebugHandler;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLFunction;
@@ -187,11 +188,13 @@ public interface SQLManager {
     /**
      * 获取并操作 {@link  DatabaseMetaData} 以得到需要的数据库消息。
      *
-     * @param metadata 操作与返回的方法
-     * @param <R>      最终结果的返回类型
+     * @param reader 操作与读取的方法
+     * @param <R>    最终结果的返回类型
      * @return 最终结果，通过 {@link CompletableFuture#get()} 可阻塞并等待结果返回。
      */
-    <R> CompletableFuture<R> fetchMetadata(@NotNull SQLFunction<DatabaseMetaData, R> metadata);
+    default <R> CompletableFuture<R> fetchMetadata(@NotNull SQLFunction<DatabaseMetaData, R> reader) {
+        return fetchMetadata((meta, conn) -> reader.apply(meta));
+    }
 
     /**
      * 获取并操作 {@link DatabaseMetaData} 提供的指定 {@link ResultSet} 以得到需要的数据库消息。
@@ -203,7 +206,31 @@ public interface SQLManager {
      * @return 最终结果，通过 {@link CompletableFuture#get()} 可阻塞并等待结果返回。
      * @throws NullPointerException 当 supplier 提供的 {@link ResultSet} 为NULL时抛出
      */
-    <R> CompletableFuture<R> fetchMetadata(@NotNull SQLFunction<DatabaseMetaData, ResultSet> supplier,
+    default <R> CompletableFuture<R> fetchMetadata(@NotNull SQLFunction<DatabaseMetaData, ResultSet> supplier,
+                                                   @NotNull SQLFunction<@NotNull ResultSet, R> reader) {
+        return fetchMetadata((meta, conn) -> supplier.apply(meta), reader);
+    }
+
+    /**
+     * 获取并操作 {@link  DatabaseMetaData} 以得到需要的数据库消息。
+     *
+     * @param reader 操作与读取的方法
+     * @param <R>    最终结果的返回类型
+     * @return 最终结果，通过 {@link CompletableFuture#get()} 可阻塞并等待结果返回。
+     */
+    <R> CompletableFuture<R> fetchMetadata(@NotNull SQLBiFunction<DatabaseMetaData, Connection, R> reader);
+
+    /**
+     * 获取并操作 {@link DatabaseMetaData} 提供的指定 {@link ResultSet} 以得到需要的数据库消息。
+     * <br> 该方法会自动关闭 {@link ResultSet} 。
+     *
+     * @param supplier 操作 {@link DatabaseMetaData} 以提供信息所在的 {@link ResultSet}
+     * @param reader   读取 {@link ResultSet} 中指定信息的方法
+     * @param <R>      最终结果的返回类型
+     * @return 最终结果，通过 {@link CompletableFuture#get()} 可阻塞并等待结果返回。
+     * @throws NullPointerException 当 supplier 提供的 {@link ResultSet} 为NULL时抛出
+     */
+    <R> CompletableFuture<R> fetchMetadata(@NotNull SQLBiFunction<DatabaseMetaData, Connection, ResultSet> supplier,
                                            @NotNull SQLFunction<@NotNull ResultSet, R> reader);
 
     /**
