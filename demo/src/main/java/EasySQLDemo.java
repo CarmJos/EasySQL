@@ -8,9 +8,11 @@ import cc.carm.lib.easysql.api.util.TimeDateUtils;
 import cc.carm.lib.easysql.api.util.UUIDUtil;
 import org.jetbrains.annotations.TestOnly;
 
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @TestOnly
 @SuppressWarnings("all")
@@ -155,6 +157,24 @@ public class EasySQLDemo {
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+    }
+
+    public void metadata(SQLManager sql) {
+
+        // 操作数据库元数据，直接返回结果。
+        CompletableFuture<Boolean> roFuture = sql.fetchMetadata(DatabaseMetaData::isReadOnly);
+        CompletableFuture<Integer> maxColumnFuture = sql.fetchMetadata(DatabaseMetaData::getMaxColumnsInSelect);
+
+        // 操作有 ResultSet 元数据。该方法会自动关闭ResultSet。
+        CompletableFuture<Boolean> tableExists = sql.fetchMetadata(
+                meta -> meta.getTables(null, null, "表名", new String[]{"TABKE"}),
+                resultSet -> resultSet.next()
+        );
+
+        // SQLManager附带了几个常用元数据的获取方法。
+        CompletableFuture<Boolean> tableExists2 = sql.fetchTableMetadata("表名").validateExist();
+        CompletableFuture<Boolean> columnExists = sql.fetchTableMetadata("表名").isColumnExists("字段名");
+
     }
 
 }
