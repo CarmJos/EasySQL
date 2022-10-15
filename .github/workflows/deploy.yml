@@ -11,10 +11,9 @@ on:
     types: [ published ]
 
 jobs:
-  gh-deploy:
-    name: "Publish Project (GitHub)"
+  packages-deploy:
+    name: "Publish Project (GitHub Packages)"
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: "Set up JDK"
@@ -29,63 +28,16 @@ jobs:
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
           gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
 
-      - name: "Maven Deploy With Javadoc"
+      - name: "Packages Deploy"
         run: mvn -B -Pgithub deploy --file pom.xml -DskipTests
         env:
           MAVEN_USERNAME: ${{ github.repository_owner }}
           MAVEN_TOKEN: ${{secrets.GITHUB_TOKEN}}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
-      - name: "Copy Javadoc to Location"
-        run: |
-          rm -rf docs
-          mkdir -vp docs
-          cp -vrf easysql-api/target/apidocs/* docs/
-          cp -vrf .documentation/JAVADOC-README.md docs/README.md
-
-      - name: "Generate the Javadoc sitemap"
-        id: sitemap
-        uses: cicirello/generate-sitemap@v1
-        with:
-          base-url-path: https://carmjos.github.io/EasySQL
-          path-to-root: docs
-
-      - name: "Output stats"
-        run: |
-          echo "sitemap-path = ${{ steps.sitemap.outputs.sitemap-path }}"
-          echo "url-count = ${{ steps.sitemap.outputs.url-count }}"
-          echo "excluded-count = ${{ steps.sitemap.outputs.excluded-count }}"
-
-      - name: "Configure Git"
-        env:
-          DEPLOY_PRI: ${{secrets.DEPLOY_PRI}}
-        run: |
-          sudo timedatectl set-timezone "Asia/Shanghai"
-          mkdir -p ~/.ssh/
-          echo "$DEPLOY_PRI" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          git config --global user.name 'CarmJos'
-          git config --global user.email 'carm@carm.cc'
-
-      - name: "Commit documentations"
-        run: |
-          cd docs
-          git init
-          git remote add origin git@github.com:CarmJos/EasySQL.git
-          git checkout -b gh-pages
-          git add -A
-          git commit -m "API Document generated."
-
-      - name: "Push javadocs"
-        run: |
-          cd docs
-          git push origin HEAD:gh-pages --force
-
   central-deploy:
     name: "Deploy Project (Central Repository)"
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: "Set up JDK"
@@ -106,3 +58,81 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USER }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASS }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+  github-deploy:
+    name: "Deploy Project (GitHub Repository)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Set up JDK"
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          cache: maven
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
+
+      - name: "Maven Deploy"
+        run: mvn -B -Plocal deploy --file pom.xml -DskipTests
+        env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+      - name: "Copy artifacts"
+        run: |
+          rm -rf deploy
+          mkdir -vp deploy
+          cp -vrf $HOME/local-deploy/* deploy/
+          cp -vrf .documentation/repository/README.md deploy/README.md
+
+      - name: "Copy Javadoc"
+        run: |
+          rm -rf docs
+          mkdir -vp docs
+          cp -vrf api/target/apidocs/* docs/
+          cp -vrf .documentation/javadoc/README.md docs/README.md
+
+      - name: "Generate the Javadoc sitemap"
+        id: sitemap
+        uses: cicirello/generate-sitemap@v1
+        with:
+          base-url-path: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          path-to-root: docs
+
+      - name: "Output stats"
+        run: |
+          echo "sitemap-path = ${{ steps.sitemap.outputs.sitemap-path }}"
+          echo "url-count = ${{ steps.sitemap.outputs.url-count }}"
+          echo "excluded-count = ${{ steps.sitemap.outputs.excluded-count }}"
+
+      - name: "Configure Git"
+        env:
+          DEPLOY_PRI: ${{secrets.DEPLOY_PRI}}
+        run: |
+          sudo timedatectl set-timezone "Asia/Shanghai"
+          mkdir -p ~/.ssh/
+          echo "$DEPLOY_PRI" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config --global user.name '${{ github.repository_owner }}'
+          git config --global user.email '${{ github.repository_owner }}@users.noreply.github.com'
+
+      - name: "Commit&Push repository files"
+        run: |
+          cd deploy
+          git init
+          git remote add origin git@github.com:${{ github.repository_owner }}/${{ github.event.repository.name }}.git
+          git checkout -b repo
+          git add -A
+          git commit -m "Maven project deployment."
+          git push origin HEAD:repo --force
+
+      - name: "Commit&Push documentations"
+        run: |
+          cd docs
+          git init
+          git remote add origin git@github.com:${{ github.repository_owner }}/${{ github.event.repository.name }}.git
+          git checkout -b gh-pages
+          git add -A
+          git commit -m "API documentation deployment."
+          git push origin HEAD:gh-pages --force

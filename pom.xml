@@ -5,11 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <java.version>8</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <jdk.version>8</jdk.version>
+        <maven.compiler.source>${jdk.version}</maven.compiler.source>
+        <maven.compiler.target>${jdk.version}</maven.compiler.target>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+
         <sonar.organization>carmjos</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
@@ -17,17 +19,16 @@
     <groupId>cc.carm.lib</groupId>
     <artifactId>easysql-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.3.5</version>
+    <version>0.4.6</version>
 
     <modules>
-        <module>easysql-api</module>
-        <module>easysql-impl</module>
+        <module>api</module>
+        <module>impl</module>
 
-        <module>with-pool/easysql-beecp</module>
-        <module>with-pool/easysql-hikaricp</module>
-        <module>example/easysql-demo</module>
-        <module>example/easysql-test</module>
+        <module>with-pool/beecp</module>
+        <module>with-pool/hikaricp</module>
 
+        <module>demo</module>
     </modules>
 
     <name>EasySQL</name>
@@ -95,14 +96,12 @@
     </repositories>
 
     <distributionManagement>
-
         <downloadUrl>https://github.com/CarmJos/EasySQL/releases</downloadUrl>
         <site>
             <id>easysql-javadoc</id>
             <name>EasySQL JavaDoc (on Github Pages)</name>
             <url>https://CarmJos.github.io/EasySQL</url>
         </site>
-
     </distributionManagement>
 
     <dependencies>
@@ -170,7 +169,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.3.1</version>
+                    <version>3.4.1</version>
                     <configuration>
                         <classifier>javadoc</classifier>
                         <detectJavaApiLink>false</detectJavaApiLink>
@@ -197,10 +196,10 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.9.0</version>
+                    <version>3.10.1</version>
                     <configuration>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
+                        <source>${jdk.version}</source>
+                        <target>${jdk.version}</target>
                         <encoding>UTF-8</encoding>
                         <compilerArgument>-parameters</compilerArgument>
                     </configuration>
@@ -209,7 +208,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.2.2</version>
+                    <version>3.3.0</version>
                 </plugin>
 
                 <plugin>
@@ -229,7 +228,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.2.4</version>
+                    <version>3.4.0</version>
                     <executions>
                         <execution>
                             <phase>package</phase>
@@ -299,6 +298,20 @@
                     <id>github</id>
                     <name>GitHub Packages</name>
                     <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>local</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>localRepository</id>
+                    <url>file:${user.home}/local-deploy/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>localRepository</id>
+                    <url>file:${user.home}/local-deploy/</url>
                 </repository>
             </distributionManagement>
         </profile>
