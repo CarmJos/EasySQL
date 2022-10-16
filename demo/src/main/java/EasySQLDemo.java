@@ -84,8 +84,8 @@ public class EasySQLDemo {
     public void sqlQuery(SQLManager sqlManager) {
         // 同步SQL查询
         try (SQLQuery query = sqlManager.createQuery()
-                .inTable("users") // 在users表中查询
-                .selectColumns("id", "name") // 选中 id 与 name列
+                .fromTable("users") // 在users表中查询
+                .select("id", "name") // 选中 id 与 name列
                 .addCondition("age", ">", 18) // 限定 age 要大于5
                 .addCondition("email", null) // 限定查询 email 字段为空
                 .addNotNullCondition("phone") // 限定 phone 字段不为空
@@ -101,10 +101,10 @@ public class EasySQLDemo {
         }
 
         UUID userUUID = sqlManager.createQuery()
-                .inTable("users") // 在users表中查询
-                .selectColumns("uuid")
+                .fromTable("users") // 在users表中查询
+                .select("uuid")
                 .addCondition("id", 5) // 限定 id 为 5
-                .setLimit(1) // 只取出一个数据
+                .limit(1) // 只取出一个数据
                 .build().execute(query -> {
                     //可以直接进行数据处理
                     ResultSet result = query.getResultSet();
@@ -118,9 +118,9 @@ public class EasySQLDemo {
     public void sqlQueryAsync(SQLManager sqlManager) {
         // 异步SQL查询
         sqlManager.createQuery()
-                .inTable("users") // 在users表中查询
+                .fromTable("users") // 在users表中查询
                 .addCondition("id", 5) // 限定 id 为 5
-                .setLimit(1) // 只取出一个数据
+                .limit(1) // 只取出一个数据
                 .build().executeAsync(success -> {
                     ResultSet resultSet = success.getResultSet();
                     if (resultSet != null && resultSet.next()) {
@@ -137,8 +137,8 @@ public class EasySQLDemo {
     public void sqlInsert(SQLManager sqlManager) {
         // 同步SQL插入 （不使用try-catch的情况下，返回的数值可能为空。）
         int id = sqlManager.createInsert("users")
-                .setColumnNames("username", "phone", "email", "registerTime")
-                .setParams("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
+                .columns("username", "phone", "email", "registerTime")
+                .params("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
                 .returnGeneratedKey() // 设定在后续返回自增主键
                 .execute((exception, action) -> {
                     // 处理异常
@@ -148,8 +148,8 @@ public class EasySQLDemo {
 
         try {
             int userID = sqlManager.createInsert("users")
-                    .setColumnNames("username", "phone", "email", "registerTime")
-                    .setParams("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
+                    .columns("username", "phone", "email", "registerTime")
+                    .params("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
                     .returnGeneratedKey().execute();
 
             System.out.println("新用户的ID为 " + userID);

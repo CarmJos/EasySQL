@@ -49,7 +49,7 @@ public interface TableCreateBuilder extends SQLBuilder {
      * @param columns 列的相关信息 (包括列设定)
      * @return {@link TableCreateBuilder}
      */
-    TableCreateBuilder setColumns(@NotNull String... columns);
+    TableCreateBuilder columns(@NotNull String... columns);
 
     /**
      * 为该表添加一个列

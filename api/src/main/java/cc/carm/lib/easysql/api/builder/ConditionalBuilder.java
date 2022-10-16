@@ -23,7 +23,7 @@ public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T extend
      * @param limit 条数限制
      * @return {@link B}
      */
-    B setLimit(int limit);
+    B limit(int limit);
 
     /**
      * 直接设定条件的源文本,不需要以WHERE开头。
@@ -32,7 +32,7 @@ public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T extend
      * @param condition 条件文本，不需要以WHERE开头。
      * @return {@link B}
      */
-    B setConditions(@Nullable String condition);
+    B where(@Nullable String condition);
 
     /**
      * 直接设定每个条件的文本与其对应数值,将以AND链接，且不需要以WHERE开头。
@@ -41,7 +41,7 @@ public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T extend
      * @param conditionSQLs 条件内容，将以AND链接，且不需要以WHERE开头。
      * @return {@link B}
      */
-    B setConditions(LinkedHashMap<@NotNull String, @Nullable Object> conditionSQLs);
+    B where(LinkedHashMap<@NotNull String, @Nullable Object> conditionSQLs);
 
     B addCondition(@Nullable String condition);
 

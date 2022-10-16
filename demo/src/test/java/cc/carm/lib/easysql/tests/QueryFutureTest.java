@@ -15,9 +15,9 @@ public class QueryFutureTest extends TestHandler {
 
 
         Future<Integer> future = sqlManager.createQuery()
-                .inTable("test_user_table")
+                .fromTable("test_user_table")
                 .orderBy("id", false)
-                .setLimit(1)
+                .limit(1)
                 .build().executeFuture((query) -> {
                     if (!query.getResultSet().next()) {
                         return -1;

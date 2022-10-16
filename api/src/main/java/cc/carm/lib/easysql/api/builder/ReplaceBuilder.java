@@ -16,10 +16,10 @@ public interface ReplaceBuilder<T extends SQLAction<?>> {
 
     String getTableName();
 
-    T setColumnNames(List<String> columnNames);
+    T columns(List<String> columnNames);
 
-    default T setColumnNames(String... columnNames) {
-        return setColumnNames(columnNames == null ? null : Arrays.asList(columnNames));
+    default T columns(String... columnNames) {
+        return columns(columnNames == null ? null : Arrays.asList(columnNames));
     }
 
 }

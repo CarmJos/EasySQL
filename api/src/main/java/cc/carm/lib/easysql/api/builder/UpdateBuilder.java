@@ -18,7 +18,7 @@ public interface UpdateBuilder extends ConditionalBuilder<UpdateBuilder, SQLActi
      * @return {@link UpdateBuilder}
      * @since 0.3.7
      */
-    UpdateBuilder addColumnValue(@NotNull String columnName, @Nullable Object columnValue);
+    UpdateBuilder set(@NotNull String columnName, @Nullable Object columnValue);
 
     /**
      * 设定更新的全部字段值 <b>(此操作会覆盖之前的设定)</b>
@@ -27,7 +27,7 @@ public interface UpdateBuilder extends ConditionalBuilder<UpdateBuilder, SQLActi
      * @param columnData 字段名和值的键值对
      * @return {@link UpdateBuilder}
      */
-    UpdateBuilder setColumnValues(LinkedHashMap<@NotNull String, @Nullable Object> columnData);
+    UpdateBuilder setAll(LinkedHashMap<@NotNull String, @Nullable Object> columnData);
 
     /**
      * 设定更新的全部字段值 <b>(此操作会覆盖之前的设定)</b>
@@ -37,19 +37,19 @@ public interface UpdateBuilder extends ConditionalBuilder<UpdateBuilder, SQLActi
      * @param columnValues 字段名对应的值
      * @return {@link UpdateBuilder}
      */
-    UpdateBuilder setColumnValues(@NotNull String[] columnNames, @Nullable Object[] columnValues);
+    UpdateBuilder setAll(@NotNull String[] columnNames, @Nullable Object[] columnValues);
 
     /**
      * 设定更新的全部字段值 <b>(此操作会覆盖之前的设定)</b>
-     * <p> 如需同时更新多条字段，请使用 {@link #setColumnValues(String[], Object[])} 或 {@link #setColumnValues(LinkedHashMap)}
-     * <br>也可以使用 {@link #addColumnValue(String, Object)} 一条条的添加字段
+     * <p> 如需同时更新多条字段，请使用 {@link #setAll(String[], Object[])} 或 {@link #setAll(LinkedHashMap)}
+     * <br>也可以使用 {@link #set(String, Object)} 一条条的添加字段
      *
      * @param columnName  字段名
      * @param columnValue 字段名对应的值
      * @return {@link UpdateBuilder}
      */
-    default UpdateBuilder setColumnValues(@NotNull String columnName, @Nullable Object columnValue) {
-        return setColumnValues(new String[]{columnName}, new Object[]{columnValue});
+    default UpdateBuilder setAll(@NotNull String columnName, @Nullable Object columnValue) {
+        return setAll(new String[]{columnName}, new Object[]{columnValue});
     }
 
 

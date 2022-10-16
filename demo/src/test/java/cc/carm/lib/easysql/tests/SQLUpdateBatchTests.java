@@ -26,7 +26,7 @@ public class SQLUpdateBatchTests extends TestHandler {
     public void onTest(SQLManager sqlManager) throws SQLException {
 
         List<Long> updates = sqlManager.createInsertBatch("test_user_table")
-                .setColumnNames("uuid", "username", "age")
+                .columns("uuid", "username", "age")
                 .setAllParams(generateParams())
                 .returnGeneratedKeys(Long.class)
                 .execute();

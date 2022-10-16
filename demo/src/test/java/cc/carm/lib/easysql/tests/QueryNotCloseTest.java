@@ -13,9 +13,9 @@ public class QueryNotCloseTest extends TestHandler {
     @Override
     public void onTest(SQLManager sqlManager) throws SQLException {
         SQLQuery query = sqlManager.createQuery()
-                .inTable("test_user_table")
+                .fromTable("test_user_table")
                 .orderBy("id", false)
-                .setLimit(5)
+                .limit(5)
                 .build().execute();
 
         ResultSet resultSet = query.getResultSet();

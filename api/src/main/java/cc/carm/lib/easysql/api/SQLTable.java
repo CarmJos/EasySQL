@@ -45,7 +45,7 @@ public interface SQLTable {
     static @NotNull NamedSQLTable of(@NotNull String tableName,
                                      @NotNull String[] columns, @Nullable String tableSettings) {
         return of(tableName, builder -> {
-            builder.setColumns(columns);
+            builder.columns(columns);
             if (tableSettings != null) builder.setTableSettings(tableSettings);
         });
     }
@@ -79,7 +79,7 @@ public interface SQLTable {
     }
 
     default @NotNull TableQueryBuilder createQuery(@NotNull SQLManager sqlManager) {
-        return sqlManager.createQuery().inTable(getTableName());
+        return sqlManager.createQuery().fromTable(getTableName());
     }
 
     default @NotNull DeleteBuilder createDelete() {

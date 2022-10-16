@@ -27,7 +27,7 @@ public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B,
     protected abstract B getThis();
 
     @Override
-    public B setConditions(@Nullable String condition) {
+    public B where(@Nullable String condition) {
         this.conditionSQLs = new ArrayList<>();
         this.conditionParams = new ArrayList<>();
         if (condition != null) this.conditionSQLs.add(condition);
@@ -35,7 +35,7 @@ public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B,
     }
 
     @Override
-    public B setConditions(
+    public B where(
             LinkedHashMap<@NotNull String, @Nullable Object> conditions
     ) {
         conditions.forEach(this::addCondition);
@@ -119,7 +119,7 @@ public abstract class AbstractConditionalBuilder<B extends ConditionalBuilder<B,
 
 
     @Override
-    public B setLimit(int limit) {
+    public B limit(int limit) {
         this.limit = limit;
         return getThis();
     }

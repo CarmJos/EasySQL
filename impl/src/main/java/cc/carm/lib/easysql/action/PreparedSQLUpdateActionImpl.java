@@ -46,19 +46,19 @@ public class PreparedSQLUpdateActionImpl<T extends Number>
     }
 
     @Override
-    public PreparedSQLUpdateActionImpl<T> setParams(Object... params) {
+    public PreparedSQLUpdateActionImpl<T> params(Object... params) {
         this.params = params;
         return this;
     }
 
     @Override
-    public PreparedSQLUpdateActionImpl<T> setParams(@Nullable Iterable<Object> params) {
+    public PreparedSQLUpdateActionImpl<T> params(@Nullable Iterable<Object> params) {
         if (params == null) {
-            return setParams((Object[]) null);
+            return params((Object[]) null);
         } else {
             List<Object> paramsList = new ArrayList<>();
             params.forEach(paramsList::add);
-            return setParams(paramsList.toArray());
+            return params(paramsList.toArray());
         }
     }
 

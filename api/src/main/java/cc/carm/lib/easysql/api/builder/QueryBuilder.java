@@ -32,6 +32,6 @@ public interface QueryBuilder extends SQLBuilder {
      * @param tableName 表名
      * @return {@link TableQueryBuilder}
      */
-    TableQueryBuilder inTable(@NotNull String tableName);
+    TableQueryBuilder fromTable(@NotNull String tableName);
 
 }

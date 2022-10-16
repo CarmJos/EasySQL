@@ -203,7 +203,7 @@ public class SQLManagerImpl implements SQLManager {
     public InsertBuilder<PreparedSQLUpdateBatchAction<Integer>> createInsertBatch(@NotNull String tableName) {
         return new InsertBuilderImpl<PreparedSQLUpdateBatchAction<Integer>>(this, tableName) {
             @Override
-            public PreparedSQLUpdateBatchAction<Integer> setColumnNames(List<String> columnNames) {
+            public PreparedSQLUpdateBatchAction<Integer> columns(List<String> columnNames) {
                 return new PreparedSQLBatchUpdateActionImpl<>(getManager(), Integer.class, buildSQL(getTableName(), columnNames));
             }
         };
@@ -213,7 +213,7 @@ public class SQLManagerImpl implements SQLManager {
     public InsertBuilder<PreparedSQLUpdateAction<Integer>> createInsert(@NotNull String tableName) {
         return new InsertBuilderImpl<PreparedSQLUpdateAction<Integer>>(this, tableName) {
             @Override
-            public PreparedSQLUpdateAction<Integer> setColumnNames(List<String> columnNames) {
+            public PreparedSQLUpdateAction<Integer> columns(List<String> columnNames) {
                 return new PreparedSQLUpdateActionImpl<>(getManager(), Integer.class, buildSQL(getTableName(), columnNames));
             }
         };
@@ -223,7 +223,7 @@ public class SQLManagerImpl implements SQLManager {
     public ReplaceBuilder<PreparedSQLUpdateBatchAction<Integer>> createReplaceBatch(@NotNull String tableName) {
         return new ReplaceBuilderImpl<PreparedSQLUpdateBatchAction<Integer>>(this, tableName) {
             @Override
-            public PreparedSQLUpdateBatchAction<Integer> setColumnNames(List<String> columnNames) {
+            public PreparedSQLUpdateBatchAction<Integer> columns(List<String> columnNames) {
                 return new PreparedSQLBatchUpdateActionImpl<>(getManager(), Integer.class, buildSQL(getTableName(), columnNames));
             }
         };
@@ -233,7 +233,7 @@ public class SQLManagerImpl implements SQLManager {
     public ReplaceBuilder<PreparedSQLUpdateAction<Integer>> createReplace(@NotNull String tableName) {
         return new ReplaceBuilderImpl<PreparedSQLUpdateAction<Integer>>(this, tableName) {
             @Override
-            public PreparedSQLUpdateAction<Integer> setColumnNames(List<String> columnNames) {
+            public PreparedSQLUpdateAction<Integer> columns(List<String> columnNames) {
                 return new PreparedSQLUpdateActionImpl<>(getManager(), Integer.class, buildSQL(getTableName(), columnNames));
             }
         };

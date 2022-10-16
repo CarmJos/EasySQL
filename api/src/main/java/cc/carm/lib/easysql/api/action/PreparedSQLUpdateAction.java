@@ -10,7 +10,7 @@ public interface PreparedSQLUpdateAction<T extends Number> extends SQLUpdateActi
      * @param params 参数内容
      * @return {@link PreparedSQLUpdateAction}
      */
-    PreparedSQLUpdateAction<T> setParams(Object... params);
+    PreparedSQLUpdateAction<T> params(Object... params);
 
     /**
      * 设定SQL语句中所有 ? 对应的参数
@@ -19,6 +19,6 @@ public interface PreparedSQLUpdateAction<T extends Number> extends SQLUpdateActi
      * @return {@link PreparedSQLUpdateAction}
      * @since 0.4.0
      */
-    PreparedSQLUpdateAction<T> setParams(@Nullable Iterable<Object> params);
+    PreparedSQLUpdateAction<T> params(@Nullable Iterable<Object> params);
 
 }

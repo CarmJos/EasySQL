@@ -33,7 +33,7 @@ public class QueryBuilderImpl extends AbstractSQLBuilder implements QueryBuilder
     }
 
     @Override
-    public TableQueryBuilder inTable(@NotNull String tableName) {
+    public TableQueryBuilder fromTable(@NotNull String tableName) {
         Objects.requireNonNull(tableName, "tableName could not be null");
         return new TableQueryBuilderImpl(getManager(), tableName);
     }
