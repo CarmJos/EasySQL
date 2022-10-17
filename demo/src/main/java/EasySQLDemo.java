@@ -138,7 +138,7 @@ public class EasySQLDemo {
         // 同步SQL插入 （不使用try-catch的情况下，返回的数值可能为空。）
         int id = sqlManager.createInsert("users")
                 .columns("username", "phone", "email", "registerTime")
-                .params("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
+                .values("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
                 .returnGeneratedKey() // 设定在后续返回自增主键
                 .execute((exception, action) -> {
                     // 处理异常
@@ -149,7 +149,7 @@ public class EasySQLDemo {
         try {
             int userID = sqlManager.createInsert("users")
                     .columns("username", "phone", "email", "registerTime")
-                    .params("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
+                    .values("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
                     .returnGeneratedKey().execute();
 
             System.out.println("新用户的ID为 " + userID);

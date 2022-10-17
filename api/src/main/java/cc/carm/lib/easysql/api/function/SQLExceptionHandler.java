@@ -38,6 +38,7 @@ public interface SQLExceptionHandler extends BiConsumer<SQLException, SQLAction<
      *
      * @return 无输出的处理器。
      */
+    @Deprecated
     static SQLExceptionHandler silent() {
         return (exception, sqlAction) -> {
         };

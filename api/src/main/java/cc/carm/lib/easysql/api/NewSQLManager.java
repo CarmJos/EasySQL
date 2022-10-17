@@ -2,6 +2,7 @@ package cc.carm.lib.easysql.api;
 
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
+import cc.carm.lib.easysql.api.transaction.SQLTransaction;
 import cc.carm.lib.easysql.api.builder.*;
 import cc.carm.lib.easysql.api.function.SQLBiFunction;
 import cc.carm.lib.easysql.api.function.SQLFunction;
@@ -100,6 +101,8 @@ public interface NewSQLManager {
      * @return {@link QueryBuilder}
      */
     @NotNull QueryBuilder createQuery();
+
+    @NotNull SQLTransaction createTransaction();
 
     /**
      * 创建一条插入操作。
