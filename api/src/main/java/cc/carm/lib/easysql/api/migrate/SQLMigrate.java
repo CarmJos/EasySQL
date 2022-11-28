@@ -51,7 +51,7 @@ public interface SQLMigrate {
     SQLMigrate column(String oldColumnName, String newColumnName, String newColumnSettings, IndexType indexType);
 
     /**
-     * @param oldColumnName 旧列名
+     *Returns {@link SQLMigrate}.
      * @param newColumnName 新列名
      * @return {@link SQLMigrate}
      */
