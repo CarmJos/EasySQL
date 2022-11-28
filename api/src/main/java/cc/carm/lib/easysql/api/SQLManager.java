@@ -9,6 +9,7 @@ import cc.carm.lib.easysql.api.function.SQLBiFunction;
 import cc.carm.lib.easysql.api.function.SQLDebugHandler;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLFunction;
+import cc.carm.lib.easysql.api.migrate.SQLMigrate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -264,6 +265,13 @@ public interface SQLManager {
      * @return {@link QueryBuilder}
      */
     QueryBuilder createQuery();
+
+    /**
+     * 新建一个迁移操作。
+     *
+     * @return {@link SQLMigrate}
+     */
+    SQLMigrate createMigrate();
 
     /**
      * 创建一条插入操作。

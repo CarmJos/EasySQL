@@ -56,6 +56,8 @@ public class EasySQLTest {
         tests.add(new TableMetadataTest());
 //        tests.add(new DeleteTest());
 
+        tests.add(new TableMigrateTest());
+
         print("准备进行测试...");
 
         int index = 1;

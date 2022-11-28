@@ -14,7 +14,9 @@ import cc.carm.lib.easysql.api.function.SQLBiFunction;
 import cc.carm.lib.easysql.api.function.SQLDebugHandler;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLFunction;
+import cc.carm.lib.easysql.api.migrate.SQLMigrate;
 import cc.carm.lib.easysql.builder.impl.*;
+import cc.carm.lib.easysql.migrate.SQLMigrateImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -197,6 +199,11 @@ public class SQLManagerImpl implements SQLManager {
     @Override
     public QueryBuilder createQuery() {
         return new QueryBuilderImpl(this);
+    }
+
+    @Override
+    public SQLMigrate createMigrate() {
+        return new SQLMigrateImpl(this);
     }
 
     @Override
