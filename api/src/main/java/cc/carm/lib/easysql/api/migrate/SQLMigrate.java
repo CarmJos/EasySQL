@@ -26,7 +26,7 @@ public interface SQLMigrate {
     SQLMigrate tableName(String oldTableName, String newTableName, String newTableSettings);
 
     /**
-     * 为迁移工作定义前后的表名信息
+     * 为迁移工作定义前后的列名信息
      *
      * @param oldColumnName     旧列名
      * @param newColumnName     新列名
@@ -39,7 +39,7 @@ public interface SQLMigrate {
     }
 
     /**
-     * 为迁移工作定义前后的表名信息
+     * 为迁移工作定义前后的列名信息
      *
      * @param oldColumnName     旧列名
      * @param newColumnName     新列名
@@ -51,7 +51,9 @@ public interface SQLMigrate {
     SQLMigrate column(String oldColumnName, String newColumnName, String newColumnSettings, IndexType indexType);
 
     /**
-     *Returns {@link SQLMigrate}.
+     * 为迁移工作定义前后的自增列名信息
+     *
+     * @param oldColumnName 旧列名
      * @param newColumnName 新列名
      * @return {@link SQLMigrate}
      */
