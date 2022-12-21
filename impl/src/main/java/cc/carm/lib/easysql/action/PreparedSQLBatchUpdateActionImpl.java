@@ -38,16 +38,16 @@ public class PreparedSQLBatchUpdateActionImpl<T extends Number>
     }
 
     @Override
-    public PreparedSQLBatchUpdateActionImpl<T> setAllParams(Iterable<Object[]> allParams) {
+    public PreparedSQLBatchUpdateActionImpl<T> allValues(Iterable<Object[]> allValues) {
         List<Object[]> paramsList = new ArrayList<>();
-        allParams.forEach(paramsList::add);
+        allValues.forEach(paramsList::add);
         this.allParams = paramsList;
         return this;
     }
 
     @Override
-    public PreparedSQLBatchUpdateActionImpl<T> addParamsBatch(Object... params) {
-        this.allParams.add(params);
+    public PreparedSQLBatchUpdateActionImpl<T> values(Object... values) {
+        this.allParams.add(values);
         return this;
     }
 
@@ -60,7 +60,7 @@ public class PreparedSQLBatchUpdateActionImpl<T extends Number>
     @Override
     public <N extends Number> PreparedSQLBatchUpdateActionImpl<N> returnGeneratedKeys(Class<N> keyTypeClass) {
         return new PreparedSQLBatchUpdateActionImpl<>(getManager(), keyTypeClass, getActionUUID(), getSQLContent())
-                .setAllParams(allParams).returnGeneratedKeys();
+                .allValues(allParams).returnGeneratedKeys();
     }
 
     @Override

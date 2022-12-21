@@ -1,6 +1,6 @@
 import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.SQLQuery;
-import cc.carm.lib.easysql.api.SQLTable;
+import cc.carm.lib.easysql.api.table.SQLTable;
 import cc.carm.lib.easysql.api.enums.ForeignKeyRule;
 import cc.carm.lib.easysql.api.enums.IndexType;
 import cc.carm.lib.easysql.api.enums.NumberType;
@@ -136,7 +136,7 @@ public class EasySQLDemo {
 
     public void sqlInsert(SQLManager sqlManager) {
         // 同步SQL插入 （不使用try-catch的情况下，返回的数值可能为空。）
-        int id = sqlManager.createInsert("users")
+        int id = sqlManager.insertInto("users")
                 .columns("username", "phone", "email", "registerTime")
                 .values("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
                 .returnGeneratedKey() // 设定在后续返回自增主键
@@ -147,10 +147,10 @@ public class EasySQLDemo {
                 });
 
         try {
-            int userID = sqlManager.createInsert("users")
+            long userID = sqlManager.insertInto("users")
                     .columns("username", "phone", "email", "registerTime")
                     .values("CarmJos", "18888888888", "carm@carm.cc", TimeDateUtils.getCurrentTime())
-                    .returnGeneratedKey().execute();
+                    .returnGeneratedKey(Long.class).execute();
 
             System.out.println("新用户的ID为 " + userID);
 

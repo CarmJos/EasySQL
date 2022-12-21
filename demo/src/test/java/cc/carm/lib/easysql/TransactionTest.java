@@ -27,9 +27,8 @@ public class TransactionTest {
                 transaction.commit(); // 提交
             } catch (Exception ex) {
                 transaction.rollback(pointA); // 出错回滚到pointA
-                transaction.commit(); // 提交出错前的内容
+                transaction.commit(); // 提交快照前的代码
             }
-
 
             pointA.release(); // release savepoint (结束后也会被自动释放)
 

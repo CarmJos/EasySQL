@@ -130,7 +130,7 @@ public class SQLManagerImpl implements SQLManager {
 
     @Override
     public List<Integer> executeSQLBatch(String sql, Iterable<Object[]> paramsBatch) {
-        return new PreparedSQLBatchUpdateActionImpl<>(this, Integer.class, sql).setAllParams(paramsBatch).execute(null);
+        return new PreparedSQLBatchUpdateActionImpl<>(this, Integer.class, sql).allValues(paramsBatch).execute(null);
     }
 
     @Override
@@ -210,7 +210,7 @@ public class SQLManagerImpl implements SQLManager {
     }
 
     @Override
-    public InsertBuilder<PreparedSQLUpdateAction<Integer>> createInsert(@NotNull String tableName) {
+    public InsertBuilder<PreparedSQLUpdateAction<Integer>> insertInto(@NotNull String tableName) {
         return new InsertBuilderImpl<PreparedSQLUpdateAction<Integer>>(this, tableName) {
             @Override
             public PreparedSQLUpdateAction<Integer> columns(List<String> columnNames) {

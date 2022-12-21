@@ -9,18 +9,18 @@ public interface PreparedSQLUpdateBatchAction<T extends Number> extends SQLActio
     /**
      * 设定多组SQL语句中所有 ? 对应的参数
      *
-     * @param allParams 所有参数内容
+     * @param allValues 所有参数内容
      * @return {@link PreparedSQLUpdateBatchAction}
      */
-    PreparedSQLUpdateBatchAction<T> setAllParams(Iterable<Object[]> allParams);
+    PreparedSQLUpdateBatchAction<T> allValues(Iterable<Object[]> allValues);
 
     /**
      * 添加一组SQL语句中所有 ? 对应的参数
      *
-     * @param params 参数内容
+     * @param values 参数内容
      * @return {@link PreparedSQLUpdateBatchAction}
      */
-    PreparedSQLUpdateBatchAction<T> addParamsBatch(Object... params);
+    PreparedSQLUpdateBatchAction<T> values(Object... values);
 
     /**
      * 设定该操作返回自增键序列。

@@ -269,7 +269,7 @@ public interface SQLManager {
      * @param tableName 目标表名
      * @return {@link InsertBuilder}
      */
-    InsertBuilder<PreparedSQLUpdateAction<Integer>> createInsert(@NotNull String tableName);
+    InsertBuilder<PreparedSQLUpdateAction<Integer>> insertInto(@NotNull String tableName);
 
     /**
      * 创建支持多组数据的插入操作。

@@ -1,5 +1,6 @@
-package cc.carm.lib.easysql.api;
+package cc.carm.lib.easysql.api.table;
 
+import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
 import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
 import cc.carm.lib.easysql.api.builder.*;
@@ -45,7 +46,7 @@ public interface SQLTable {
     static @NotNull NamedSQLTable of(@NotNull String tableName,
                                      @NotNull String[] columns, @Nullable String tableSettings) {
         return of(tableName, builder -> {
-            builder.columns(columns);
+            builder.setColumns(columns);
             if (tableSettings != null) builder.setTableSettings(tableSettings);
         });
     }
@@ -106,7 +107,7 @@ public interface SQLTable {
     }
 
     default @NotNull InsertBuilder<PreparedSQLUpdateAction<Integer>> createInsert(@NotNull SQLManager sqlManager) {
-        return sqlManager.createInsert(getTableName());
+        return sqlManager.insertInto(getTableName());
     }
 
     default @NotNull InsertBuilder<PreparedSQLUpdateBatchAction<Integer>> createInsertBatch() {

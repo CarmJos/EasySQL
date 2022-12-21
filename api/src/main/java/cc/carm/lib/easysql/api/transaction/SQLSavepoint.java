@@ -12,5 +12,4 @@ public interface SQLSavepoint {
 
     boolean isReleased();
 
-
 }

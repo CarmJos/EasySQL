@@ -1,7 +1,6 @@
 package cc.carm.lib.easysql.api.table;
 
 import cc.carm.lib.easysql.api.SQLManager;
-import cc.carm.lib.easysql.api.SQLTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +15,7 @@ public abstract class NamedSQLTable implements SQLTable {
     protected @Nullable SQLManager manager;
 
     /**
-     * 请调用 {@link NamedSQLTable} 下的静态方法进行对象的初始化。
+     * 请调用 {@link SQLTable} 下的静态方法进行对象的初始化。
      *
      * @param tableName 该表的名称
      */

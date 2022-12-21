@@ -1,26 +1,52 @@
 package cc.carm.lib.easysql.api;
 
-import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
-import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
-import cc.carm.lib.easysql.api.transaction.SQLTransaction;
-import cc.carm.lib.easysql.api.builder.*;
+import cc.carm.lib.easysql.api.builder.TableAlterBuilder;
+import cc.carm.lib.easysql.api.builder.TableCreateBuilder;
+import cc.carm.lib.easysql.api.builder.TableMetadataBuilder;
+import cc.carm.lib.easysql.api.enums.IsolationLevel;
 import cc.carm.lib.easysql.api.function.SQLBiFunction;
 import cc.carm.lib.easysql.api.function.SQLFunction;
+import cc.carm.lib.easysql.api.transaction.SQLTransaction;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.util.concurrent.CompletableFuture;
 
-public interface NewSQLManager {
+public interface NewSQLManager extends SQLSource, SQLOperator {
+
+    default @NotNull SQLTransaction createTransaction() {
+        return createTransaction(null);
+    }
+
+    @NotNull SQLTransaction createTransaction(@Nullable IsolationLevel level);
 
     /**
-     * 得到用于该管理器的 {@link SQLSource}
+     * 在库中创建一个表。
      *
-     * @return {@link SQLSource}
+     * @param tableName 表名
+     * @return {@link TableCreateBuilder}
      */
-    @NotNull SQLSource getSource();
+    @NotNull TableCreateBuilder createTable(@NotNull String tableName);
+
+    /**
+     * 对库中的某个表执行更改。
+     *
+     * @param tableName 表名
+     * @return {@link TableAlterBuilder}
+     */
+    @NotNull TableAlterBuilder alterTable(@NotNull String tableName);
+
+    /**
+     * 快速获取表的部分元数据。
+     * <br> 当需要获取其他元数据时，请使用 {@link #fetchMetadata(SQLFunction, SQLFunction)} 方法。
+     *
+     * @param tablePattern 表名通配符
+     * @return {@link TableMetadataBuilder}
+     */
+    @NotNull TableMetadataBuilder fetchTableMetadata(@NotNull String tablePattern);
 
     /**
      * 获取并操作 {@link  DatabaseMetaData} 以得到需要的数据库消息。
@@ -69,87 +95,5 @@ public interface NewSQLManager {
      */
     <R> CompletableFuture<R> fetchMetadata(@NotNull SQLBiFunction<DatabaseMetaData, Connection, ResultSet> supplier,
                                            @NotNull SQLFunction<@NotNull ResultSet, R> reader);
-
-    /**
-     * 在库中创建一个表。
-     *
-     * @param tableName 表名
-     * @return {@link TableCreateBuilder}
-     */
-    @NotNull TableCreateBuilder createTable(@NotNull String tableName);
-
-    /**
-     * 对库中的某个表执行更改。
-     *
-     * @param tableName 表名
-     * @return {@link TableAlterBuilder}
-     */
-    @NotNull TableAlterBuilder alterTable(@NotNull String tableName);
-
-    /**
-     * 快速获取表的部分元数据。
-     * <br> 当需要获取其他元数据时，请使用 {@link #fetchMetadata(SQLFunction, SQLFunction)} 方法。
-     *
-     * @param tablePattern 表名通配符
-     * @return {@link TableMetadataBuilder}
-     */
-    @NotNull TableMetadataBuilder fetchTableMetadata(@NotNull String tablePattern);
-
-    /**
-     * 新建一个查询。
-     *
-     * @return {@link QueryBuilder}
-     */
-    @NotNull QueryBuilder createQuery();
-
-    @NotNull SQLTransaction createTransaction();
-
-    /**
-     * 创建一条插入操作。
-     *
-     * @param tableName 目标表名
-     * @return {@link InsertBuilder}
-     */
-    @NotNull InsertBuilder<PreparedSQLUpdateAction<Integer>> insertInto(@NotNull String tableName);
-
-    /**
-     * 创建支持多组数据的插入操作。
-     *
-     * @param tableName 目标表名
-     * @return {@link InsertBuilder}
-     */
-    @NotNull InsertBuilder<PreparedSQLUpdateBatchAction<Integer>> insertBatchInto(@NotNull String tableName);
-
-    /**
-     * 创建一条替换操作。
-     *
-     * @param tableName 目标表名
-     * @return {@link ReplaceBuilder}
-     */
-    @NotNull ReplaceBuilder<PreparedSQLUpdateAction<Integer>> replaceInto(@NotNull String tableName);
-
-    /**
-     * 创建支持多组数据的替换操作。
-     *
-     * @param tableName 目标表名
-     * @return {@link ReplaceBuilder}
-     */
-    @NotNull ReplaceBuilder<PreparedSQLUpdateBatchAction<Integer>> replaceBatchInto(@NotNull String tableName);
-
-    /**
-     * 创建更新操作。
-     *
-     * @param tableName 目标表名
-     * @return {@link UpdateBuilder}
-     */
-    @NotNull UpdateBuilder updateInto(@NotNull String tableName);
-
-    /**
-     * 创建删除操作。
-     *
-     * @param tableName 目标表名
-     * @return {@link DeleteBuilder}
-     */
-    @NotNull DeleteBuilder deleteFrom(@NotNull String tableName);
 
 }

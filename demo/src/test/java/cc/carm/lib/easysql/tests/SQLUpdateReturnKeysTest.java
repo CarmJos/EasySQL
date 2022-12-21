@@ -13,7 +13,7 @@ public class SQLUpdateReturnKeysTest extends SQLUpdateBatchTests {
     public void onTest(SQLManager sqlManager) throws SQLException {
         List<Integer> generatedKeys = sqlManager.createInsertBatch("test_user_table")
                 .columns("uuid", "username", "age")
-                .setAllParams(generateParams())
+                .allValues(generateParams())
                 .returnGeneratedKeys(Integer.class)
                 .execute();
 
