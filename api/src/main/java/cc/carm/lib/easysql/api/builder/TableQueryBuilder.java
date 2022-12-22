@@ -1,6 +1,6 @@
 package cc.carm.lib.easysql.api.builder;
 
-import cc.carm.lib.easysql.api.action.query.PreparedQueryAction;
+import cc.carm.lib.easysql.api.action.base.PreparedQueryAction;
 import org.jetbrains.annotations.NotNull;
 
 public interface TableQueryBuilder extends ConditionalBuilder<TableQueryBuilder, PreparedQueryAction> {

@@ -1,6 +1,6 @@
 package cc.carm.lib.easysql.action.query;
 
-import cc.carm.lib.easysql.api.action.query.PreparedQueryAction;
+import cc.carm.lib.easysql.api.action.base.PreparedQueryAction;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import cc.carm.lib.easysql.query.SQLQueryImpl;
 import cc.carm.lib.easysql.util.StatementUtil;

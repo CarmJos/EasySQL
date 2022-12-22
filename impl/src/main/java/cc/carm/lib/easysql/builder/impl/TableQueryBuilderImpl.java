@@ -1,7 +1,7 @@
 package cc.carm.lib.easysql.builder.impl;
 
 import cc.carm.lib.easysql.action.query.PreparedQueryActionImpl;
-import cc.carm.lib.easysql.api.action.query.PreparedQueryAction;
+import cc.carm.lib.easysql.api.action.base.PreparedQueryAction;
 import cc.carm.lib.easysql.api.builder.TableQueryBuilder;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;

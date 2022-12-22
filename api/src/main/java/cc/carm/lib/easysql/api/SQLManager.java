@@ -1,7 +1,7 @@
 package cc.carm.lib.easysql.api;
 
-import cc.carm.lib.easysql.api.action.asyncable.AsyncableBatchUpdateAction;
-import cc.carm.lib.easysql.api.action.asyncable.AsyncableUpdateAction;
+import cc.carm.lib.easysql.api.action.asyncable.AsyncablePreparedBatchUpdateAction;
+import cc.carm.lib.easysql.api.action.asyncable.AsyncablePreparedUpdateAction;
 import cc.carm.lib.easysql.api.builder.*;
 import cc.carm.lib.easysql.api.enums.IsolationLevel;
 import cc.carm.lib.easysql.api.function.SQLBiFunction;
@@ -36,7 +36,7 @@ public interface SQLManager extends SQLSource {
      * @param tableName 目标表名
      * @return {@link InsertBuilder}
      */
-    @NotNull InsertBuilder<AsyncableUpdateAction<Integer>> insertInto(@NotNull String tableName);
+    @NotNull InsertBuilder<AsyncablePreparedUpdateAction<Integer>> insertInto(@NotNull String tableName);
 
     /**
      * 创建支持多组数据的插入操作。
@@ -44,7 +44,7 @@ public interface SQLManager extends SQLSource {
      * @param tableName 目标表名
      * @return {@link InsertBuilder}
      */
-    @NotNull InsertBuilder<AsyncableBatchUpdateAction<Integer>> insertBatchInto(@NotNull String tableName);
+    @NotNull InsertBuilder<AsyncablePreparedBatchUpdateAction<Integer>> insertBatchInto(@NotNull String tableName);
 
     /**
      * 创建一条替换操作。
@@ -52,7 +52,7 @@ public interface SQLManager extends SQLSource {
      * @param tableName 目标表名
      * @return {@link ReplaceBuilder}
      */
-    @NotNull ReplaceBuilder<AsyncableUpdateAction<Integer>> replaceInto(@NotNull String tableName);
+    @NotNull ReplaceBuilder<AsyncablePreparedUpdateAction<Integer>> replaceInto(@NotNull String tableName);
 
     /**
      * 创建支持多组数据的替换操作。
@@ -60,7 +60,7 @@ public interface SQLManager extends SQLSource {
      * @param tableName 目标表名
      * @return {@link ReplaceBuilder}
      */
-    @NotNull ReplaceBuilder<AsyncableBatchUpdateAction<Integer>> replaceBatchInto(@NotNull String tableName);
+    @NotNull ReplaceBuilder<AsyncablePreparedBatchUpdateAction<Integer>> replaceBatchInto(@NotNull String tableName);
 
     /**
      * 创建更新操作。

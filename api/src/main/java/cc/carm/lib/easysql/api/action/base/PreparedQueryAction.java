@@ -1,4 +1,4 @@
-package cc.carm.lib.easysql.api.action.query;
+package cc.carm.lib.easysql.api.action.base;
 
 import org.jetbrains.annotations.Nullable;
 

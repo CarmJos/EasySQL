@@ -2,8 +2,8 @@ package cc.carm.lib.easysql.builder.impl;
 
 import cc.carm.lib.easysql.action.query.PreparedQueryActionImpl;
 import cc.carm.lib.easysql.action.query.QueryActionImpl;
-import cc.carm.lib.easysql.api.action.query.PreparedQueryAction;
-import cc.carm.lib.easysql.api.action.query.QueryAction;
+import cc.carm.lib.easysql.api.action.base.PreparedQueryAction;
+import cc.carm.lib.easysql.api.action.base.QueryAction;
 import cc.carm.lib.easysql.api.builder.QueryBuilder;
 import cc.carm.lib.easysql.api.builder.TableQueryBuilder;
 import cc.carm.lib.easysql.builder.AbstractSQLBuilder;
