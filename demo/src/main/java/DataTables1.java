@@ -1,4 +1,3 @@
-import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.table.SQLTable;
 import cc.carm.lib.easysql.api.enums.IndexType;
 import cc.carm.lib.easysql.api.enums.NumberType;

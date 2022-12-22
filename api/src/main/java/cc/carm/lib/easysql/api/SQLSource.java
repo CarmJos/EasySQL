@@ -1,9 +1,10 @@
 package cc.carm.lib.easysql.api;
 
-import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
-import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
-import cc.carm.lib.easysql.api.action.SQLUpdateAction;
-import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
+import cc.carm.lib.easysql.api.action.*;
+import cc.carm.lib.easysql.api.action.base.PreparedBatchUpdateAction;
+import cc.carm.lib.easysql.api.action.base.PreparedUpdateAction;
+import cc.carm.lib.easysql.api.action.base.BatchUpdateAction;
+import cc.carm.lib.easysql.api.action.base.UpdateAction;
 import cc.carm.lib.easysql.api.function.SQLDebugHandler;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import org.jetbrains.annotations.NotNull;
@@ -128,7 +129,7 @@ public interface SQLSource {
      *
      * @param sql SQL语句内容
      * @return 更新的行数
-     * @see SQLUpdateAction
+     * @see UpdateAction
      */
     @Nullable Integer executeSQL(String sql);
 
@@ -138,7 +139,7 @@ public interface SQLSource {
      * @param sql    SQL语句内容
      * @param params SQL语句中 ? 的对应参数
      * @return 更新的行数
-     * @see PreparedSQLUpdateAction
+     * @see PreparedUpdateAction
      */
     @Nullable Integer executeSQL(String sql, Object[] params);
 
@@ -148,7 +149,7 @@ public interface SQLSource {
      * @param sql         SQL语句内容
      * @param paramsBatch SQL语句中对应?的参数组
      * @return 对应参数返回的行数
-     * @see PreparedSQLUpdateBatchAction
+     * @see PreparedBatchUpdateAction
      */
     @Nullable List<Integer> executeSQLBatch(String sql, Iterable<Object[]> paramsBatch);
 
@@ -160,7 +161,7 @@ public interface SQLSource {
      * @param sql     SQL语句内容
      * @param moreSQL 更多SQL语句内容
      * @return 对应参数返回的行数
-     * @see SQLUpdateBatchAction
+     * @see BatchUpdateAction
      */
     @Nullable List<Integer> executeSQLBatch(@NotNull String sql, String... moreSQL);
 

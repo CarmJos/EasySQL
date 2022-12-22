@@ -24,9 +24,9 @@ _SQLTable同时提供了有SQLManager参数与无参的操作方法，其中无�
 首先，我们需要创建一个枚举类，[示例代码](../demo/src/main/java/DataTables1.java)如下所示：
 
 ```java
-import cc.carm.lib.easysql.api.enums.IndexType;
-import cc.carm.lib.easysql.api.enums.NumberType;
-import cc.carm.lib.easysql.api.table.NamedSQLTable;
+import enums.cc.carm.lib.easysql.api.IndexType;
+import enums.cc.carm.lib.easysql.api.NumberType;
+import table.cc.carm.lib.easysql.api.NamedSQLTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -91,9 +91,9 @@ _该方法为本人最常用，也是最推荐的方法。_
 [示例代码](../demo/src/main/java/DataTables2.java)如下：
 
 ```java
-import cc.carm.lib.easysql.api.builder.TableCreateBuilder;
-import cc.carm.lib.easysql.api.enums.IndexType;
-import cc.carm.lib.easysql.api.enums.NumberType;
+import builder.cc.carm.lib.easysql.api.TableCreateBuilder;
+import enums.cc.carm.lib.easysql.api.IndexType;
+import enums.cc.carm.lib.easysql.api.NumberType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

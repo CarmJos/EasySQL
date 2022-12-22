@@ -1,6 +1,6 @@
 package cc.carm.lib.easysql.action;
 
-import cc.carm.lib.easysql.api.action.SQLUpdateAction;
+import cc.carm.lib.easysql.api.action.base.UpdateAction;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,22 +11,22 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class SQLUpdateActionImpl<T extends Number>
+public class UpdateActionImpl<T extends Number>
         extends AbstractSQLAction<T>
-        implements SQLUpdateAction<T> {
+        implements UpdateAction<T> {
 
     protected final @NotNull Class<T> numberClass;
 
     protected boolean returnGeneratedKeys = false;
 
-    public SQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
-                               @NotNull String sql) {
+    public UpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
+                            @NotNull String sql) {
         super(manager, sql);
         this.numberClass = numberClass;
     }
 
-    public SQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
-                               @NotNull UUID uuid, @NotNull String sql) {
+    public UpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
+                            @NotNull UUID uuid, @NotNull String sql) {
         super(manager, sql, uuid);
         this.numberClass = numberClass;
     }
@@ -52,14 +52,14 @@ public class SQLUpdateActionImpl<T extends Number>
     }
 
     @Override
-    public SQLUpdateAction<T> returnGeneratedKey() {
+    public UpdateAction<T> returnGeneratedKey() {
         this.returnGeneratedKeys = true;
         return this;
     }
 
     @Override
-    public <N extends Number> SQLUpdateAction<N> returnGeneratedKey(Class<N> keyTypeClass) {
-        return new SQLUpdateActionImpl<>(getManager(), keyTypeClass, getActionUUID(), getSQLContent()).returnGeneratedKey();
+    public <N extends Number> UpdateAction<N> returnGeneratedKey(Class<N> keyTypeClass) {
+        return new UpdateActionImpl<>(getManager(), keyTypeClass, getActionUUID(), getSQLContent()).returnGeneratedKey();
     }
 
 }

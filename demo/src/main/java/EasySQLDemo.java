@@ -1,4 +1,3 @@
-import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.SQLQuery;
 import cc.carm.lib.easysql.api.table.SQLTable;
 import cc.carm.lib.easysql.api.enums.ForeignKeyRule;

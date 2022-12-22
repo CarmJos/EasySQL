@@ -1,7 +1,7 @@
 package cc.carm.lib.easysql.builder.impl;
 
-import cc.carm.lib.easysql.action.SQLUpdateActionImpl;
-import cc.carm.lib.easysql.api.action.SQLUpdateAction;
+import cc.carm.lib.easysql.action.UpdateActionImpl;
+import cc.carm.lib.easysql.api.action.base.UpdateAction;
 import cc.carm.lib.easysql.api.builder.TableCreateBuilder;
 import cc.carm.lib.easysql.api.enums.ForeignKeyRule;
 import cc.carm.lib.easysql.api.enums.IndexType;
@@ -75,7 +75,7 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
     }
 
     @Override
-    public SQLUpdateAction<Integer> build() {
+    public UpdateAction<Integer> build() {
         StringBuilder createSQL = new StringBuilder();
         createSQL.append("CREATE TABLE IF NOT EXISTS ").append(withBackQuote(tableName));
         createSQL.append("(");
@@ -94,7 +94,7 @@ public class TableCreateBuilderImpl extends AbstractSQLBuilder implements TableC
             createSQL.append(" COMMENT ").append(withQuote(tableComment));
         }
 
-        return new SQLUpdateActionImpl<>(getManager(), Integer.class, createSQL.toString());
+        return new UpdateActionImpl<>(getManager(), Integer.class, createSQL.toString());
     }
 
     @Override

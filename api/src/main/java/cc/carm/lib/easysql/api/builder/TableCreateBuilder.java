@@ -1,7 +1,7 @@
 package cc.carm.lib.easysql.api.builder;
 
 import cc.carm.lib.easysql.api.SQLBuilder;
-import cc.carm.lib.easysql.api.action.SQLUpdateAction;
+import cc.carm.lib.easysql.api.action.base.UpdateAction;
 import cc.carm.lib.easysql.api.enums.ForeignKeyRule;
 import cc.carm.lib.easysql.api.enums.IndexType;
 import cc.carm.lib.easysql.api.enums.NumberType;
@@ -19,9 +19,9 @@ public interface TableCreateBuilder extends SQLBuilder {
     /**
      * 将现有条件构建完整的SQL语句用于执行。
      *
-     * @return {@link SQLUpdateAction}
+     * @return {@link UpdateAction}
      */
-    SQLUpdateAction<Integer> build();
+    UpdateAction<Integer> build();
 
     @NotNull String getTableName();
 

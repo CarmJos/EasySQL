@@ -1,6 +1,5 @@
 package cc.carm.lib.easysql;
 
-import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import cc.carm.lib.easysql.tests.*;
 import com.zaxxer.hikari.HikariConfig;

@@ -1,8 +1,7 @@
 package cc.carm.lib.easysql.builder.impl;
 
-import cc.carm.lib.easysql.action.PreparedSQLUpdateActionImpl;
-import cc.carm.lib.easysql.api.SQLAction;
-import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
+import cc.carm.lib.easysql.action.PreparedUpdateActionImpl;
+import cc.carm.lib.easysql.api.action.base.PreparedUpdateAction;
 import cc.carm.lib.easysql.api.builder.DeleteBuilder;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +23,7 @@ public class DeleteBuilderImpl
     }
 
     @Override
-    public PreparedSQLUpdateAction<Integer> build() {
+    public PreparedUpdateAction<Integer> build() {
 
         StringBuilder sqlBuilder = new StringBuilder();
 
@@ -33,7 +32,7 @@ public class DeleteBuilderImpl
         if (hasConditions()) sqlBuilder.append(" ").append(buildConditionSQL());
         if (limit > 0) sqlBuilder.append(" ").append(buildLimitSQL());
 
-        return new PreparedSQLUpdateActionImpl<>(
+        return new PreparedUpdateActionImpl<>(
                 getManager(), Integer.class, sqlBuilder.toString(),
                 (hasConditionParams() ? getConditionParams() : null)
         );

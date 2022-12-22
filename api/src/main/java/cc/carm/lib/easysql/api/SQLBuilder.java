@@ -1,5 +1,6 @@
 package cc.carm.lib.easysql.api;
 
+import cc.carm.lib.easysql.api.action.SQLAction;
 import org.jetbrains.annotations.NotNull;
 
 /**

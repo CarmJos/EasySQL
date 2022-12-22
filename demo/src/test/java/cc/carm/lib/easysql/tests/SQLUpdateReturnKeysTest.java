@@ -1,7 +1,5 @@
 package cc.carm.lib.easysql.tests;
 
-import cc.carm.lib.easysql.api.SQLManager;
-
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;

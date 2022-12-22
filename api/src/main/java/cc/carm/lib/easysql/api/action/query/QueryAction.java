@@ -1,9 +1,8 @@
 package cc.carm.lib.easysql.api.action.query;
 
-import cc.carm.lib.easysql.api.SQLAction;
+import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.api.SQLQuery;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
-import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.api.function.SQLHandler;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

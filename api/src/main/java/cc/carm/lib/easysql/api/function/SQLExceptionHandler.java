@@ -1,6 +1,6 @@
 package cc.carm.lib.easysql.api.function;
 
-import cc.carm.lib.easysql.api.SQLAction;
+import cc.carm.lib.easysql.api.action.SQLAction;
 import org.slf4j.Logger;
 
 import java.sql.SQLException;

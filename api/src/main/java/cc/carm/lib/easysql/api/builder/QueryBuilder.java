@@ -1,8 +1,8 @@
 package cc.carm.lib.easysql.api.builder;
 
 import cc.carm.lib.easysql.api.SQLBuilder;
-import cc.carm.lib.easysql.api.action.query.PreparedQueryAction;
 import cc.carm.lib.easysql.api.action.query.QueryAction;
+import cc.carm.lib.easysql.api.action.query.PreparedQueryAction;
 import org.jetbrains.annotations.NotNull;
 
 public interface QueryBuilder extends SQLBuilder {

@@ -1,4 +1,4 @@
-package cc.carm.lib.easysql.api;
+package cc.carm.lib.easysql.api.action;
 
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLFunction;
@@ -16,25 +16,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-/**
- * SQLAction 是用于承载SQL语句并进行处理、返回的基本类。
- *
- * <ul>
- *     <li>同步执行 {@link #execute()}, {@link #execute(SQLFunction, SQLExceptionHandler)}
- *     <br>同步执行方法中有会抛出异常的方法与不抛出异常的方法，
- *     <br>若选择不抛出异常，则返回值可能为空，需要特殊处理。</li>
- *
- *     <li>异步执行 {@link #executeAsync(SQLHandler, SQLExceptionHandler)}
- *     <br>异步执行时将提供成功与异常两种处理方式
- *     <br>可自行选择是否对数据或异常进行处理
- *     <br>默认的异常处理器为 {@link #defaultExceptionHandler()}
- *     <br>若有特殊需要，可通过{@link #setExceptionHandler(SQLExceptionHandler)} 方法修改默认的处理器</li>
- * </ul>
- *
- * @param <T> 需要返回的类型
- * @author CarmJos
- * @since 0.0.1
- */
 public interface SQLAction<T> {
 
     /**

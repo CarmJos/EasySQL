@@ -1,6 +1,4 @@
-package cc.carm.lib.easysql.api.action;
-
-import cc.carm.lib.easysql.api.SQLAction;
+package cc.carm.lib.easysql.api.newactions;
 
 public interface SQLUpdateAction<T extends Number> extends SQLAction<T> {
 

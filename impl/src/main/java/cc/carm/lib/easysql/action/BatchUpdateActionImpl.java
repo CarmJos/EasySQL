@@ -1,6 +1,6 @@
 package cc.carm.lib.easysql.action;
 
-import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
+import cc.carm.lib.easysql.api.action.base.BatchUpdateAction;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class SQLUpdateBatchActionImpl
+public class BatchUpdateActionImpl
         extends AbstractSQLAction<List<Integer>>
-        implements SQLUpdateBatchAction {
+        implements BatchUpdateAction {
 
     protected final List<String> sqlContents = new ArrayList<>();
 
-    public SQLUpdateBatchActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
+    public BatchUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
         super(manager, sql);
         this.sqlContents.add(sql);
     }
@@ -30,7 +30,7 @@ public class SQLUpdateBatchActionImpl
     }
 
     @Override
-    public SQLUpdateBatchAction addBatch(@NotNull String sql) {
+    public BatchUpdateAction addBatch(@NotNull String sql) {
         Objects.requireNonNull(sql, "sql could not be null");
         this.sqlContents.add(sql);
         return this;

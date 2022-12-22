@@ -1,9 +1,8 @@
 package cc.carm.lib.easysql.api.function;
 
-import cc.carm.lib.easysql.api.SQLAction;
 import cc.carm.lib.easysql.api.SQLQuery;
-import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
-import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
+import cc.carm.lib.easysql.api.action.base.PreparedUpdateAction;
+import cc.carm.lib.easysql.api.action.base.PreparedBatchUpdateAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -24,7 +23,7 @@ public interface SQLDebugHandler {
      *
      * @param action {@link SQLAction} 对象
      * @param params 执行传入的参数列表。
-     *               实际上，仅有 {@link PreparedSQLUpdateAction} 和 {@link PreparedSQLUpdateBatchAction} 才会有传入参数。
+     *               实际上，仅有 {@link PreparedUpdateAction} 和 {@link PreparedBatchUpdateAction} 才会有传入参数。
      */
     void beforeExecute(@NotNull SQLAction<?> action, @NotNull List<@Nullable Object[]> params);
 

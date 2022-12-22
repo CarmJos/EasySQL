@@ -1,8 +1,7 @@
 package cc.carm.lib.easysql.api.builder;
 
-import cc.carm.lib.easysql.api.SQLAction;
 import cc.carm.lib.easysql.api.SQLBuilder;
-import cc.carm.lib.easysql.api.action.SQLUpdateAction;
+import cc.carm.lib.easysql.api.action.base.UpdateAction;
 import cc.carm.lib.easysql.api.enums.IndexType;
 import cc.carm.lib.easysql.api.enums.NumberType;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +22,7 @@ public interface TableAlterBuilder extends SQLBuilder {
      * 为该表移除一个索引
      *
      * @param indexName 索引名
-     * @return {@link SQLUpdateAction}
+     * @return {@link UpdateAction}
      */
     SQLAction<Integer> dropIndex(@NotNull String indexName);
 
@@ -31,14 +30,14 @@ public interface TableAlterBuilder extends SQLBuilder {
      * 为该表移除一个外键
      *
      * @param keySymbol 外键名
-     * @return {@link SQLUpdateAction}
+     * @return {@link UpdateAction}
      */
     SQLAction<Integer> dropForeignKey(@NotNull String keySymbol);
 
     /**
      * 为该表移除主键(须添加新主键)
      *
-     * @return {@link SQLUpdateAction}
+     * @return {@link UpdateAction}
      */
     SQLAction<Integer> dropPrimaryKey();
 
@@ -47,7 +46,7 @@ public interface TableAlterBuilder extends SQLBuilder {
      *
      * @param columnName 列名
      * @param settings   列的相关设定
-     * @return {@link SQLUpdateAction}
+     * @return {@link UpdateAction}
      */
     default SQLAction<Integer> addColumn(@NotNull String columnName, @NotNull String settings) {
         return addColumn(columnName, settings, null);
@@ -61,7 +60,7 @@ public interface TableAlterBuilder extends SQLBuilder {
      * @param afterColumn 该列增添到哪个列的后面，
      *                    <p> 该参数若省缺则放于最后一行
      *                    <p> 若为 "" 则置于首行。
-     * @return {@link SQLUpdateAction}
+     * @return {@link UpdateAction}
      */
     SQLAction<Integer> addColumn(@NotNull String columnName, @NotNull String settings, @Nullable String afterColumn);
 

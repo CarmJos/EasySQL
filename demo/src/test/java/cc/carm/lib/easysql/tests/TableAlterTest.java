@@ -1,7 +1,6 @@
 package cc.carm.lib.easysql.tests;
 
 import cc.carm.lib.easysql.TestHandler;
-import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.enums.NumberType;
 
 import java.sql.SQLException;

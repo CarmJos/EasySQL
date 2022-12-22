@@ -1,7 +1,6 @@
 package cc.carm.lib.easysql.builder.impl;
 
-import cc.carm.lib.easysql.action.SQLUpdateActionImpl;
-import cc.carm.lib.easysql.api.SQLAction;
+import cc.carm.lib.easysql.action.UpdateActionImpl;
 import cc.carm.lib.easysql.api.builder.TableAlterBuilder;
 import cc.carm.lib.easysql.api.enums.IndexType;
 import cc.carm.lib.easysql.builder.AbstractSQLBuilder;
@@ -141,7 +140,7 @@ public class TableAlterBuilderImpl extends AbstractSQLBuilder implements TableAl
         );
     }
 
-    private SQLUpdateActionImpl<Integer> createAction(@NotNull String sql) {
-        return new SQLUpdateActionImpl<>(getManager(), Integer.class, sql);
+    private UpdateActionImpl<Integer> createAction(@NotNull String sql) {
+        return new UpdateActionImpl<>(getManager(), Integer.class, sql);
     }
 }

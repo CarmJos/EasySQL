@@ -1,6 +1,6 @@
 package cc.carm.lib.easysql.action;
 
-import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
+import cc.carm.lib.easysql.api.action.base.PreparedBatchUpdateAction;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import cc.carm.lib.easysql.util.StatementUtil;
 import org.jetbrains.annotations.NotNull;
@@ -15,30 +15,30 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class PreparedSQLBatchUpdateActionImpl<T extends Number>
+public class PreparedBatchUpdateActionImpl<T extends Number>
         extends AbstractSQLAction<List<T>>
-        implements PreparedSQLUpdateBatchAction<T> {
+        implements PreparedBatchUpdateAction<T> {
 
     boolean returnKeys = false;
     @NotNull List<Object[]> allParams = new ArrayList<>();
 
     protected final @NotNull Class<T> numberClass;
 
-    public PreparedSQLBatchUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
-                                            @NotNull String sql) {
+    public PreparedBatchUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
+                                         @NotNull String sql) {
         super(manager, sql);
         this.numberClass = numberClass;
         this.allParams = new ArrayList<>();
     }
 
-    public PreparedSQLBatchUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
-                                            @NotNull UUID uuid, @NotNull String sql) {
+    public PreparedBatchUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
+                                         @NotNull UUID uuid, @NotNull String sql) {
         super(manager, sql, uuid);
         this.numberClass = numberClass;
     }
 
     @Override
-    public PreparedSQLBatchUpdateActionImpl<T> allValues(Iterable<Object[]> allValues) {
+    public PreparedBatchUpdateActionImpl<T> allValues(Iterable<Object[]> allValues) {
         List<Object[]> paramsList = new ArrayList<>();
         allValues.forEach(paramsList::add);
         this.allParams = paramsList;
@@ -46,20 +46,20 @@ public class PreparedSQLBatchUpdateActionImpl<T extends Number>
     }
 
     @Override
-    public PreparedSQLBatchUpdateActionImpl<T> values(Object... values) {
+    public PreparedBatchUpdateActionImpl<T> values(Object... values) {
         this.allParams.add(values);
         return this;
     }
 
     @Override
-    public PreparedSQLBatchUpdateActionImpl<T> returnGeneratedKeys() {
+    public PreparedBatchUpdateActionImpl<T> returnGeneratedKeys() {
         this.returnKeys = true;
         return this;
     }
 
     @Override
-    public <N extends Number> PreparedSQLBatchUpdateActionImpl<N> returnGeneratedKeys(Class<N> keyTypeClass) {
-        return new PreparedSQLBatchUpdateActionImpl<>(getManager(), keyTypeClass, getActionUUID(), getSQLContent())
+    public <N extends Number> PreparedBatchUpdateActionImpl<N> returnGeneratedKeys(Class<N> keyTypeClass) {
+        return new PreparedBatchUpdateActionImpl<>(getManager(), keyTypeClass, getActionUUID(), getSQLContent())
                 .allValues(allParams).returnGeneratedKeys();
     }
 

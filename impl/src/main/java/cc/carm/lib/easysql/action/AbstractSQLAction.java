@@ -1,6 +1,5 @@
 package cc.carm.lib.easysql.action;
 
-import cc.carm.lib.easysql.api.SQLAction;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.api.function.SQLHandler;

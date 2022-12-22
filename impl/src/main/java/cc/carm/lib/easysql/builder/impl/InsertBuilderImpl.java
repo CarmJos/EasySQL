@@ -1,6 +1,5 @@
 package cc.carm.lib.easysql.builder.impl;
 
-import cc.carm.lib.easysql.api.SQLAction;
 import cc.carm.lib.easysql.api.builder.InsertBuilder;
 import cc.carm.lib.easysql.builder.AbstractSQLBuilder;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;

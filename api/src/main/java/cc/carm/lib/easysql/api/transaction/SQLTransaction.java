@@ -1,11 +1,20 @@
 package cc.carm.lib.easysql.api.transaction;
 
-import cc.carm.lib.easysql.api.SQLOperator;
+import cc.carm.lib.easysql.api.SQLManager;
+import cc.carm.lib.easysql.api.action.base.PreparedBatchUpdateAction;
+import cc.carm.lib.easysql.api.action.base.PreparedUpdateAction;
+import cc.carm.lib.easysql.api.action.base.BatchUpdateAction;
+import cc.carm.lib.easysql.api.action.base.UpdateAction;
+import cc.carm.lib.easysql.api.builder.*;
 import cc.carm.lib.easysql.api.enums.IsolationLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface SQLTransaction extends SQLOperator, AutoCloseable {
+import java.util.List;
+
+public interface SQLTransaction extends AutoCloseable {
+
+    @NotNull SQLManager getManager();
 
     /**
      * 得到本次事务的隔离级别
@@ -40,5 +49,109 @@ public interface SQLTransaction extends SQLOperator, AutoCloseable {
      * @param savepoint 记录点，若记录点为NULL则回退整个事务的操作。
      */
     void rollback(@Nullable SQLSavepoint savepoint);
+
+    /**
+     * 执行一条不需要返回结果的SQL语句(多用于UPDATE、REPLACE、DELETE方法)
+     * 该方法使用 Statement 实现，请注意SQL注入风险！
+     *
+     * @param sql SQL语句内容
+     * @return 更新的行数
+     * @see UpdateAction
+     */
+    @Nullable Integer executeSQL(String sql);
+
+    /**
+     * 执行一条不需要返回结果的预处理SQL更改(UPDATE、REPLACE、DELETE)
+     *
+     * @param sql    SQL语句内容
+     * @param params SQL语句中 ? 的对应参数
+     * @return 更新的行数
+     * @see PreparedUpdateAction
+     */
+    @Nullable Integer executeSQL(String sql, Object[] params);
+
+    /**
+     * 执行多条不需要返回结果的SQL更改(UPDATE、REPLACE、DELETE)
+     *
+     * @param sql         SQL语句内容
+     * @param paramsBatch SQL语句中对应?的参数组
+     * @return 对应参数返回的行数
+     * @see PreparedBatchUpdateAction
+     */
+    @Nullable List<Integer> executeSQLBatch(String sql, Iterable<Object[]> paramsBatch);
+
+    /**
+     * 执行多条不需要返回结果的SQL。
+     * 该方法使用 Statement 实现，请注意SQL注入风险！
+     *
+     * @param sql     SQL语句内容
+     * @param moreSQL 更多SQL语句内容
+     * @return 对应参数返回的行数
+     * @see BatchUpdateAction
+     */
+    @Nullable List<Integer> executeSQLBatch(@NotNull String sql, String... moreSQL);
+
+    /**
+     * 执行多条不需要返回结果的SQL。
+     *
+     * @param sqlBatch SQL语句内容
+     * @return 对应参数返回的行数
+     */
+    @Nullable List<Integer> executeSQLBatch(@NotNull Iterable<String> sqlBatch);
+
+    /**
+     * 新建一个查询。
+     *
+     * @return {@link QueryBuilder}
+     */
+    @NotNull QueryBuilder createQuery();
+
+    /**
+     * 创建一条插入操作。
+     *
+     * @param tableName 目标表名
+     * @return {@link InsertBuilder}
+     */
+    @NotNull InsertBuilder<PreparedUpdateAction<Integer>> insertInto(@NotNull String tableName);
+
+    /**
+     * 创建支持多组数据的插入操作。
+     *
+     * @param tableName 目标表名
+     * @return {@link InsertBuilder}
+     */
+    @NotNull InsertBuilder<PreparedBatchUpdateAction<Integer>> insertBatchInto(@NotNull String tableName);
+
+    /**
+     * 创建一条替换操作。
+     *
+     * @param tableName 目标表名
+     * @return {@link ReplaceBuilder}
+     */
+    @NotNull ReplaceBuilder<PreparedUpdateAction<Integer>> replaceInto(@NotNull String tableName);
+
+    /**
+     * 创建支持多组数据的替换操作。
+     *
+     * @param tableName 目标表名
+     * @return {@link ReplaceBuilder}
+     */
+    @NotNull ReplaceBuilder<PreparedBatchUpdateAction<Integer>> replaceBatchInto(@NotNull String tableName);
+
+    /**
+     * 创建更新操作。
+     *
+     * @param tableName 目标表名
+     * @return {@link UpdateBuilder}
+     */
+    @NotNull UpdateBuilder updateInto(@NotNull String tableName);
+
+    /**
+     * 创建删除操作。
+     *
+     * @param tableName 目标表名
+     * @return {@link DeleteBuilder}
+     */
+    @NotNull DeleteBuilder deleteFrom(@NotNull String tableName);
 
 }

@@ -10,8 +10,6 @@ import cc.carm.lib.easysql.builder.AbstractSQLBuilder;
 import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Objects;
 
 public class QueryBuilderImpl extends AbstractSQLBuilder implements QueryBuilder {

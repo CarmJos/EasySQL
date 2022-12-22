@@ -1,14 +1,13 @@
 package cc.carm.lib.easysql.manager;
 
-import cc.carm.lib.easysql.action.PreparedSQLBatchUpdateActionImpl;
-import cc.carm.lib.easysql.action.PreparedSQLUpdateActionImpl;
-import cc.carm.lib.easysql.action.SQLUpdateActionImpl;
-import cc.carm.lib.easysql.action.SQLUpdateBatchActionImpl;
-import cc.carm.lib.easysql.api.SQLManager;
+import cc.carm.lib.easysql.action.PreparedBatchUpdateActionImpl;
+import cc.carm.lib.easysql.action.PreparedUpdateActionImpl;
+import cc.carm.lib.easysql.action.UpdateActionImpl;
+import cc.carm.lib.easysql.action.BatchUpdateActionImpl;
 import cc.carm.lib.easysql.api.SQLQuery;
-import cc.carm.lib.easysql.api.action.PreparedSQLUpdateAction;
-import cc.carm.lib.easysql.api.action.PreparedSQLUpdateBatchAction;
-import cc.carm.lib.easysql.api.action.SQLUpdateBatchAction;
+import cc.carm.lib.easysql.api.action.base.PreparedUpdateAction;
+import cc.carm.lib.easysql.api.action.base.PreparedBatchUpdateAction;
+import cc.carm.lib.easysql.api.action.base.BatchUpdateAction;
 import cc.carm.lib.easysql.api.builder.*;
 import cc.carm.lib.easysql.api.function.SQLBiFunction;
 import cc.carm.lib.easysql.api.function.SQLDebugHandler;
@@ -120,22 +119,22 @@ public class SQLManagerImpl implements SQLManager {
 
     @Override
     public Integer executeSQL(String sql) {
-        return new SQLUpdateActionImpl<>(this, Integer.class, sql).execute(null);
+        return new UpdateActionImpl<>(this, Integer.class, sql).execute(null);
     }
 
     @Override
     public Integer executeSQL(String sql, Object[] params) {
-        return new PreparedSQLUpdateActionImpl<>(this, Integer.class, sql, params).execute(null);
+        return new PreparedUpdateActionImpl<>(this, Integer.class, sql, params).execute(null);
     }
 
     @Override
     public List<Integer> executeSQLBatch(String sql, Iterable<Object[]> paramsBatch) {
-        return new PreparedSQLBatchUpdateActionImpl<>(this, Integer.class, sql).allValues(paramsBatch).execute(null);
+        return new PreparedBatchUpdateActionImpl<>(this, Integer.class, sql).allValues(paramsBatch).execute(null);
     }
 
     @Override
     public List<Integer> executeSQLBatch(@NotNull String sql, String... moreSQL) {
-        SQLUpdateBatchAction action = new SQLUpdateBatchActionImpl(this, sql);
+        BatchUpdateAction action = new BatchUpdateActionImpl(this, sql);
         if (moreSQL != null && moreSQL.length > 0) {
             Arrays.stream(moreSQL).forEach(action::addBatch);
         }
@@ -147,7 +146,7 @@ public class SQLManagerImpl implements SQLManager {
         Iterator<String> iterator = sqlBatch.iterator();
         if (!iterator.hasNext()) return null; // PLEASE GIVE IT SOMETHING
 
-        SQLUpdateBatchAction action = new SQLUpdateBatchActionImpl(this, iterator.next());
+        BatchUpdateAction action = new BatchUpdateActionImpl(this, iterator.next());
         while (iterator.hasNext()) {
             action.addBatch(iterator.next());
         }
@@ -200,41 +199,41 @@ public class SQLManagerImpl implements SQLManager {
     }
 
     @Override
-    public InsertBuilder<PreparedSQLUpdateBatchAction<Integer>> createInsertBatch(@NotNull String tableName) {
-        return new InsertBuilderImpl<PreparedSQLUpdateBatchAction<Integer>>(this, tableName) {
+    public InsertBuilder<PreparedBatchUpdateAction<Integer>> createInsertBatch(@NotNull String tableName) {
+        return new InsertBuilderImpl<PreparedBatchUpdateAction<Integer>>(this, tableName) {
             @Override
-            public PreparedSQLUpdateBatchAction<Integer> columns(List<String> columnNames) {
-                return new PreparedSQLBatchUpdateActionImpl<>(getManager(), Integer.class, buildSQL(getTableName(), columnNames));
+            public PreparedBatchUpdateAction<Integer> columns(List<String> columnNames) {
+                return new PreparedBatchUpdateActionImpl<>(getManager(), Integer.class, buildSQL(getTableName(), columnNames));
             }
         };
     }
 
     @Override
-    public InsertBuilder<PreparedSQLUpdateAction<Integer>> insertInto(@NotNull String tableName) {
-        return new InsertBuilderImpl<PreparedSQLUpdateAction<Integer>>(this, tableName) {
+    public InsertBuilder<PreparedUpdateAction<Integer>> insertInto(@NotNull String tableName) {
+        return new InsertBuilderImpl<PreparedUpdateAction<Integer>>(this, tableName) {
             @Override
-            public PreparedSQLUpdateAction<Integer> columns(List<String> columnNames) {
-                return new PreparedSQLUpdateActionImpl<>(getManager(), Integer.class, buildSQL(getTableName(), columnNames));
+            public PreparedUpdateAction<Integer> columns(List<String> columnNames) {
+                return new PreparedUpdateActionImpl<>(getManager(), Integer.class, buildSQL(getTableName(), columnNames));
             }
         };
     }
 
     @Override
-    public ReplaceBuilder<PreparedSQLUpdateBatchAction<Integer>> createReplaceBatch(@NotNull String tableName) {
-        return new ReplaceBuilderImpl<PreparedSQLUpdateBatchAction<Integer>>(this, tableName) {
+    public ReplaceBuilder<PreparedBatchUpdateAction<Integer>> createReplaceBatch(@NotNull String tableName) {
+        return new ReplaceBuilderImpl<PreparedBatchUpdateAction<Integer>>(this, tableName) {
             @Override
-            public PreparedSQLUpdateBatchAction<Integer> columns(List<String> columnNames) {
-                return new PreparedSQLBatchUpdateActionImpl<>(getManager(), Integer.class, buildSQL(getTableName(), columnNames));
+            public PreparedBatchUpdateAction<Integer> columns(List<String> columnNames) {
+                return new PreparedBatchUpdateActionImpl<>(getManager(), Integer.class, buildSQL(getTableName(), columnNames));
             }
         };
     }
 
     @Override
-    public ReplaceBuilder<PreparedSQLUpdateAction<Integer>> createReplace(@NotNull String tableName) {
-        return new ReplaceBuilderImpl<PreparedSQLUpdateAction<Integer>>(this, tableName) {
+    public ReplaceBuilder<PreparedUpdateAction<Integer>> createReplace(@NotNull String tableName) {
+        return new ReplaceBuilderImpl<PreparedUpdateAction<Integer>>(this, tableName) {
             @Override
-            public PreparedSQLUpdateAction<Integer> columns(List<String> columnNames) {
-                return new PreparedSQLUpdateActionImpl<>(getManager(), Integer.class, buildSQL(getTableName(), columnNames));
+            public PreparedUpdateAction<Integer> columns(List<String> columnNames) {
+                return new PreparedUpdateActionImpl<>(getManager(), Integer.class, buildSQL(getTableName(), columnNames));
             }
         };
     }
