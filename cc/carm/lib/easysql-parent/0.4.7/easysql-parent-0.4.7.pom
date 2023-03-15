@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <jdk.version>8</jdk.version>
+        <maven.compiler.source>${jdk.version}</maven.compiler.source>
+        <maven.compiler.target>${jdk.version}</maven.compiler.target>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+
+        <sonar.organization>carmjos</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    </properties>
+
+    <groupId>cc.carm.lib</groupId>
+    <artifactId>easysql-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>0.4.7</version>
+
+    <modules>
+        <module>api</module>
+        <module>impl</module>
+
+        <module>with-pool/beecp</module>
+        <module>with-pool/hikaricp</module>
+
+        <module>demo</module>
+    </modules>
+
+    <name>EasySQL</name>
+    <description>简单便捷的数据库操作工具，可自选连接池。</description>
+    <url>https://github.com/CarmJos/EasySQL</url>
+
+    <developers>
+        <developer>
+            <id>CarmJos</id>
+            <name>Carm Jos</name>
+            <email>carm@carm.cc</email>
+            <url>https://www.carm.cc</url>
+            <timezone>Asia/Shanghai</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:CarmJos/EasySQL.git</connection>
+        <developerConnection>scm:git:git@github.com:CarmJos/EasySQL.git</developerConnection>
+        <url>https://github.com/CarmJos/EasySQL</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/CarmJos/EasySQL/issues</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>GitHub Actions</system>
+        <url>https://github.com/CarmJos/EasySQL/actions/workflows/maven.yml</url>
+    </ciManagement>
+
+    <repositories>
+
+        <repository>
+            <id>carm-repo</id>
+            <name>Carm's Repo</name>
+            <url>https://repo.carm.cc/repository/maven-public/</url>
+        </repository>
+
+        <repository>
+            <id>nexus</id>
+            <url>https://mvn.lumine.io/repository/maven-public/</url>
+        </repository>
+
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
+        </repository>
+
+    </repositories>
+
+    <distributionManagement>
+        <downloadUrl>https://github.com/CarmJos/EasySQL/releases</downloadUrl>
+        <site>
+            <id>easysql-javadoc</id>
+            <name>EasySQL JavaDoc (on Github Pages)</name>
+            <url>https://CarmJos.github.io/EasySQL</url>
+        </site>
+    </distributionManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>24.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <gpgArguments>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                    </gpgArguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.5.0</version>
+                    <configuration>
+                        <classifier>javadoc</classifier>
+                        <detectJavaApiLink>false</detectJavaApiLink>
+                        <encoding>UTF-8</encoding>
+                        <charset>UTF-8</charset>
+                        <docencoding>UTF-8</docencoding>
+                        <locale>zh_CN</locale>
+
+                        <includeDependencySources>true</includeDependencySources>
+                        <dependencySourceIncludes>
+                            <dependencySourceInclude>cc.carm.lib:*</dependencySourceInclude>
+                        </dependencySourceIncludes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
+                    <configuration>
+                        <source>${jdk.version}</source>
+                        <target>${jdk.version}</target>
+                        <encoding>UTF-8</encoding>
+                        <compilerArgument>-parameters</compilerArgument>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.2.1</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.4.1</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                            <configuration>
+                                <createDependencyReducedPom>false</createDependencyReducedPom>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <filters>
+                            <filter>
+                                <artifact>*:*</artifact>
+                                <excludes>
+                                    <exclude>META-INF/MANIFEST.MF</exclude>
+                                    <exclude>META-INF/*.txt</exclude>
+                                </excludes>
+                            </filter>
+                        </filters>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <configuration>
+                        <useSystemClassLoader>false</useSystemClassLoader>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+    </build>
+
+    <profiles>
+
+        <profile>
+            <id>ossrh</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>github</id>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>local</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>localRepository</id>
+                    <url>file:${user.home}/local-deploy/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>localRepository</id>
+                    <url>file:${user.home}/local-deploy/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+    </profiles>
+
+</project>
