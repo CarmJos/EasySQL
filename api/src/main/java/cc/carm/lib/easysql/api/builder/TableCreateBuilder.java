@@ -1,7 +1,7 @@
 package cc.carm.lib.easysql.api.builder;
 
 import cc.carm.lib.easysql.api.SQLBuilder;
-import cc.carm.lib.easysql.api.action.base.UpdateAction;
+import cc.carm.lib.easysql.api.action.update.SQLUpdateAction;
 import cc.carm.lib.easysql.api.enums.ForeignKeyRule;
 import cc.carm.lib.easysql.api.enums.IndexType;
 import cc.carm.lib.easysql.api.enums.NumberType;
@@ -19,9 +19,9 @@ public interface TableCreateBuilder extends SQLBuilder {
     /**
      * 将现有条件构建完整的SQL语句用于执行。
      *
-     * @return {@link UpdateAction}
+     * @return {@link SQLUpdateAction.Advanced}
      */
-    UpdateAction<Integer> build();
+    @NotNull SQLUpdateAction.Advanced<Integer> build();
 
     @NotNull String getTableName();
 
@@ -33,7 +33,7 @@ public interface TableCreateBuilder extends SQLBuilder {
      */
     @NotNull String getTableSettings();
 
-    TableCreateBuilder setTableSettings(@NotNull String settings);
+    @NotNull TableCreateBuilder setTableSettings(@NotNull String settings);
 
     /**
      * 设定表的标注，一般用于解释该表的作用。
@@ -41,7 +41,7 @@ public interface TableCreateBuilder extends SQLBuilder {
      * @param comment 表标注
      * @return {@link TableCreateBuilder}
      */
-    TableCreateBuilder setTableComment(@Nullable String comment);
+    @NotNull TableCreateBuilder setTableComment(@Nullable String comment);
 
     /**
      * 直接设定表的所有列信息
@@ -49,7 +49,7 @@ public interface TableCreateBuilder extends SQLBuilder {
      * @param columns 列的相关信息 (包括列设定)
      * @return {@link TableCreateBuilder}
      */
-    TableCreateBuilder setColumns(@NotNull String... columns);
+    @NotNull TableCreateBuilder setColumns(@NotNull String... columns);
 
     /**
      * 为该表添加一个列
@@ -58,7 +58,7 @@ public interface TableCreateBuilder extends SQLBuilder {
      *               <br>如 `uuid` VARCHAR(36) NOT NULL UNIQUE KEY
      * @return {@link TableCreateBuilder}
      */
-    TableCreateBuilder addColumn(@NotNull String column);
+    @NotNull TableCreateBuilder addColumn(@NotNull String column);
 
     /**
      * 为该表添加一个列
@@ -68,7 +68,7 @@ public interface TableCreateBuilder extends SQLBuilder {
      *                   <br>如 VARCHAR(36) NOT NULL UNIQUE KEY
      * @return {@link TableCreateBuilder}
      */
-    default TableCreateBuilder addColumn(@NotNull String columnName, @NotNull String settings) {
+    default @NotNull TableCreateBuilder addColumn(@NotNull String columnName, @NotNull String settings) {
         Objects.requireNonNull(columnName, "columnName could not be null");
         return addColumn(withBackQuote(columnName) + " " + settings);
     }
@@ -82,7 +82,7 @@ public interface TableCreateBuilder extends SQLBuilder {
      * @param comments   列的注解，用于解释该列数据的作用
      * @return {@link TableCreateBuilder}
      */
-    default TableCreateBuilder addColumn(@NotNull String columnName, @NotNull String settings, @NotNull String comments) {
+    default @NotNull TableCreateBuilder addColumn(@NotNull String columnName, @NotNull String settings, @NotNull String comments) {
         return addColumn(columnName, settings + " COMMENT " + withQuote(comments));
     }
 
@@ -97,8 +97,8 @@ public interface TableCreateBuilder extends SQLBuilder {
      * @param unsigned     是否采用 UNSIGNED (即无负数，可以增加自增键的最高数，建议为true)
      * @return {@link TableCreateBuilder}
      */
-    TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName, @Nullable NumberType numberType,
-                                              boolean asPrimaryKey, boolean unsigned);
+    @NotNull TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName, @Nullable NumberType numberType,
+                                                       boolean asPrimaryKey, boolean unsigned);
 
     /**
      * 为该表添加一个INT类型的自增主键列
@@ -110,8 +110,8 @@ public interface TableCreateBuilder extends SQLBuilder {
      * @param unsigned     是否采用 UNSIGNED (即无负数，可以增加自增键的最高数，建议为true)
      * @return {@link TableCreateBuilder}
      */
-    default TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName,
-                                                      boolean asPrimaryKey, boolean unsigned) {
+    default @NotNull TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName,
+                                                               boolean asPrimaryKey, boolean unsigned) {
         return addAutoIncrementColumn(columnName, NumberType.INT, asPrimaryKey, unsigned);
     }
 
@@ -125,7 +125,7 @@ public interface TableCreateBuilder extends SQLBuilder {
      * @param asPrimaryKey 是否为主键，若为false则设定为唯一键
      * @return {@link TableCreateBuilder}
      */
-    default TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName, boolean asPrimaryKey) {
+    default @NotNull TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName, boolean asPrimaryKey) {
         return addAutoIncrementColumn(columnName, asPrimaryKey, true);
     }
 
@@ -137,7 +137,7 @@ public interface TableCreateBuilder extends SQLBuilder {
      * @param columnName 列名
      * @return {@link TableCreateBuilder}
      */
-    default TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName) {
+    default @NotNull TableCreateBuilder addAutoIncrementColumn(@NotNull String columnName) {
         return addAutoIncrementColumn(columnName, true);
     }
 
@@ -152,8 +152,8 @@ public interface TableCreateBuilder extends SQLBuilder {
      * @param columnName 索引包含的列
      * @return {@link TableCreateBuilder}
      */
-    default TableCreateBuilder setIndex(@NotNull String columnName,
-                                        @NotNull IndexType type) {
+    default @NotNull TableCreateBuilder setIndex(@NotNull String columnName,
+                                                 @NotNull IndexType type) {
         return setIndex(type, null, columnName);
     }
 
@@ -170,8 +170,8 @@ public interface TableCreateBuilder extends SQLBuilder {
      * @param moreColumns 联合索引需要包含的列
      * @return {@link TableCreateBuilder}
      */
-    TableCreateBuilder setIndex(@NotNull IndexType type, @Nullable String indexName,
-                                @NotNull String columnName, @NotNull String... moreColumns);
+    @NotNull TableCreateBuilder setIndex(@NotNull IndexType type, @Nullable String indexName,
+                                         @NotNull String columnName, @NotNull String... moreColumns);
 
 
     /**
@@ -185,7 +185,7 @@ public interface TableCreateBuilder extends SQLBuilder {
      * @param foreignColumn 外键关联表中对应的关联列，必须为目标表的主键，即 {@link IndexType#PRIMARY_KEY}
      * @return {@link TableCreateBuilder}
      */
-    default TableCreateBuilder addForeignKey(@NotNull String tableColumn, @NotNull String foreignColumn) {
+    default @NotNull TableCreateBuilder addForeignKey(@NotNull String tableColumn, @NotNull String foreignColumn) {
         return addForeignKey(tableColumn, getTableName(), foreignColumn);
     }
 
@@ -203,8 +203,8 @@ public interface TableCreateBuilder extends SQLBuilder {
      *                      <p> 2. 数据类型必须和所要建立主键的列的数据类型相同。
      * @return {@link TableCreateBuilder}
      */
-    default TableCreateBuilder addForeignKey(@NotNull String tableColumn,
-                                             @NotNull String foreignTable, @NotNull String foreignColumn) {
+    default @NotNull TableCreateBuilder addForeignKey(@NotNull String tableColumn,
+                                                      @NotNull String foreignTable, @NotNull String foreignColumn) {
         return addForeignKey(tableColumn, null, foreignTable, foreignColumn);
     }
 
@@ -223,8 +223,8 @@ public interface TableCreateBuilder extends SQLBuilder {
      *                       <p> 2. 数据类型必须和所要建立主键的列的数据类型相同。
      * @return {@link TableCreateBuilder}
      */
-    default TableCreateBuilder addForeignKey(@NotNull String tableColumn, @Nullable String constraintName,
-                                             @NotNull String foreignTable, @NotNull String foreignColumn) {
+    default @NotNull TableCreateBuilder addForeignKey(@NotNull String tableColumn, @Nullable String constraintName,
+                                                      @NotNull String foreignTable, @NotNull String foreignColumn) {
         return addForeignKey(tableColumn, constraintName, foreignTable, foreignColumn, null, null);
     }
 
@@ -245,9 +245,9 @@ public interface TableCreateBuilder extends SQLBuilder {
      * @param deleteRule     在外键被删除时采用的规则，缺省时默认为{@link ForeignKeyRule#RESTRICT}
      * @return {@link TableCreateBuilder}
      */
-    TableCreateBuilder addForeignKey(@NotNull String tableColumn, @Nullable String constraintName,
-                                     @NotNull String foreignTable, @NotNull String foreignColumn,
-                                     @Nullable ForeignKeyRule updateRule, @Nullable ForeignKeyRule deleteRule);
+    @NotNull TableCreateBuilder addForeignKey(@NotNull String tableColumn, @Nullable String constraintName,
+                                              @NotNull String foreignTable, @NotNull String foreignColumn,
+                                              @Nullable ForeignKeyRule updateRule, @Nullable ForeignKeyRule deleteRule);
 
     default String defaultTablesSettings() {
         return "ENGINE=InnoDB DEFAULT CHARSET=utf8";

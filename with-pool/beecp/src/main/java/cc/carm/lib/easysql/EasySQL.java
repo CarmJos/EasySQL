@@ -2,7 +2,6 @@ package cc.carm.lib.easysql;
 
 import cc.carm.lib.easysql.api.SQLQuery;
 import cc.carm.lib.easysql.api.util.TimeDateUtils;
-import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import cn.beecp.BeeDataSource;
 import cn.beecp.BeeDataSourceConfig;
 import org.jetbrains.annotations.NotNull;

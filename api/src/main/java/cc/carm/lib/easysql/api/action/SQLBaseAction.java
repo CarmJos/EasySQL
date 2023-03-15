@@ -1,12 +1,10 @@
 package cc.carm.lib.easysql.api.action;
 
 import cc.carm.lib.easysql.api.SQLSource;
-import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLFunction;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
 
 import java.sql.SQLException;
 import java.util.Collections;
@@ -14,7 +12,14 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public interface SQLAction<T> {
+/**
+ * SQLBaseAction 是用于承载SQL语句并进行处理、返回的基本类。
+ *
+ * @param <T> 需要返回的类型
+ * @author CarmJos
+ * @since 0.0.1
+ */
+public interface SQLBaseAction<T> {
 
     /**
      * 得到该Action的UUID
@@ -81,53 +86,6 @@ public interface SQLAction<T> {
     @NotNull T execute() throws SQLException;
 
     /**
-     * 执行语句并返回值
-     *
-     * @param exceptionHandler 异常处理器 默认为 {@link #defaultExceptionHandler()}
-     * @return 指定类型数据
-     */
-    @Nullable
-    default T execute(@Nullable SQLExceptionHandler exceptionHandler) {
-        return execute(t -> t, exceptionHandler);
-    }
-
-    /**
-     * 执行语句并处理返回值
-     *
-     * @param function         处理方法
-     * @param exceptionHandler 异常处理器 默认为 {@link #defaultExceptionHandler()}
-     * @param <R>              需要返回的内容
-     * @return 指定类型数据
-     */
-    @Nullable
-    default <R> R execute(@NotNull SQLFunction<T, R> function,
-                          @Nullable SQLExceptionHandler exceptionHandler) {
-        return execute(function, null, exceptionHandler);
-    }
-
-    /**
-     * 执行语句并处理返回值
-     *
-     * @param function         处理方法
-     * @param defaultResult    默认结果，若处理后的结果为null，则返回该值
-     * @param exceptionHandler 异常处理器 默认为 {@link #defaultExceptionHandler()}
-     * @param <R>              需要返回的内容
-     * @return 指定类型数据
-     */
-    @Nullable
-    @Contract("_,!null,_ -> !null")
-    default <R> R execute(@NotNull SQLFunction<T, R> function,
-                          @Nullable R defaultResult,
-                          @Nullable SQLExceptionHandler exceptionHandler) {
-        try {
-            return executeFunction(function, defaultResult);
-        } catch (SQLException exception) {
-            handleException(exceptionHandler, exception);
-            return null;
-        }
-    }
-
-    /**
      * 执行语句并处理返回值
      *
      * @param function 处理方法
@@ -159,33 +117,6 @@ public interface SQLAction<T> {
         } catch (SQLException exception) {
             throw new SQLException(exception);
         }
-    }
-
-    default void handleException(@Nullable SQLExceptionHandler handler, SQLException exception) {
-        if (handler == null) handler = defaultExceptionHandler();
-        handler.accept(exception, this);
-    }
-
-    /**
-     * 获取管理器提供的默认异常处理器。
-     * 若未使用过 {@link #setExceptionHandler(SQLExceptionHandler)} 方法，
-     * 则默认返回 {@link SQLExceptionHandler#detailed(Logger)} 。
-     *
-     * @return {@link SQLExceptionHandler}
-     */
-    default SQLExceptionHandler defaultExceptionHandler() {
-        return getSource().getExceptionHandler();
-    }
-
-    /**
-     * 设定通用的异常处理器。
-     * <br> 在使用 {@link #execute(SQLExceptionHandler)} 等相关方法时，若传入的处理器为null，则会采用此处理器。
-     * <br> 若该方法传入参数为 null，则会使用 {@link #defaultExceptionHandler()} 。
-     *
-     * @param handler 异常处理器
-     */
-    default void setExceptionHandler(@Nullable SQLExceptionHandler handler) {
-        getSource().setExceptionHandler(handler);
     }
 
 }

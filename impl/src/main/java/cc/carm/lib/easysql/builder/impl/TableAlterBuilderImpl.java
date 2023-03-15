@@ -4,7 +4,7 @@ import cc.carm.lib.easysql.action.UpdateActionImpl;
 import cc.carm.lib.easysql.api.builder.TableAlterBuilder;
 import cc.carm.lib.easysql.api.enums.IndexType;
 import cc.carm.lib.easysql.builder.AbstractSQLBuilder;
-import cc.carm.lib.easysql.manager.SQLManagerImpl;
+import cc.carm.lib.easysql.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

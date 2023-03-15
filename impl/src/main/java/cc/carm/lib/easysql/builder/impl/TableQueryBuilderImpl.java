@@ -1,9 +1,9 @@
 package cc.carm.lib.easysql.builder.impl;
 
-import cc.carm.lib.easysql.action.query.PreparedQueryActionImpl;
+import cc.carm.lib.easysql.action.query.PreparedSQLQueryActionImpl;
 import cc.carm.lib.easysql.api.action.base.PreparedQueryAction;
 import cc.carm.lib.easysql.api.builder.TableQueryBuilder;
-import cc.carm.lib.easysql.manager.SQLManagerImpl;
+import cc.carm.lib.easysql.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +30,7 @@ public class TableQueryBuilderImpl
     }
 
     @Override
-    public PreparedQueryActionImpl build() {
+    public PreparedSQLQueryActionImpl build() {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT").append(" ");
         if (columns == null || columns.length < 1) {
@@ -58,7 +58,7 @@ public class TableQueryBuilderImpl
         }
 
 
-        return new PreparedQueryActionImpl(getManager(), sqlBuilder.toString())
+        return new PreparedSQLQueryActionImpl(getManager(), sqlBuilder.toString())
                 .setParams(hasConditionParams() ? getConditionParams() : null);
     }
 

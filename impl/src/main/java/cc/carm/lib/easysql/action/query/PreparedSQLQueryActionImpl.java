@@ -1,7 +1,7 @@
 package cc.carm.lib.easysql.action.query;
 
 import cc.carm.lib.easysql.api.action.base.PreparedQueryAction;
-import cc.carm.lib.easysql.manager.SQLManagerImpl;
+import cc.carm.lib.easysql.SQLManagerImpl;
 import cc.carm.lib.easysql.query.SQLQueryImpl;
 import cc.carm.lib.easysql.util.StatementUtil;
 import org.jetbrains.annotations.NotNull;
@@ -15,23 +15,23 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class PreparedQueryActionImpl extends QueryActionImpl implements PreparedQueryAction {
+public class PreparedSQLQueryActionImpl extends SQLQueryActionImpl implements PreparedQueryAction {
 
     Consumer<PreparedStatement> handler;
     Object[] params;
 
-    public PreparedQueryActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
+    public PreparedSQLQueryActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
         super(manager, sql);
     }
 
     @Override
-    public PreparedQueryActionImpl setParams(@Nullable Object... params) {
+    public @NotNull PreparedSQLQueryActionImpl setParams(@Nullable Object... params) {
         this.params = params;
         return this;
     }
 
     @Override
-    public PreparedQueryActionImpl setParams(@Nullable Iterable<Object> params) {
+    public PreparedSQLQueryActionImpl setParams(@Nullable Iterable<Object> params) {
         if (params == null) {
             return setParams((Object[]) null);
         } else {
@@ -42,7 +42,7 @@ public class PreparedQueryActionImpl extends QueryActionImpl implements Prepared
     }
 
     @Override
-    public PreparedQueryActionImpl handleStatement(@Nullable Consumer<PreparedStatement> statement) {
+    public PreparedSQLQueryActionImpl handleStatement(@Nullable Consumer<PreparedStatement> statement) {
         this.handler = statement;
         return this;
     }
@@ -72,7 +72,7 @@ public class PreparedQueryActionImpl extends QueryActionImpl implements Prepared
                     connection, preparedStatement,
                     preparedStatement.executeQuery()
             );
-            getManager().getActiveQuery().put(getActionUUID(), query);
+            getManager().getActiveQueries().put(getActionUUID(), query);
             return query;
         } catch (SQLException exception) {
             preparedStatement.close();

@@ -1,8 +1,8 @@
 package cc.carm.lib.easysql.query;
 
-import cc.carm.lib.easysql.action.query.QueryActionImpl;
+import cc.carm.lib.easysql.action.query.SQLQueryActionImpl;
 import cc.carm.lib.easysql.api.SQLQuery;
-import cc.carm.lib.easysql.manager.SQLManagerImpl;
+import cc.carm.lib.easysql.SQLManagerImpl;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -18,17 +18,17 @@ public class SQLQueryImpl implements SQLQuery {
     protected final Connection connection;
     protected final Statement statement;
     protected final ResultSet resultSet;
-    protected QueryActionImpl queryAction;
+    protected SQLQueryActionImpl queryAction;
 
     public SQLQueryImpl(
-            SQLManagerImpl sqlManager, QueryActionImpl queryAction,
+            SQLManagerImpl sqlManager, SQLQueryActionImpl queryAction,
             Connection connection, Statement statement, ResultSet resultSet
     ) {
         this(sqlManager, queryAction, connection, statement, resultSet, System.nanoTime());
     }
 
     public SQLQueryImpl(
-            SQLManagerImpl sqlManager, QueryActionImpl queryAction,
+            SQLManagerImpl sqlManager, SQLQueryActionImpl queryAction,
             Connection connection, Statement statement, ResultSet resultSet,
             long executeTime
     ) {
@@ -51,7 +51,7 @@ public class SQLQueryImpl implements SQLQuery {
     }
 
     @Override
-    public QueryActionImpl getAction() {
+    public SQLQueryActionImpl getAction() {
         return this.queryAction;
     }
 
@@ -79,7 +79,7 @@ public class SQLQueryImpl implements SQLQuery {
                     ex.printStackTrace();
                 }
             }
-            getManager().getActiveQuery().remove(getAction().getActionUUID());
+            getManager().getActiveQueries().remove(getAction().getActionUUID());
         } catch (SQLException e) {
             getAction().handleException(getAction().defaultExceptionHandler(), e);
         }

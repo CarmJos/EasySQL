@@ -1,9 +1,9 @@
 package cc.carm.lib.easysql.builder.impl;
 
-import cc.carm.lib.easysql.action.PreparedUpdateActionImpl;
+import cc.carm.lib.easysql.action.PreparedSQLUpdateActionImpl;
 import cc.carm.lib.easysql.api.action.base.PreparedUpdateAction;
 import cc.carm.lib.easysql.api.builder.UpdateBuilder;
-import cc.carm.lib.easysql.manager.SQLManagerImpl;
+import cc.carm.lib.easysql.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,7 +46,7 @@ public class UpdateBuilderImpl
 
         if (limit > 0) sqlBuilder.append(" ").append(buildLimitSQL());
 
-        return new PreparedUpdateActionImpl<>(getManager(), Integer.class, sqlBuilder.toString(), allParams);
+        return new PreparedSQLUpdateActionImpl<>(getManager(), Integer.class, sqlBuilder.toString(), allParams);
     }
 
     @Override

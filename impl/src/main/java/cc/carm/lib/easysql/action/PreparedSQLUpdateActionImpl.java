@@ -2,7 +2,7 @@ package cc.carm.lib.easysql.action;
 
 import cc.carm.lib.easysql.api.action.base.PreparedUpdateAction;
 import cc.carm.lib.easysql.api.action.base.UpdateAction;
-import cc.carm.lib.easysql.manager.SQLManagerImpl;
+import cc.carm.lib.easysql.SQLManagerImpl;
 import cc.carm.lib.easysql.util.StatementUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,43 +16,43 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class PreparedUpdateActionImpl<T extends Number>
+public class PreparedSQLUpdateActionImpl<T extends Number>
         extends UpdateActionImpl<T>
         implements PreparedUpdateAction<T> {
 
     Object[] params;
 
-    public PreparedUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
-                                    @NotNull String sql) {
+    public PreparedSQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
+                                       @NotNull String sql) {
         this(manager, numberClass, sql, (Object[]) null);
     }
 
-    public PreparedUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
-                                    @NotNull String sql, @Nullable List<Object> params) {
+    public PreparedSQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
+                                       @NotNull String sql, @Nullable List<Object> params) {
         this(manager, numberClass, sql, params == null ? null : params.toArray());
     }
 
-    public PreparedUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
-                                    @NotNull String sql, @Nullable Object[] params) {
+    public PreparedSQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
+                                       @NotNull String sql, @Nullable Object[] params) {
         super(manager, numberClass, sql);
         this.params = params;
     }
 
-    public PreparedUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
-                                    @NotNull UUID uuid, @NotNull String sql,
-                                    Object[] params) {
+    public PreparedSQLUpdateActionImpl(@NotNull SQLManagerImpl manager, @NotNull Class<T> numberClass,
+                                       @NotNull UUID uuid, @NotNull String sql,
+                                       Object[] params) {
         super(manager, numberClass, uuid, sql);
         this.params = params;
     }
 
     @Override
-    public PreparedUpdateActionImpl<T> values(Object... params) {
+    public PreparedSQLUpdateActionImpl<T> values(Object... params) {
         this.params = params;
         return this;
     }
 
     @Override
-    public PreparedUpdateActionImpl<T> values(@Nullable Iterable<Object> params) {
+    public PreparedSQLUpdateActionImpl<T> values(@Nullable Iterable<Object> params) {
         if (params == null) {
             return values((Object[]) null);
         } else {
@@ -87,7 +87,7 @@ public class PreparedUpdateActionImpl<T extends Number>
 
     @Override
     public <N extends Number> UpdateAction<N> returnGeneratedKey(Class<N> keyTypeClass) {
-        PreparedUpdateActionImpl<N> newAction = new PreparedUpdateActionImpl<>(getManager(), keyTypeClass, getActionUUID(), getSQLContent(), params);
+        PreparedSQLUpdateActionImpl<N> newAction = new PreparedSQLUpdateActionImpl<>(getManager(), keyTypeClass, getActionUUID(), getSQLContent(), params);
         newAction.returnGeneratedKey();
         return newAction;
     }

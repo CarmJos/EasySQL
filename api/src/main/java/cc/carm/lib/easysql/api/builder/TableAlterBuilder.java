@@ -1,7 +1,7 @@
 package cc.carm.lib.easysql.api.builder;
 
 import cc.carm.lib.easysql.api.SQLBuilder;
-import cc.carm.lib.easysql.api.action.base.UpdateAction;
+import cc.carm.lib.easysql.api.action.SQLAdvancedAction;
 import cc.carm.lib.easysql.api.enums.IndexType;
 import cc.carm.lib.easysql.api.enums.NumberType;
 import org.jetbrains.annotations.NotNull;
@@ -9,46 +9,46 @@ import org.jetbrains.annotations.Nullable;
 
 public interface TableAlterBuilder extends SQLBuilder {
 
-    SQLAction<Integer> renameTo(@NotNull String newTableName);
+    @NotNull SQLAdvancedAction<Integer> renameTo(@NotNull String newTableName);
 
-    SQLAction<Integer> changeComment(@NotNull String newTableComment);
+    @NotNull SQLAdvancedAction<Integer> changeComment(@NotNull String newTableComment);
 
-    SQLAction<Integer> setAutoIncrementIndex(int index);
+    @NotNull SQLAdvancedAction<Integer> setAutoIncrementIndex(int index);
 
-    SQLAction<Integer> addIndex(@NotNull IndexType indexType, @Nullable String indexName,
-                                @NotNull String columnName, @NotNull String... moreColumns);
+    @NotNull SQLAdvancedAction<Integer> addIndex(@NotNull IndexType indexType, @Nullable String indexName,
+                                                 @NotNull String columnName, @NotNull String... moreColumns);
 
     /**
      * 为该表移除一个索引
      *
      * @param indexName 索引名
-     * @return {@link UpdateAction}
+     * @return {@link SQLAdvancedAction}
      */
-    SQLAction<Integer> dropIndex(@NotNull String indexName);
+    @NotNull SQLAdvancedAction<Integer> dropIndex(@NotNull String indexName);
 
     /**
      * 为该表移除一个外键
      *
      * @param keySymbol 外键名
-     * @return {@link UpdateAction}
+     * @return {@link SQLAdvancedAction}
      */
-    SQLAction<Integer> dropForeignKey(@NotNull String keySymbol);
+    @NotNull SQLAdvancedAction<Integer> dropForeignKey(@NotNull String keySymbol);
 
     /**
      * 为该表移除主键(须添加新主键)
      *
-     * @return {@link UpdateAction}
+     * @return {@link SQLAdvancedAction}
      */
-    SQLAction<Integer> dropPrimaryKey();
+    @NotNull SQLAdvancedAction<Integer> dropPrimaryKey();
 
     /**
      * 为表添加一列
      *
      * @param columnName 列名
      * @param settings   列的相关设定
-     * @return {@link UpdateAction}
+     * @return {@link SQLAdvancedAction}
      */
-    default SQLAction<Integer> addColumn(@NotNull String columnName, @NotNull String settings) {
+    default @NotNull SQLAdvancedAction<Integer> addColumn(@NotNull String columnName, @NotNull String settings) {
         return addColumn(columnName, settings, null);
     }
 
@@ -60,23 +60,27 @@ public interface TableAlterBuilder extends SQLBuilder {
      * @param afterColumn 该列增添到哪个列的后面，
      *                    <p> 该参数若省缺则放于最后一行
      *                    <p> 若为 "" 则置于首行。
-     * @return {@link UpdateAction}
+     * @return {@link SQLAdvancedAction}
      */
-    SQLAction<Integer> addColumn(@NotNull String columnName, @NotNull String settings, @Nullable String afterColumn);
+    @NotNull SQLAdvancedAction<Integer> addColumn(@NotNull String columnName,
+                                                  @NotNull String settings,
+                                                  @Nullable String afterColumn);
 
-    SQLAction<Integer> renameColumn(@NotNull String columnName, @NotNull String newName);
+    @NotNull SQLAdvancedAction<Integer> renameColumn(@NotNull String columnName, @NotNull String newName);
 
-    SQLAction<Integer> modifyColumn(@NotNull String columnName, @NotNull String settings);
+    @NotNull SQLAdvancedAction<Integer> modifyColumn(@NotNull String columnName, @NotNull String settings);
 
-    default SQLAction<Integer> modifyColumn(@NotNull String columnName, @NotNull String columnSettings, @NotNull String afterColumn) {
+    default @NotNull SQLAdvancedAction<Integer> modifyColumn(@NotNull String columnName,
+                                                             @NotNull String columnSettings,
+                                                             @NotNull String afterColumn) {
         return modifyColumn(columnName, columnSettings + " AFTER `" + afterColumn + "`");
     }
 
-    SQLAction<Integer> removeColumn(@NotNull String columnName);
+    @NotNull SQLAdvancedAction<Integer> removeColumn(@NotNull String columnName);
 
-    SQLAction<Integer> setColumnDefault(@NotNull String columnName, @NotNull String defaultValue);
+    @NotNull SQLAdvancedAction<Integer> setColumnDefault(@NotNull String columnName, @NotNull String defaultValue);
 
-    SQLAction<Integer> removeColumnDefault(@NotNull String columnName);
+    @NotNull SQLAdvancedAction<Integer> removeColumnDefault(@NotNull String columnName);
 
     /**
      * 为该表添加一个自增列
@@ -89,8 +93,9 @@ public interface TableAlterBuilder extends SQLBuilder {
      * @param unsigned   是否采用 UNSIGNED (即无负数，可以增加自增键的最高数，建议为true)
      * @return {@link TableCreateBuilder}
      */
-    default SQLAction<Integer> addAutoIncrementColumn(@NotNull String columnName, @Nullable NumberType numberType,
-                                                      boolean primary, boolean unsigned) {
+    default @NotNull SQLAdvancedAction<Integer> addAutoIncrementColumn(@NotNull String columnName,
+                                                                       @Nullable NumberType numberType,
+                                                                       boolean primary, boolean unsigned) {
         return addColumn(columnName,
                 (numberType == null ? NumberType.INT : numberType).name()
                         + (unsigned ? " UNSIGNED " : " ")
@@ -108,7 +113,8 @@ public interface TableAlterBuilder extends SQLBuilder {
      * @param numberType 数字类型，若省缺则为 {@link NumberType#INT}
      * @return {@link TableAlterBuilder}
      */
-    default SQLAction<Integer> addAutoIncrementColumn(@NotNull String columnName, @NotNull NumberType numberType) {
+    default @NotNull SQLAdvancedAction<Integer> addAutoIncrementColumn(@NotNull String columnName,
+                                                                       @NotNull NumberType numberType) {
         return addAutoIncrementColumn(columnName, numberType, false, true);
     }
 
@@ -121,7 +127,7 @@ public interface TableAlterBuilder extends SQLBuilder {
      * @param columnName 列名
      * @return {@link TableAlterBuilder}
      */
-    default SQLAction<Integer> addAutoIncrementColumn(@NotNull String columnName) {
+    default @NotNull SQLAdvancedAction<Integer> addAutoIncrementColumn(@NotNull String columnName) {
         return addAutoIncrementColumn(columnName, NumberType.INT);
     }
 

@@ -1,6 +1,7 @@
 package cc.carm.lib.easysql.api.function;
 
-import cc.carm.lib.easysql.api.action.SQLAction;
+import cc.carm.lib.easysql.api.action.SQLAdvancedAction;
+import cc.carm.lib.easysql.api.action.SQLBaseAction;
 import org.slf4j.Logger;
 
 import java.sql.SQLException;
@@ -8,11 +9,11 @@ import java.util.function.BiConsumer;
 
 /**
  * 异常处理器。
- * <br> 在使用 {@link SQLAction#execute(SQLExceptionHandler)} 等相关方法时，
+ * <br> 在使用 {@link SQLAdvancedAction#execute(SQLExceptionHandler)} 等相关方法时，
  * 如果发生异常，则会调用错误处理器进行错误内容的输出提示。
  */
 @FunctionalInterface
-public interface SQLExceptionHandler extends BiConsumer<SQLException, SQLAction<?>> {
+public interface SQLExceptionHandler extends BiConsumer<SQLException, SQLBaseAction<?>> {
 
     /**
      * 默认的异常处理器，将详细的输出相关错误与错误来源。

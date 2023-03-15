@@ -1,10 +1,12 @@
 package cc.carm.lib.easysql.api.transaction;
 
 import cc.carm.lib.easysql.api.SQLManager;
-import cc.carm.lib.easysql.api.action.base.PreparedBatchUpdateAction;
-import cc.carm.lib.easysql.api.action.base.PreparedUpdateAction;
-import cc.carm.lib.easysql.api.action.base.BatchUpdateAction;
-import cc.carm.lib.easysql.api.action.base.UpdateAction;
+import cc.carm.lib.easysql.api.action.query.PreparedSQLQueryAction;
+import cc.carm.lib.easysql.api.action.query.SQLQueryAction;
+import cc.carm.lib.easysql.api.action.update.PreparedSQLBatchUpdateAction;
+import cc.carm.lib.easysql.api.action.update.PreparedSQLUpdateAction;
+import cc.carm.lib.easysql.api.action.update.SQLBatchUpdateAction;
+import cc.carm.lib.easysql.api.action.update.SQLUpdateAction;
 import cc.carm.lib.easysql.api.builder.*;
 import cc.carm.lib.easysql.api.enums.IsolationLevel;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +58,7 @@ public interface SQLTransaction extends AutoCloseable {
      *
      * @param sql SQL语句内容
      * @return 更新的行数
-     * @see UpdateAction
+     * @see SQLUpdateAction
      */
     @Nullable Integer executeSQL(String sql);
 
@@ -66,7 +68,7 @@ public interface SQLTransaction extends AutoCloseable {
      * @param sql    SQL语句内容
      * @param params SQL语句中 ? 的对应参数
      * @return 更新的行数
-     * @see PreparedUpdateAction
+     * @see PreparedSQLUpdateAction
      */
     @Nullable Integer executeSQL(String sql, Object[] params);
 
@@ -76,7 +78,7 @@ public interface SQLTransaction extends AutoCloseable {
      * @param sql         SQL语句内容
      * @param paramsBatch SQL语句中对应?的参数组
      * @return 对应参数返回的行数
-     * @see PreparedBatchUpdateAction
+     * @see PreparedSQLBatchUpdateAction
      */
     @Nullable List<Integer> executeSQLBatch(String sql, Iterable<Object[]> paramsBatch);
 
@@ -87,7 +89,7 @@ public interface SQLTransaction extends AutoCloseable {
      * @param sql     SQL语句内容
      * @param moreSQL 更多SQL语句内容
      * @return 对应参数返回的行数
-     * @see BatchUpdateAction
+     * @see SQLBatchUpdateAction
      */
     @Nullable List<Integer> executeSQLBatch(@NotNull String sql, String... moreSQL);
 
@@ -104,7 +106,7 @@ public interface SQLTransaction extends AutoCloseable {
      *
      * @return {@link QueryBuilder}
      */
-    @NotNull QueryBuilder createQuery();
+    @NotNull QueryBuilder<SQLQueryAction.Base, PreparedSQLQueryAction.Base> createQuery();
 
     /**
      * 创建一条插入操作。
@@ -112,7 +114,7 @@ public interface SQLTransaction extends AutoCloseable {
      * @param tableName 目标表名
      * @return {@link InsertBuilder}
      */
-    @NotNull InsertBuilder<PreparedUpdateAction<Integer>> insertInto(@NotNull String tableName);
+    @NotNull InsertBuilder<PreparedSQLUpdateAction.Base<Integer>> insertInto(@NotNull String tableName);
 
     /**
      * 创建支持多组数据的插入操作。
@@ -120,7 +122,7 @@ public interface SQLTransaction extends AutoCloseable {
      * @param tableName 目标表名
      * @return {@link InsertBuilder}
      */
-    @NotNull InsertBuilder<PreparedBatchUpdateAction<Integer>> insertBatchInto(@NotNull String tableName);
+    @NotNull InsertBuilder<PreparedSQLBatchUpdateAction.Base<Integer>> insertBatchInto(@NotNull String tableName);
 
     /**
      * 创建一条替换操作。
@@ -128,7 +130,7 @@ public interface SQLTransaction extends AutoCloseable {
      * @param tableName 目标表名
      * @return {@link ReplaceBuilder}
      */
-    @NotNull ReplaceBuilder<PreparedUpdateAction<Integer>> replaceInto(@NotNull String tableName);
+    @NotNull ReplaceBuilder<PreparedSQLUpdateAction.Base<Integer>> replaceInto(@NotNull String tableName);
 
     /**
      * 创建支持多组数据的替换操作。
@@ -136,7 +138,7 @@ public interface SQLTransaction extends AutoCloseable {
      * @param tableName 目标表名
      * @return {@link ReplaceBuilder}
      */
-    @NotNull ReplaceBuilder<PreparedBatchUpdateAction<Integer>> replaceBatchInto(@NotNull String tableName);
+    @NotNull ReplaceBuilder<PreparedSQLBatchUpdateAction.Base<Integer>> replaceBatchInto(@NotNull String tableName);
 
     /**
      * 创建更新操作。
@@ -144,7 +146,7 @@ public interface SQLTransaction extends AutoCloseable {
      * @param tableName 目标表名
      * @return {@link UpdateBuilder}
      */
-    @NotNull UpdateBuilder updateInto(@NotNull String tableName);
+    @NotNull UpdateBuilder<PreparedSQLUpdateAction.Base<Integer>> updateInto(@NotNull String tableName);
 
     /**
      * 创建删除操作。
@@ -152,6 +154,6 @@ public interface SQLTransaction extends AutoCloseable {
      * @param tableName 目标表名
      * @return {@link DeleteBuilder}
      */
-    @NotNull DeleteBuilder deleteFrom(@NotNull String tableName);
+    @NotNull DeleteBuilder<PreparedSQLUpdateAction.Base<Integer>> deleteFrom(@NotNull String tableName);
 
 }

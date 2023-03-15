@@ -3,7 +3,7 @@ package cc.carm.lib.easysql.action;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.api.function.SQLHandler;
-import cc.carm.lib.easysql.manager.SQLManagerImpl;
+import cc.carm.lib.easysql.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;

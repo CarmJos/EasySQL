@@ -1,7 +1,7 @@
 package cc.carm.lib.easysql.builder;
 
+import cc.carm.lib.easysql.SQLManagerImpl;
 import cc.carm.lib.easysql.api.SQLBuilder;
-import cc.carm.lib.easysql.manager.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -20,4 +20,5 @@ public abstract class AbstractSQLBuilder implements SQLBuilder {
     public @NotNull SQLManagerImpl getManager() {
         return this.sqlManager;
     }
+    
 }

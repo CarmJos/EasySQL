@@ -1,10 +1,6 @@
 package cc.carm.lib.easysql.api;
 
-import cc.carm.lib.easysql.api.action.*;
-import cc.carm.lib.easysql.api.action.base.PreparedBatchUpdateAction;
-import cc.carm.lib.easysql.api.action.base.PreparedUpdateAction;
-import cc.carm.lib.easysql.api.action.base.BatchUpdateAction;
-import cc.carm.lib.easysql.api.action.base.UpdateAction;
+import cc.carm.lib.easysql.api.action.SQLAdvancedAction;
 import cc.carm.lib.easysql.api.function.SQLDebugHandler;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +10,6 @@ import org.slf4j.Logger;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -23,10 +18,10 @@ import java.util.function.Supplier;
 
 public interface SQLSource {
 
-    Logger getLogger();
+    @NotNull Logger getLogger();
 
     /**
-     * 获取用于执行 {@link SQLAction#executeAsync()} 的线程池。
+     * 获取用于执行 {@link SQLAdvancedAction#executeAsync()} 的线程池。
      * <br> 默认线程池为 {@link #defaultExecutorPool(String)} 。
      *
      * @return {@link ExecutorService}
@@ -34,7 +29,7 @@ public interface SQLSource {
     @NotNull ExecutorService getExecutorPool();
 
     /**
-     * 设定用于执行 {@link SQLAction#executeAsync()} 的线程池.
+     * 设定用于执行 {@link SQLAdvancedAction#executeAsync()} 的线程池.
      * <br> 默认线程池为 {@link #defaultExecutorPool(String)} 。
      *
      * @param executorPool {@link ExecutorService}
@@ -103,7 +98,7 @@ public interface SQLSource {
      *
      * @return 查询列表
      */
-    @NotNull Map<UUID, SQLQuery> getActiveQuery();
+    @NotNull Map<UUID, SQLQuery> getActiveQueries();
 
     /**
      * 获取改管理器提供的默认异常处理器。
@@ -116,61 +111,11 @@ public interface SQLSource {
 
     /**
      * 设定通用的异常处理器。
-     * <br> 在使用 {@link SQLAction#execute(SQLExceptionHandler)} 等相关方法时，若传入的处理器为null，则会采用此处理器。
+     * <br> 在使用 {@link SQLAdvancedAction#execute(SQLExceptionHandler)} 等相关方法时，若传入的处理器为null，则会采用此处理器。
      * <br> 若该方法传入参数为 null，则会使用 {@link SQLExceptionHandler#detailed(Logger)} 。
      *
      * @param handler 异常处理器
      */
     void setExceptionHandler(@Nullable SQLExceptionHandler handler);
-
-    /**
-     * 执行一条不需要返回结果的SQL语句(多用于UPDATE、REPLACE、DELETE方法)
-     * 该方法使用 Statement 实现，请注意SQL注入风险！
-     *
-     * @param sql SQL语句内容
-     * @return 更新的行数
-     * @see UpdateAction
-     */
-    @Nullable Integer executeSQL(String sql);
-
-    /**
-     * 执行一条不需要返回结果的预处理SQL更改(UPDATE、REPLACE、DELETE)
-     *
-     * @param sql    SQL语句内容
-     * @param params SQL语句中 ? 的对应参数
-     * @return 更新的行数
-     * @see PreparedUpdateAction
-     */
-    @Nullable Integer executeSQL(String sql, Object[] params);
-
-    /**
-     * 执行多条不需要返回结果的SQL更改(UPDATE、REPLACE、DELETE)
-     *
-     * @param sql         SQL语句内容
-     * @param paramsBatch SQL语句中对应?的参数组
-     * @return 对应参数返回的行数
-     * @see PreparedBatchUpdateAction
-     */
-    @Nullable List<Integer> executeSQLBatch(String sql, Iterable<Object[]> paramsBatch);
-
-
-    /**
-     * 执行多条不需要返回结果的SQL。
-     * 该方法使用 Statement 实现，请注意SQL注入风险！
-     *
-     * @param sql     SQL语句内容
-     * @param moreSQL 更多SQL语句内容
-     * @return 对应参数返回的行数
-     * @see BatchUpdateAction
-     */
-    @Nullable List<Integer> executeSQLBatch(@NotNull String sql, String... moreSQL);
-
-    /**
-     * 执行多条不需要返回结果的SQL。
-     *
-     * @param sqlBatch SQL语句内容
-     * @return 对应参数返回的行数
-     */
-    @Nullable List<Integer> executeSQLBatch(@NotNull Iterable<String> sqlBatch);
 
 }

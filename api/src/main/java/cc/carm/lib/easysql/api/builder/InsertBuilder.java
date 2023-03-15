@@ -1,15 +1,17 @@
 package cc.carm.lib.easysql.api.builder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.List;
 
 public interface InsertBuilder<T> {
 
-    String getTableName();
+    @NotNull String getTableName();
 
-    T columns(List<String> columnNames);
+    @NotNull T columns(List<String> columnNames);
 
-    default T columns(String... columnNames) {
+    default @NotNull T columns(String... columnNames) {
         return columns(columnNames == null ? null : Arrays.asList(columnNames));
     }
 

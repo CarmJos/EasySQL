@@ -1,15 +1,20 @@
 package cc.carm.lib.easysql;
 
+import cc.carm.lib.easysql.api.SQLManager;
+import cc.carm.lib.easysql.api.enums.IsolationLevel;
 import cc.carm.lib.easysql.api.transaction.SQLSavepoint;
 import cc.carm.lib.easysql.api.transaction.SQLTransaction;
 
 public class TransactionTest {
 
 
+    @SuppressWarnings("ConstantConditions")
     public void demo() {
+        SQLManager sqlManager = null;
 
 
-        try (SQLTransaction transaction = createTransaction()) {
+
+        try (SQLTransaction transaction = sqlManager.createTransaction(IsolationLevel.REPEATED_READ)) {
 
             transaction.updateInto("A")
                     .set("name", "CARM")
@@ -39,9 +44,5 @@ public class TransactionTest {
 
     }
 
-
-    protected SQLTransaction createTransaction() {
-        return null;
-    }
 
 }

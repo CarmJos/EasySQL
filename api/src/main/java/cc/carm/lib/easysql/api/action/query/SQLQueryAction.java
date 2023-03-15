@@ -1,9 +1,10 @@
-package cc.carm.lib.easysql.api.action.base;
+package cc.carm.lib.easysql.api.action.query;
 
-import cc.carm.lib.easysql.api.action.SQLAction;
-import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.api.SQLQuery;
+import cc.carm.lib.easysql.api.action.SQLBaseAction;
+import cc.carm.lib.easysql.api.action.SQLAdvancedAction;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
+import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.api.function.SQLHandler;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,7 @@ import java.sql.SQLException;
  *     <br>同步执行方法中有会抛出异常的方法与不抛出异常的方法，
  *     <br>若选择不抛出异常，则返回值可能为空，需要特殊处理。</li>
  *
- *     <li>异步执行 {@link #executeAsync(SQLHandler, SQLExceptionHandler)}
+ *     <li>异步执行 {@link Advanced#executeAsync(SQLHandler, SQLExceptionHandler)}
  *     <br>异步执行时将提供成功与异常两种处理方式
  *     <br>可自行选择是否对数据或异常进行处理
  *     <br>默认的异常处理器为 {@link #defaultExceptionHandler()}</li>
@@ -30,7 +31,13 @@ import java.sql.SQLException;
  * @author CarmJos
  * @since 0.2.6
  */
-public interface QueryAction extends SQLAction<SQLQuery> {
+public interface SQLQueryAction<B extends SQLQueryAction<B>> extends SQLBaseAction<SQLQuery> {
+
+    interface Base extends SQLQueryAction<Base> {
+    }
+
+    interface Advanced extends SQLQueryAction<Advanced>, SQLAdvancedAction<SQLQuery> {
+    }
 
     @Override
     @Contract("_,!null -> !null")

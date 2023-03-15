@@ -1,8 +1,8 @@
 package cc.carm.lib.easysql.api.table;
 
 import cc.carm.lib.easysql.api.SQLManager;
-import cc.carm.lib.easysql.api.action.asyncable.AsyncablePreparedBatchUpdateAction;
-import cc.carm.lib.easysql.api.action.asyncable.AsyncablePreparedUpdateAction;
+import cc.carm.lib.easysql.api.action.update.PreparedSQLBatchUpdateAction;
+import cc.carm.lib.easysql.api.action.update.PreparedSQLUpdateAction;
 import cc.carm.lib.easysql.api.builder.*;
 import cc.carm.lib.easysql.api.function.SQLHandler;
 import org.jetbrains.annotations.NotNull;
@@ -100,40 +100,40 @@ public interface SQLTable {
         return sqlManager.updateInto(getTableName());
     }
 
-    default @NotNull InsertBuilder<AsyncablePreparedUpdateAction<Integer>> createInsert() {
+    default @NotNull InsertBuilder<PreparedSQLUpdateAction.Advanced<Integer>> createInsert() {
         return Optional.ofNullable(getSQLManager()).map(this::createInsert)
                 .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
     }
 
-    default @NotNull InsertBuilder<AsyncablePreparedUpdateAction<Integer>> createInsert(@NotNull SQLManager sqlManager) {
+    default @NotNull InsertBuilder<PreparedSQLUpdateAction.Advanced<Integer>> createInsert(@NotNull SQLManager sqlManager) {
         return sqlManager.insertInto(getTableName());
     }
 
-    default @NotNull InsertBuilder<AsyncablePreparedBatchUpdateAction<Integer>> createInsertBatch() {
+    default @NotNull InsertBuilder<PreparedSQLBatchUpdateAction.Advanced<Integer>> createInsertBatch() {
         return Optional.ofNullable(getSQLManager()).map(this::createInsertBatch)
                 .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
     }
 
-    default @NotNull InsertBuilder<AsyncablePreparedBatchUpdateAction<Integer>> createInsertBatch(@NotNull SQLManager sqlManager) {
+    default @NotNull InsertBuilder<PreparedSQLBatchUpdateAction.Advanced<Integer>> createInsertBatch(@NotNull SQLManager sqlManager) {
         return sqlManager.insertBatchInto(getTableName());
     }
 
-    default @NotNull ReplaceBuilder<AsyncablePreparedUpdateAction<Integer>> createReplace() {
+    default @NotNull ReplaceBuilder<PreparedSQLUpdateAction.Advanced<Integer>> createReplace() {
         return Optional.ofNullable(getSQLManager()).map(this::createReplace)
                 .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
 
     }
 
-    default @NotNull ReplaceBuilder<AsyncablePreparedUpdateAction<Integer>> createReplace(@NotNull SQLManager sqlManager) {
+    default @NotNull ReplaceBuilder<PreparedSQLUpdateAction.Advanced<Integer>> createReplace(@NotNull SQLManager sqlManager) {
         return sqlManager.replaceInto(getTableName());
     }
 
-    default @NotNull ReplaceBuilder<AsyncablePreparedBatchUpdateAction<Integer>> createReplaceBatch() {
+    default @NotNull ReplaceBuilder<PreparedSQLBatchUpdateAction.Advanced<Integer>> createReplaceBatch() {
         return Optional.ofNullable(getSQLManager()).map(this::createReplaceBatch)
                 .orElseThrow(() -> new NullPointerException("This table doesn't have a SQLManger."));
     }
 
-    default @NotNull ReplaceBuilder<AsyncablePreparedBatchUpdateAction<Integer>> createReplaceBatch(@NotNull SQLManager sqlManager) {
+    default @NotNull ReplaceBuilder<PreparedSQLBatchUpdateAction.Advanced<Integer>> createReplaceBatch(@NotNull SQLManager sqlManager) {
         return sqlManager.replaceBatchInto(getTableName());
     }
 

@@ -1,7 +1,7 @@
 package cc.carm.lib.easysql.action;
 
 import cc.carm.lib.easysql.api.action.base.UpdateAction;
-import cc.carm.lib.easysql.manager.SQLManagerImpl;
+import cc.carm.lib.easysql.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;

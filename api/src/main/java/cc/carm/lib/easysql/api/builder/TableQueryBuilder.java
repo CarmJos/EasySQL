@@ -1,9 +1,10 @@
 package cc.carm.lib.easysql.api.builder;
 
-import cc.carm.lib.easysql.api.action.base.PreparedQueryAction;
+import cc.carm.lib.easysql.api.action.query.PreparedSQLQueryAction;
 import org.jetbrains.annotations.NotNull;
 
-public interface TableQueryBuilder extends ConditionalBuilder<TableQueryBuilder, PreparedQueryAction> {
+public interface TableQueryBuilder<B extends PreparedSQLQueryAction<B>>
+        extends ConditionalBuilder<TableQueryBuilder<B>, B> {
 
     @NotNull String getTableName();
 
@@ -13,7 +14,7 @@ public interface TableQueryBuilder extends ConditionalBuilder<TableQueryBuilder,
      * @param columnNames 列名
      * @return {@link TableQueryBuilder}
      */
-    TableQueryBuilder select(@NotNull String... columnNames);
+    TableQueryBuilder<B> select(@NotNull String... columnNames);
 
     /**
      * 对结果进行排序
@@ -22,7 +23,7 @@ public interface TableQueryBuilder extends ConditionalBuilder<TableQueryBuilder,
      * @param asc        是否为正序排序 (为false则倒序排序)
      * @return {@link TableQueryBuilder}
      */
-    TableQueryBuilder orderBy(@NotNull String columnName, boolean asc);
+    TableQueryBuilder<B> orderBy(@NotNull String columnName, boolean asc);
 
     /**
      * 限制查询条数，用于分页查询。
@@ -32,6 +33,6 @@ public interface TableQueryBuilder extends ConditionalBuilder<TableQueryBuilder,
      * @return {@link TableQueryBuilder}
      * @since 0.2.6
      */
-    TableQueryBuilder limit(int start, int end);
+    TableQueryBuilder<B> limit(int start, int end);
 
 }

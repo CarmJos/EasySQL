@@ -2,10 +2,10 @@ package cc.carm.lib.easysql.action.query;
 
 import cc.carm.lib.easysql.action.AbstractSQLAction;
 import cc.carm.lib.easysql.api.SQLQuery;
-import cc.carm.lib.easysql.api.action.base.QueryAction;
+import cc.carm.lib.easysql.api.action.query.SQLQueryAction;
 import cc.carm.lib.easysql.api.function.SQLExceptionHandler;
 import cc.carm.lib.easysql.api.function.SQLHandler;
-import cc.carm.lib.easysql.manager.SQLManagerImpl;
+import cc.carm.lib.easysql.SQLManagerImpl;
 import cc.carm.lib.easysql.query.SQLQueryImpl;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,9 +14,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class QueryActionImpl extends AbstractSQLAction<SQLQuery> implements QueryAction {
+public class SQLQueryActionImpl extends AbstractSQLAction<SQLQuery> implements SQLQueryAction<SQLQueryActionImpl> {
 
-    public QueryActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
+    public SQLQueryActionImpl(@NotNull SQLManagerImpl manager, @NotNull String sql) {
         super(manager, sql);
     }
 
@@ -40,7 +40,7 @@ public class QueryActionImpl extends AbstractSQLAction<SQLQuery> implements Quer
                     connection, statement,
                     statement.executeQuery(getSQLContent())
             );
-            getManager().getActiveQuery().put(getActionUUID(), query);
+            getManager().getActiveQueries().put(getActionUUID(), query);
 
             return query;
         } catch (SQLException exception) {

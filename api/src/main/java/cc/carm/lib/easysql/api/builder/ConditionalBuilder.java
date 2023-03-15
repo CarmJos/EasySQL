@@ -1,20 +1,21 @@
 package cc.carm.lib.easysql.api.builder;
 
 import cc.carm.lib.easysql.api.SQLBuilder;
+import cc.carm.lib.easysql.api.action.SQLBaseAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
 
-public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T extends SQLAction<?>> extends SQLBuilder {
+public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T extends SQLBaseAction<?>> extends SQLBuilder {
 
     /**
      * 将现有条件构建完整的SQL语句用于执行。
      *
-     * @return {@link SQLAction}
+     * @return {@link SQLBaseAction}
      */
-    T build();
+    @NotNull T build();
 
     /**
      * 设定限定的条目数
@@ -22,7 +23,7 @@ public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T extend
      * @param limit 条数限制
      * @return {@link B}
      */
-    B limit(int limit);
+    @NotNull B limit(int limit);
 
     /**
      * 直接设定条件的源文本,不需要以WHERE开头。
@@ -31,7 +32,7 @@ public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T extend
      * @param condition 条件文本，不需要以WHERE开头。
      * @return {@link B}
      */
-    B where(@Nullable String condition);
+    @NotNull B where(@Nullable String condition);
 
     /**
      * 直接设定每个条件的文本与其对应数值,将以AND链接，且不需要以WHERE开头。
@@ -40,17 +41,17 @@ public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T extend
      * @param conditionSQLs 条件内容，将以AND链接，且不需要以WHERE开头。
      * @return {@link B}
      */
-    B where(LinkedHashMap<@NotNull String, @Nullable Object> conditionSQLs);
+    @NotNull B where(LinkedHashMap<@NotNull String, @Nullable Object> conditionSQLs);
 
-    B addCondition(@Nullable String condition);
+    @NotNull B addCondition(@Nullable String condition);
 
-    B addCondition(@NotNull String columnName, @NotNull String operator, @Nullable Object queryValue);
+    @NotNull B addCondition(@NotNull String columnName, @NotNull String operator, @Nullable Object queryValue);
 
-    B addCondition(@NotNull String columnName, @Nullable Object queryValue);
+    @NotNull B addCondition(@NotNull String columnName, @Nullable Object queryValue);
 
-    B addCondition(@NotNull String[] columnNames, @Nullable Object[] queryValues);
+    @NotNull B addCondition(@NotNull String[] columnNames, @Nullable Object[] queryValues);
 
-    B addNotNullCondition(@NotNull String columnName);
+    @NotNull B addNotNullCondition(@NotNull String columnName);
 
     /**
      * 添加时间的限定条件。 若设定了开始时间，则限定条件为 {@code endMillis >= startMillis}；
@@ -60,7 +61,7 @@ public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T extend
      * @param endMillis   结束时间戳，若{@code <0}则不作限定
      * @return {@link B}
      */
-    default B addTimeCondition(@NotNull String columnName, long startMillis, long endMillis) {
+    default @NotNull B addTimeCondition(@NotNull String columnName, long startMillis, long endMillis) {
         return addTimeCondition(columnName,
                 startMillis > 0 ? new Date(startMillis) : null,
                 endMillis > 0 ? new Date(endMillis) : null
@@ -75,7 +76,7 @@ public interface ConditionalBuilder<B extends ConditionalBuilder<B, T>, T extend
      * @param endDate    结束时间，若为null则不作限定
      * @return {@link B}
      */
-    B addTimeCondition(@NotNull String columnName, @Nullable java.util.Date startDate, @Nullable java.util.Date endDate);
+    @NotNull B addTimeCondition(@NotNull String columnName, @Nullable java.util.Date startDate, @Nullable java.util.Date endDate);
 
 
 }

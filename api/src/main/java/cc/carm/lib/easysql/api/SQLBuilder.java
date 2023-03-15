@@ -1,11 +1,11 @@
 package cc.carm.lib.easysql.api;
 
-import cc.carm.lib.easysql.api.action.SQLAction;
+import cc.carm.lib.easysql.api.action.SQLBaseAction;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * SQLBuilder 是用于构建SQL语句以生成SQLAction执行操作的中间类。
- * <br>其连接了{@link SQLManager} 与 {@link SQLAction} ,避免大量的代码堆积
+ * <br>其连接了{@link SQLManager} 与 {@link SQLBaseAction} ,避免大量的代码堆积
  * <br>也是本接口的核心功能所在
  *
  * @author CarmJos

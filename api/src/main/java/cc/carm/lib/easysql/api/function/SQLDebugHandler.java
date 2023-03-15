@@ -1,7 +1,7 @@
 package cc.carm.lib.easysql.api.function;
 
 import cc.carm.lib.easysql.api.SQLQuery;
-import cc.carm.lib.easysql.api.action.SQLAction;
+import cc.carm.lib.easysql.api.action.SQLBaseAction;
 import cc.carm.lib.easysql.api.action.base.PreparedBatchUpdateAction;
 import cc.carm.lib.easysql.api.action.base.PreparedUpdateAction;
 import org.jetbrains.annotations.NotNull;
@@ -14,19 +14,19 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 异常处理器。
- * <br> 在使用 {@link SQLAction#execute(SQLExceptionHandler)} 等相关方法时，
+ * <br> 在使用 {@link SQLBaseAction#execute(SQLExceptionHandler)} 等相关方法时，
  * 如果发生异常，则会调用错误处理器进行错误内容的输出提示。
  */
 
 public interface SQLDebugHandler {
     /**
-     * 该方法将在 {@link SQLAction#execute()} 执行前调用。
+     * 该方法将在 {@link SQLBaseAction#execute()} 执行前调用。
      *
-     * @param action {@link SQLAction} 对象
+     * @param action {@link SQLBaseAction} 对象
      * @param params 执行传入的参数列表。
      *               实际上，仅有 {@link PreparedUpdateAction} 和 {@link PreparedBatchUpdateAction} 才会有传入参数。
      */
-    void beforeExecute(@NotNull SQLAction<?> action, @NotNull List<@Nullable Object[]> params);
+    void beforeExecute(@NotNull SQLBaseAction<?> action, @NotNull List<@Nullable Object[]> params);
 
     /**
      * 该方法将在 {@link SQLQuery#close()} 执行后调用。
@@ -54,7 +54,7 @@ public interface SQLDebugHandler {
         return new SQLDebugHandler() {
 
             @Override
-            public void beforeExecute(@NotNull SQLAction<?> action, @NotNull List<@Nullable Object[]> params) {
+            public void beforeExecute(@NotNull SQLBaseAction<?> action, @NotNull List<@Nullable Object[]> params) {
                 logger.info("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
                 logger.info("┣# 操作编号: {}", action.getActionUUID());
                 logger.info("┣# 操作类型: {}", action.getClass().getSimpleName());

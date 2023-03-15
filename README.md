@@ -200,9 +200,11 @@ dependencies {
 
 ## 支持与捐赠
 
-若您觉得本插件做的不错，您可以通过捐赠支持我！
+若您觉得本插件做的不错，您可以通过捐赠支持我！ 感谢您对开源项目的支持！
 
-感谢您对开源项目的支持！
+Many thanks to Jetbrains for kindly providing a license for me to work on this and other open-source projects.  
+[![](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)](https://www.jetbrains.com/?from=https://github.com/CarmJos/EasySQL)
+
 
 ## 开源协议
 

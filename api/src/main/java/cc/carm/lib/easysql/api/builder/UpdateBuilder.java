@@ -1,11 +1,13 @@
 package cc.carm.lib.easysql.api.builder;
 
+import cc.carm.lib.easysql.api.action.update.PreparedSQLUpdateAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 
-public interface UpdateBuilder extends ConditionalBuilder<UpdateBuilder, SQLAction<Integer>> {
+public interface UpdateBuilder<B extends PreparedSQLUpdateAction<Integer, B>>
+        extends ConditionalBuilder<UpdateBuilder<B>, B> {
 
     String getTableName();
 
@@ -17,7 +19,7 @@ public interface UpdateBuilder extends ConditionalBuilder<UpdateBuilder, SQLActi
      * @return {@link UpdateBuilder}
      * @since 0.3.7
      */
-    UpdateBuilder set(@NotNull String columnName, @Nullable Object columnValue);
+    UpdateBuilder<B> set(@NotNull String columnName, @Nullable Object columnValue);
 
     /**
      * 设定更新的全部字段值 <b>(此操作会覆盖之前的设定)</b>
@@ -26,7 +28,7 @@ public interface UpdateBuilder extends ConditionalBuilder<UpdateBuilder, SQLActi
      * @param columnData 字段名和值的键值对
      * @return {@link UpdateBuilder}
      */
-    UpdateBuilder setAll(LinkedHashMap<@NotNull String, @Nullable Object> columnData);
+    UpdateBuilder<B> setAll(LinkedHashMap<@NotNull String, @Nullable Object> columnData);
 
     /**
      * 设定更新的全部字段值 <b>(此操作会覆盖之前的设定)</b>
@@ -36,7 +38,7 @@ public interface UpdateBuilder extends ConditionalBuilder<UpdateBuilder, SQLActi
      * @param columnValues 字段名对应的值
      * @return {@link UpdateBuilder}
      */
-    UpdateBuilder setAll(@NotNull String[] columnNames, @Nullable Object[] columnValues);
+    UpdateBuilder<B> setAll(@NotNull String[] columnNames, @Nullable Object[] columnValues);
 
     /**
      * 设定更新的全部字段值 <b>(此操作会覆盖之前的设定)</b>
@@ -47,9 +49,8 @@ public interface UpdateBuilder extends ConditionalBuilder<UpdateBuilder, SQLActi
      * @param columnValue 字段名对应的值
      * @return {@link UpdateBuilder}
      */
-    default UpdateBuilder setAll(@NotNull String columnName, @Nullable Object columnValue) {
+    default UpdateBuilder<B> setAll(@NotNull String columnName, @Nullable Object columnValue) {
         return setAll(new String[]{columnName}, new Object[]{columnValue});
     }
-
 
 }

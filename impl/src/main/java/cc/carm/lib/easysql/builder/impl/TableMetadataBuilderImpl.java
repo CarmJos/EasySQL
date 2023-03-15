@@ -4,7 +4,7 @@ import cc.carm.lib.easysql.api.builder.TableMetadataBuilder;
 import cc.carm.lib.easysql.api.function.SQLBiFunction;
 import cc.carm.lib.easysql.api.function.SQLFunction;
 import cc.carm.lib.easysql.builder.AbstractSQLBuilder;
-import cc.carm.lib.easysql.manager.SQLManagerImpl;
+import cc.carm.lib.easysql.SQLManagerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

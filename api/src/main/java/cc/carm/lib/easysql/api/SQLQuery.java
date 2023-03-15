@@ -1,10 +1,11 @@
 package cc.carm.lib.easysql.api;
 
-import cc.carm.lib.easysql.api.action.base.QueryAction;
-import cc.carm.lib.easysql.api.action.base.PreparedQueryAction;
+import cc.carm.lib.easysql.api.action.query.PreparedSQLQueryAction;
+import cc.carm.lib.easysql.api.action.query.SQLQueryAction;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.TimeUnit;
 
@@ -42,11 +43,11 @@ public interface SQLQuery extends AutoCloseable {
     SQLManager getManager();
 
     /**
-     * 得到承载该SQLQuery的对应{@link QueryAction}
+     * 得到承载该SQLQuery的对应{@link SQLQueryAction}
      *
-     * @return {@link QueryAction} 或 {@link PreparedQueryAction}
+     * @return {@link SQLQueryAction} 或 {@link PreparedSQLQueryAction}
      */
-    QueryAction getAction();
+    SQLQueryAction<?> getAction();
 
     ResultSet getResultSet();
 
