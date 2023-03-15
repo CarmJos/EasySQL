@@ -1,0 +1,8 @@
+cc.carm.lib.easysql.api
+cc.carm.lib.easysql.api.action
+cc.carm.lib.easysql.api.action.query
+cc.carm.lib.easysql.api.builder
+cc.carm.lib.easysql.api.enums
+cc.carm.lib.easysql.api.function
+cc.carm.lib.easysql.api.table
+cc.carm.lib.easysql.api.util
