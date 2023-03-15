@@ -5,6 +5,7 @@ import cc.carm.lib.easysql.api.action.query.QueryAction;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.TimeUnit;
 
@@ -49,6 +50,10 @@ public interface SQLQuery extends AutoCloseable {
     QueryAction getAction();
 
     ResultSet getResultSet();
+
+    default boolean containsResult(String columnName) throws SQLException {
+        return getResultSet() != null && getResultSet().getObject(columnName) != null;
+    }
 
     /**
      * 得到设定的SQL语句
