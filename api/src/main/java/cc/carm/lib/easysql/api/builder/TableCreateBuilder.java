@@ -250,7 +250,7 @@ public interface TableCreateBuilder extends SQLBuilder {
                                      @Nullable ForeignKeyRule updateRule, @Nullable ForeignKeyRule deleteRule);
 
     default String defaultTablesSettings() {
-        return "ENGINE=InnoDB DEFAULT CHARSET=utf8";
+        return "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
     }
 
 }
