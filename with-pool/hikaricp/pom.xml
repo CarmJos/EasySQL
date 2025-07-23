@@ -74,7 +74,7 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <!--suppress MavenPackageUpdate -->
-            <version>6.3.0</version>
+            <version>6.3.2</version>
             <optional>true</optional>
             <scope>compile</scope>
         </dependency>
