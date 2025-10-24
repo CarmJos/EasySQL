@@ -26,7 +26,7 @@ jobs:
       - name: "Target Stage"
         run: mkdir staging && cp */target/*.jar staging
       - name: "Upload artifact"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Artifact
           path: staging
