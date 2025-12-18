@@ -17,7 +17,7 @@
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
 
-        <log4j.version>2.25.2</log4j.version>
+        <log4j.version>2.25.3</log4j.version>
     </properties>
 
     <artifactId>easysql-demo</artifactId>
