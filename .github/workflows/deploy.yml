@@ -19,7 +19,7 @@ jobs:
       - name: "Set up JDK"
         uses: actions/setup-java@v6
         with:
-          java-version: '11'
+          java-version: '25'
           distribution: 'adopt'
           cache: maven
           server-id: github
@@ -43,7 +43,7 @@ jobs:
       - name: "Set up JDK"
         uses: actions/setup-java@v6
         with:
-          java-version: '11'
+          java-version: '25'
           distribution: 'adopt'
           cache: maven
           server-id: ossrh
@@ -67,7 +67,7 @@ jobs:
       - name: "Set up JDK"
         uses: actions/setup-java@v6
         with:
-          java-version: '11'
+          java-version: '25'
           distribution: 'adopt'
           cache: maven
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
